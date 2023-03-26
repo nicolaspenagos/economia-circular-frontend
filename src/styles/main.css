@@ -29,6 +29,14 @@
     border-color: #50da9e;
 }
 
+.custom-text-color-purple{
+    color: #756EF2;
+}
+.custom-text-color-purple:hover{
+    color: #5f5bb0;
+}
+
+
 .custom-shadow{
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }

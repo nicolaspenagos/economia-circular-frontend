@@ -38,19 +38,21 @@ const styles = {
           bg-center
           bg-no-repeat
           bg-gradient
-          flex
           justify-center
+          hidden
+          sm:flex
         `),
   logo: ctl(`
           w-3/5
           mb-10
         `),
   section: ctl(`
-          w-3/5
+          w-full
           custom-bg-gray
           flex
           items-center
           justify-center
+          sm:w-3/5
         `),
 }
 </script>
