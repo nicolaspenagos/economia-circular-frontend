@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import './base.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+.custom-bg-gradient{
+    background: linear-gradient(115.47deg, rgba(55, 155, 144, 0.92) 3.88%, rgba(97, 89, 239, 0.88) 93.92%);
+}
+
+.custom-bg-gray{
+    background-color: #F8F7F7;
+}
+
+.custom-bg-green{
+    background-color: #66eeb3;
+}
+.custom-bg-green:hover{
+    background-color: #4ceda7;
+}
+
+.custom-border-green{
+    border-color: #39F0A1;
+}
+.custom-border-green:hover{
+    border-color: #50da9e;
+}
+
+.custom-shadow{
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.cutom-text-color{
+    color: #0B033C;
+}
+
+.custom-border-radius{
+    border-radius: 10px;
+}
