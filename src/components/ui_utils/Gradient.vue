@@ -3,6 +3,7 @@ import ctl from "@netlify/classnames-template-literals";
 </script>
 <template>
   <div :class="styles.div">
+    <p></p>
   </div>
 </template>
 <script>

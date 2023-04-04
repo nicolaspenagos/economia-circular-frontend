@@ -3,14 +3,14 @@
     <label v-if="label">
         {{label}}
     </label>
-    <input :placeholder="placeHolder" :class="styles.input" type="text" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" v-bind="$attrs" />
+    <input :placeholder="placeholder" :class="styles.input + ' ' +classMod" type="text" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" v-bind="$attrs" />
 </div>
 </template>
 
 <script setup>
 import ctl from "@netlify/classnames-template-literals";
 defineProps({
-    placeHolder: {
+    placeholder: {
         type: String,
         default: ""
     },
@@ -21,6 +21,10 @@ defineProps({
     modelValue: {
         type: String,
         default: ""
+    },
+    classMod:{
+        type:String,
+        default:""
     }
 });
 const styles = {
@@ -32,6 +36,7 @@ const styles = {
         pb-3
         outline-0
         border-slate-200
+        focus:border-indigo-300
     `),
 }
 </script>
