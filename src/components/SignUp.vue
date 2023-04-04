@@ -25,9 +25,10 @@ import incomes from "../constants/income";
         />
         <div :class="localStyles.sep"></div>
         <BaseInput
-          v-model="emailValidation"
-          placeholder="Verificar correo electrónico"
+          v-model="email"
+          placeholder="Correo electrónico"
           type="text"
+          :classMod="getClassMod(email, emailValidation)"
         />
         <div :class="localStyles.sep"></div>
         <Autocomplete
@@ -44,19 +45,20 @@ import incomes from "../constants/income";
           v-model="password"
           placeholder="Contraseña"
           type="password"
-          :classMod="getPasswordClassMod()"
+          :classMod="getClassMod(password, passwordValidation)"
         />
       </article>
       <article
         :class="localStyles.formCol + ' mt-8 sm:mt-0 sm:ml-4 hidden sm:flex'"
       >
-        <BaseInput
-          v-model="email"
-          placeholder="Correo electrónico"
-          type="text"
-        />
-        <div :class="localStyles.sep"></div>
         <BaseInput v-model="company" placeholder="Empresa" type="text" />
+        <div :class="localStyles.sep"></div>
+        <BaseInput
+          v-model="emailValidation"
+          placeholder="Verificar correo electrónico"
+          type="text"
+          :classMod="getClassMod(emailValidation, email)"
+        />
         <div :class="localStyles.sep"></div>
         <Autocomplete
           placeholderMsg="Rango de ingresos"
@@ -69,7 +71,7 @@ import incomes from "../constants/income";
           v-model="passwordValidation"
           placeholder="Verificar contraseña"
           type="password"
-          :classMod="getPasswordValClassMod()"
+          :classMod="getClassMod(passwordValidation, password)"
         />
       </article>
 
@@ -84,12 +86,14 @@ import incomes from "../constants/income";
           v-model="email"
           placeholder="Correo electrónico"
           type="text"
+          :classMod="getClassMod(email, emailValidation)"
         />
         <div :class="localStyles.sep"></div>
         <BaseInput
           v-model="emailValidation"
           placeholder="Verificar correo electrónico"
           type="text"
+          :classMod="getClassMod(emailValidation, email)"
         />
         <div :class="localStyles.sep"></div>
         <Autocomplete
@@ -115,14 +119,14 @@ import incomes from "../constants/income";
           v-model="passwordValidation"
           placeholder="Verificar contraseña"
           type="password"
-          :classMod="getPasswordValClassMod()"
+          :classMod="getClassMod(passwordValidation, password)"
         />
         <div :class="localStyles.sep"></div>
         <BaseInput
           v-model="password"
           placeholder="Contraseña"
           type="password"
-          :classMod="getPasswordClassMod()"
+          :classMod="getClassMod(password, passwordValidation)"
         />
       </article>
     </section>
@@ -173,16 +177,13 @@ export default {
     handleChangeAuthMode() {
       this.$emit("handleChangeAuthMode");
     },
-    getPasswordClassMod() {
-      if (this.password === "") return "";
-      return this.passwordClassMod();
+    getClassMod(a,b) {
+      console.log(a);
+      if (a === "") return "";
+      return this.valClassMod(a, b);
     },
-    getPasswordValClassMod() {
-      if (this.passwordValidation === "") return "";
-      return this.passwordClassMod();
-    },
-    passwordClassMod() {
-      if (this.password === this.passwordValidation) return "!border-green-300";
+    valClassMod(a,b) {
+      if (a === b) return "!border-green-300";
       else return "!border-rose-300";
     },
   },
@@ -212,11 +213,13 @@ const localStyles = {
     flex
     flex-col
     items-center
-    !gap-6
+    !gap-8
     sm:px-8
     sm:py-12
     px-4
     py-8
+
+ 
   `),
   section: ctl(`
     flex
@@ -231,7 +234,7 @@ const localStyles = {
     flex-col
   `),
   sep: ctl(`
-    h-8
+    h-6
   `),
   textContainer: ctl(`
     sm:w-9/12
