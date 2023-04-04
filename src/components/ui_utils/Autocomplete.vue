@@ -18,7 +18,7 @@ import ctl from "@netlify/classnames-template-literals";
       :placeholder="placeholderMsg"
     />
     <div>
-      <img src="v.png" :class="[filteredOptions && modal?'sm:rotate-180':'', localStyles.img]" />
+      <img src="/v.svg" :class="[filteredOptions && modal?'sm:rotate-180':'', localStyles.img]" />
     </div>
   </div>
 
