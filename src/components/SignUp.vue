@@ -8,15 +8,18 @@ import Autocomplete from "./ui_utils/Autocomplete.vue";
 import macrosectors from "../constants/macrosector";
 import sectors from "../constants/sector";
 import incomes from "../constants/income";
+import Modal from "./ui_utils/Modal.vue";
 import {
     RouterLink
 } from 'vue-router'
 </script>
 <template>
+  <Modal/>
   <form
     :class="authStyles.form + ' ' + localStyles.form"
     v-on:submit.prevent="onSubmit"
   >
+
     <h1 :class="authStyles.title + ' !ml-0'">Crea una cuenta</h1>
 
     <section :class="localStyles.section">
@@ -138,7 +141,7 @@ import {
       <p>
         <RouterLink to="/about">About</RouterLink>
         Autorizo el tratamiento de mis datos personales a la Universidad Icesi y
-        acepto <RouterLink to="/terms-and-conditions" :class="authStyles.link">Términos de Uso</RouterLink> de la plataforma.
+        acepto <a  href="./terms-and-conditions" target="_blank" :class="authStyles.link">Términos de Uso</a> de la plataforma.
       </p>
       <div class="flex mt-3">
         <div :class="localStyles.checkbox + ' ml-auto'">
