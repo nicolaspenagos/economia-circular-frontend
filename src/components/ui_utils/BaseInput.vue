@@ -31,7 +31,7 @@ const styles = {
     input: ctl(`
         w-full
         cutom-text-color
-        placeholder-[#0B033C]
+        placeholder-slate-400
         border-b-2
         pb-3
         outline-0
@@ -40,3 +40,4 @@ const styles = {
     `),
 }
 </script>
+

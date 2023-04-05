@@ -21,6 +21,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+@media (max-width: 640px){
+  body{
+    font-size: 14px;
+  }
+}
 
 *:focus {
   outline: none;
@@ -30,4 +35,8 @@ input[type=checkbox] {
   accent-color: #756EF2;
   height: 18px;
   width: 18px;
+}
+
+h1{
+  font-size: 28px;
 }

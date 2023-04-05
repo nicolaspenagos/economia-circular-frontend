@@ -8,6 +8,9 @@ import Autocomplete from "./ui_utils/Autocomplete.vue";
 import macrosectors from "../constants/macrosector";
 import sectors from "../constants/sector";
 import incomes from "../constants/income";
+import {
+    RouterLink
+} from 'vue-router'
 </script>
 <template>
   <form
@@ -74,7 +77,7 @@ import incomes from "../constants/income";
           :classMod="getClassMod(passwordValidation, password)"
         />
       </article>
-
+      <!-- Responsive version of form (shown only on small screens in replace of thw bi-column one) -->
       <article :class="localStyles.formCol + ' sm:mr-4 sm:hidden'">
         <BaseInput
           v-model="name"
@@ -129,11 +132,13 @@ import incomes from "../constants/income";
           :classMod="getClassMod(password, passwordValidation)"
         />
       </article>
+      <!-- End of responsive form -->
     </section>
     <section :class="localStyles.textContainer">
       <p>
+        <RouterLink to="/about">About</RouterLink>
         Autorizo el tratamiento de mis datos personales a la Universidad Icesi y
-        acepto <a :class="authStyles.link">Términos de Uso</a> de la plataforma.
+        acepto <RouterLink to="/terms-and-conditions" :class="authStyles.link">Términos de Uso</RouterLink> de la plataforma.
       </p>
       <div class="flex mt-3">
         <div :class="localStyles.checkbox + ' ml-auto'">
@@ -177,12 +182,12 @@ export default {
     handleChangeAuthMode() {
       this.$emit("handleChangeAuthMode");
     },
-    getClassMod(a,b) {
+    getClassMod(a, b) {
       console.log(a);
       if (a === "") return "";
       return this.valClassMod(a, b);
     },
-    valClassMod(a,b) {
+    valClassMod(a, b) {
       if (a === b) return "!border-green-300";
       else return "!border-rose-300";
     },

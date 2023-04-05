@@ -5,7 +5,7 @@ import ctl from "@netlify/classnames-template-literals";
   <div
     v-if="filteredOptions && modal"
     class="absolute h-[10000px] w-[10000px] top-[-1000px] right-[-1000px]"
-    @click="this.modal = false"
+    @click="modal = false"
   ></div>
   <div class="relative">
     <input
@@ -18,7 +18,7 @@ import ctl from "@netlify/classnames-template-literals";
       :placeholder="placeholderMsg"
     />
     <div>
-      <img src="/v.svg" :class="[filteredOptions && modal?'sm:rotate-180':'', localStyles.img]" />
+      <img src="/v.svg" :class="[filteredOptions && modal?'sm:rotate-180':'', localStyles.img]"  draggable="false"/>
     </div>
   </div>
 
@@ -70,7 +70,7 @@ export default {
     if (this.option.length == 0) this.filteredOptions = this.options;
     this.filterOptions();
   },
-  watch: {},
+  watch: {}, 
 };
 const localStyles = {
   input: ctl(`
@@ -84,8 +84,7 @@ const localStyles = {
         focus:border-indigo-300
         cursor-pointer
         pr-4
-
-        
+        placeholder-slate-400 
     `),
   ul: ctl(`
         w-full 

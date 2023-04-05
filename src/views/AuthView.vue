@@ -84,9 +84,9 @@ export const styles = {
   form: ctl(`
           bg-white
           custom-shadow
+          custom-border-radius
           px-8
           py-12
-          custom-border-radius
           mx-6
           my-auto
           flex
@@ -102,7 +102,7 @@ export const styles = {
           sm:h-fit
         `),
   title: ctl(`
-          cutom-text-color
+          custom-text-color
           text-xl
           font-bold
           ml-auto
