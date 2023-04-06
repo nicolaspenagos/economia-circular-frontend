@@ -9,17 +9,21 @@ import macrosectors from "../constants/macrosector";
 import sectors from "../constants/sector";
 import incomes from "../constants/income";
 import Modal from "./ui_utils/Modal.vue";
-import {
-    RouterLink
-} from 'vue-router'
+import modalMsgs from "../constants/modal";
+import { isValidInput, EMAIL, PASSWORD } from "../utils/inputChecker.js";
+import { RouterLink } from "vue-router";
 </script>
 <template>
-  <Modal/>
+  <Modal
+    v-if="showModal"
+    :msg="modalMsgs.AUTHORIZATION_STATEMENT"
+    imgPath="/alert.svg"
+    @close="closeModal"
+  />
   <form
     :class="authStyles.form + ' ' + localStyles.form"
     v-on:submit.prevent="onSubmit"
   >
-
     <h1 :class="authStyles.title + ' !ml-0'">Crea una cuenta</h1>
 
     <section :class="localStyles.section">
@@ -28,56 +32,63 @@ import {
           v-model="name"
           placeholder="Nombre y apellidos"
           type="text"
+          :classMod="getValClassMod(name)"
         />
         <div :class="localStyles.sep"></div>
         <BaseInput
           v-model="email"
           placeholder="Correo electrónico"
           type="text"
-          :classMod="getClassMod(email, emailValidation)"
+          :classMod="getValClassMod(email, emailValidation, EMAIL)"
         />
         <div :class="localStyles.sep"></div>
         <Autocomplete
           placeholderMsg="Macrosector"
           :options="Object.values(macrosectors)"
+          :validData="validData"
         />
         <div :class="localStyles.sep"></div>
         <Autocomplete
           placeholderMsg="Sector"
           :options="Object.values(sectors)"
+          :validData="validData"
         />
         <div :class="localStyles.sep"></div>
         <BaseInput
           v-model="password"
           placeholder="Contraseña"
           type="password"
-          :classMod="getClassMod(password, passwordValidation)"
+          :classMod="getValClassMod(password, passwordValidation, PASSWORD)"
         />
+        <p class="text-xs text-slate-400 mt-2">
+          * Incluir al menos 8 dígitos entre números y letras
+        </p>
       </article>
       <article
         :class="localStyles.formCol + ' mt-8 sm:mt-0 sm:ml-4 hidden sm:flex'"
       >
-        <BaseInput v-model="company" placeholder="Empresa" type="text" />
+        <BaseInput v-model="company" placeholder="Empresa" type="text"  :classMod="getValClassMod(company)"/>
         <div :class="localStyles.sep"></div>
         <BaseInput
           v-model="emailValidation"
           placeholder="Verificar correo electrónico"
           type="text"
-          :classMod="getClassMod(emailValidation, email)"
+          :classMod="getValClassMod(emailValidation, email, EMAIL)"
         />
         <div :class="localStyles.sep"></div>
         <Autocomplete
           placeholderMsg="Rango de ingresos"
           :options="Object.values(incomes)"
+          :validData="validData"
         />
         <div :class="localStyles.sep"></div>
-        <BaseInput v-model="role" placeholder="Cargo" type="text" />
+        <BaseInput v-model="role" placeholder="Cargo" type="text"  :classMod="getValClassMod(role)" />
         <div :class="localStyles.sep"></div>
         <BaseInput
           v-model="passwordValidation"
           placeholder="Verificar contraseña"
           type="password"
-          :classMod="getClassMod(passwordValidation, password)"
+          :classMod="getValClassMod(passwordValidation, password, PASSWORD)"
         />
       </article>
       <!-- Responsive version of form (shown only on small screens in replace of thw bi-column one) -->
@@ -86,54 +97,67 @@ import {
           v-model="name"
           placeholder="Nombre y apellidos"
           type="text"
+          :classMod="getValClassMod(name)"
         />
         <div :class="localStyles.sep"></div>
         <BaseInput
           v-model="email"
           placeholder="Correo electrónico"
           type="text"
-          :classMod="getClassMod(email, emailValidation)"
+          :classMod="getValClassMod(email, emailValidation, EMAIL)"
         />
         <div :class="localStyles.sep"></div>
         <BaseInput
           v-model="emailValidation"
           placeholder="Verificar correo electrónico"
           type="text"
-          :classMod="getClassMod(emailValidation, email)"
+          :classMod="getValClassMod(emailValidation, email, EMAIL)"
         />
         <div :class="localStyles.sep"></div>
         <Autocomplete
           placeholderMsg="Macrosector"
           :options="Object.values(macrosectors)"
+          :validData="validData"
         />
         <div :class="localStyles.sep"></div>
         <Autocomplete
           placeholderMsg="Sector"
           :options="Object.values(sectors)"
+          :validData="validData"
         />
         <div :class="localStyles.sep"></div>
-        <BaseInput v-model="company" placeholder="Empresa" type="text" />
+        <BaseInput v-model="company" placeholder="Empresa" type="text" :classMod="getValClassMod(company)"/>
         <div :class="localStyles.sep"></div>
         <Autocomplete
           placeholderMsg="Rango de ingresos"
           :options="Object.values(incomes)"
+          :validData="validData"
         />
-        <div :class="localStyles.sep"></div>
-        <BaseInput v-model="role" placeholder="Cargo" type="text" />
         <div :class="localStyles.sep"></div>
         <BaseInput
-          v-model="passwordValidation"
-          placeholder="Verificar contraseña"
-          type="password"
-          :classMod="getClassMod(passwordValidation, password)"
+          v-model="role"
+          placeholder="Cargo"
+          type="text"
+          :classMod="getValClassMod(role)"
         />
+
         <div :class="localStyles.sep"></div>
         <BaseInput
           v-model="password"
           placeholder="Contraseña"
           type="password"
-          :classMod="getClassMod(password, passwordValidation)"
+          :classMod="getValClassMod(password, passwordValidation, PASSWORD)"
         />
+        <div :class="localStyles.sep"></div>
+        <BaseInput
+          v-model="passwordValidation"
+          placeholder="Verificar contraseña"
+          type="password"
+          :classMod="getValClassMod(passwordValidation, password, PASSWORD)"
+        />
+        <p class="text-xs text-slate-400 mt-2">
+          * Incluir al menos 8 dígitos entre números y letras
+        </p>
       </article>
       <!-- End of responsive form -->
     </section>
@@ -141,20 +165,31 @@ import {
       <p>
         <RouterLink to="/about">About</RouterLink>
         Autorizo el tratamiento de mis datos personales a la Universidad Icesi y
-        acepto <a  href="./terms-and-conditions" target="_blank" :class="authStyles.link">Términos de Uso</a> de la plataforma.
+        acepto
+        <a
+          href="./terms-and-conditions"
+          target="_blank"
+          :class="authStyles.link"
+          >Términos de Uso</a
+        >
+        de la plataforma.
       </p>
-      <div class="flex mt-3">
-        <div :class="localStyles.checkbox + ' ml-auto'">
+      <div :class="'flex mt-3 w-fit mr-auto ml-auto ' +getCheckClassMod(checkYes)">
+        <div :class="localStyles.checkbox + ' ml-auto ' ">
           <input type="checkbox" v-model="checkYes" />
           <label class="ml-1"> Si</label>
         </div>
-        <div :class="localStyles.checkbox + ' ml-2 mr-auto'">
+        <div :class="localStyles.checkbox + ' ml-2 mr-auto' ">
           <input type="checkbox" v-model="checkNo" />
           <label class="ml-1"> No</label>
         </div>
       </div>
     </section>
-    <BaseButton text="Registrarse" class="w-3/4 max-w-[355px]" />
+    <BaseButton
+      text="Registrarse"
+      class="w-3/4 max-w-[355px]"
+      @click="checkData"
+    />
     <section :class="localStyles.textContainer">
       <p>
         ¿Tu empresa ya está registrada?
@@ -177,23 +212,49 @@ export default {
       password: ref(""),
       passwordValidation: ref(""),
       role: ref(""),
+      secor:ref(""),
       checkYes: false,
       checkNo: false,
+      showModal: false,
+      validData: false,
     };
   },
   methods: {
+    checkData() {
+      this.validData = true;
+      //this.openModal();
+    },
+    closeModal() {
+      this.showModal = false;
+    },
+    openModal() {
+      this.showModal = true;
+    },
     handleChangeAuthMode() {
       this.$emit("handleChangeAuthMode");
     },
-    getClassMod(a, b) {
-      console.log(a);
-      if (a === "") return "";
-      return this.valClassMod(a, b);
+    getValClassMod(a, b, type) {
+      if (!b && !type) {
+        if (this.validData && a==="") {
+          return "!border-rose-300";
+        }
+        return "";
+      }
+
+      if (a === ""){
+        if(this.validData) return "!border-rose-300";
+        return "";
+      }
+      return this.valClassMod(a, b, type);
     },
-    valClassMod(a, b) {
-      if (a === b) return "!border-green-300";
+    valClassMod(a, b, type) {
+      let validType = isValidInput(a, type);
+      if (a === b && validType) return "!border-green-300";
       else return "!border-rose-300";
     },
+    getCheckClassMod(a){
+      if(!a&&this.validData) return "!border-rose-300 border-x-0 border-t-0 border-solid border-b-2";
+    }
   },
   watch: {
     checkYes() {

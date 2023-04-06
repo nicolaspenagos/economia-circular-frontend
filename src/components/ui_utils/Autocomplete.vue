@@ -10,7 +10,7 @@ import ctl from "@netlify/classnames-template-literals";
   <div class="relative">
     <input
       type="text"
-      :class="localStyles.input"
+      :class="localStyles.input + ' ' + classMod()"
       v-model="option"
       autocomplete="off"
       @input="filterOptions"
@@ -18,7 +18,14 @@ import ctl from "@netlify/classnames-template-literals";
       :placeholder="placeholderMsg"
     />
     <div>
-      <img src="/v.svg" :class="[filteredOptions && modal?'sm:rotate-180':'', localStyles.img]"  draggable="false"/>
+      <img
+        src="/v.svg"
+        :class="[
+          filteredOptions && modal ? 'sm:rotate-180' : '',
+          localStyles.img,
+        ]"
+        draggable="false"
+      />
     </div>
   </div>
 
@@ -46,12 +53,18 @@ export default {
       type: Array,
       default: () => [],
     },
+    validData: {
+      type: Boolean,
+      default: false,
+    },
   },
+
   data() {
     return {
       option: "",
       filteredOptions: [],
       modal: false,
+      localValidData: false,
     };
   },
   methods: {
@@ -61,16 +74,23 @@ export default {
       });
     },
     setOption(filteredOption) {
-      console.log(filteredOption);
       this.option = filteredOption;
       this.modal = false;
+    },
+    classMod() {
+      if (this.localValidData && this.option==="") return "!border-rose-300";
+      return "";
+    },
+  },
+  watch: {
+    validData(newVal) {
+      this.localValidData = newVal;
     },
   },
   mounted() {
     if (this.option.length == 0) this.filteredOptions = this.options;
     this.filterOptions();
   },
-  watch: {}, 
 };
 const localStyles = {
   input: ctl(`
