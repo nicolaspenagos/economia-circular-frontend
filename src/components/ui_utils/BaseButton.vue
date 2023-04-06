@@ -1,5 +1,5 @@
 <template>
-<button :class="altBtn?styles.button+' '+styles.alt:styles.button+' '+styles.default">
+<button :class="altBtn?styles.button+' '+styles.alt:styles.button+' '+styles.default" type="button">
     {{text}}
 </button>
 </template>
@@ -14,7 +14,7 @@ defineProps({
     altBtn: {
         type: Boolean,
         default: false
-    }
+    },
 });
 const styles = {
     button: ctl(`

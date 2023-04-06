@@ -10,7 +10,7 @@ import sectors from "../constants/sector";
 import incomes from "../constants/income";
 import Modal from "./ui_utils/Modal.vue";
 import modalMsgs from "../constants/modal";
-import { isValidInput, EMAIL, PASSWORD } from "../utils/inputChecker.js";
+import { isValidInput, EMAIL, PASSWORD, TEXT } from "../utils/inputChecker.js";
 import { RouterLink } from "vue-router";
 </script>
 <template>
@@ -46,12 +46,14 @@ import { RouterLink } from "vue-router";
           placeholderMsg="Macrosector"
           :options="Object.values(macrosectors)"
           :validData="validData"
+          @update="updateMacrosector"
         />
         <div :class="localStyles.sep"></div>
         <Autocomplete
           placeholderMsg="Sector"
           :options="Object.values(sectors)"
           :validData="validData"
+          @update="updateSector"
         />
         <div :class="localStyles.sep"></div>
         <BaseInput
@@ -67,7 +69,12 @@ import { RouterLink } from "vue-router";
       <article
         :class="localStyles.formCol + ' mt-8 sm:mt-0 sm:ml-4 hidden sm:flex'"
       >
-        <BaseInput v-model="company" placeholder="Empresa" type="text"  :classMod="getValClassMod(company)"/>
+        <BaseInput
+          v-model="company"
+          placeholder="Empresa"
+          type="text"
+          :classMod="getValClassMod(company)"
+        />
         <div :class="localStyles.sep"></div>
         <BaseInput
           v-model="emailValidation"
@@ -80,9 +87,15 @@ import { RouterLink } from "vue-router";
           placeholderMsg="Rango de ingresos"
           :options="Object.values(incomes)"
           :validData="validData"
+          @update="updateIncome"
         />
         <div :class="localStyles.sep"></div>
-        <BaseInput v-model="role" placeholder="Cargo" type="text"  :classMod="getValClassMod(role)" />
+        <BaseInput
+          v-model="role"
+          placeholder="Cargo"
+          type="text"
+          :classMod="getValClassMod(role)"
+        />
         <div :class="localStyles.sep"></div>
         <BaseInput
           v-model="passwordValidation"
@@ -118,20 +131,28 @@ import { RouterLink } from "vue-router";
           placeholderMsg="Macrosector"
           :options="Object.values(macrosectors)"
           :validData="validData"
+          @update="updateMacrosector"
         />
         <div :class="localStyles.sep"></div>
         <Autocomplete
           placeholderMsg="Sector"
           :options="Object.values(sectors)"
           :validData="validData"
+          @update="updateSector"
         />
         <div :class="localStyles.sep"></div>
-        <BaseInput v-model="company" placeholder="Empresa" type="text" :classMod="getValClassMod(company)"/>
+        <BaseInput
+          v-model="company"
+          placeholder="Empresa"
+          type="text"
+          :classMod="getValClassMod(company)"
+        />
         <div :class="localStyles.sep"></div>
         <Autocomplete
           placeholderMsg="Rango de ingresos"
           :options="Object.values(incomes)"
           :validData="validData"
+          @update="updateIncome"
         />
         <div :class="localStyles.sep"></div>
         <BaseInput
@@ -174,12 +195,14 @@ import { RouterLink } from "vue-router";
         >
         de la plataforma.
       </p>
-      <div :class="'flex mt-3 w-fit mr-auto ml-auto ' +getCheckClassMod(checkYes)">
-        <div :class="localStyles.checkbox + ' ml-auto ' ">
+      <div
+        :class="'flex mt-3 w-fit mr-auto ml-auto ' + getCheckClassMod(checkYes)"
+      >
+        <div :class="localStyles.checkbox + ' ml-auto '">
           <input type="checkbox" v-model="checkYes" />
           <label class="ml-1"> Si</label>
         </div>
-        <div :class="localStyles.checkbox + ' ml-2 mr-auto' ">
+        <div :class="localStyles.checkbox + ' ml-2 mr-auto'">
           <input type="checkbox" v-model="checkNo" />
           <label class="ml-1"> No</label>
         </div>
@@ -203,6 +226,7 @@ import { RouterLink } from "vue-router";
 
 <script>
 export default {
+  emits: ['handleChangeAuthMode'],
   data() {
     return {
       name: ref(""),
@@ -212,17 +236,37 @@ export default {
       password: ref(""),
       passwordValidation: ref(""),
       role: ref(""),
-      secor:ref(""),
       checkYes: false,
       checkNo: false,
       showModal: false,
       validData: false,
+      sector: "",
+      macrosector: "",
+      income: "",
     };
   },
   methods: {
     checkData() {
+
       this.validData = true;
-      //this.openModal();
+      if (
+        isValidInput(this.name, TEXT) &&
+        isValidInput(this.email, EMAIL) &&
+        isValidInput(this.company, TEXT) &&
+        isValidInput(this.role, TEXT) &&
+        this.checkYes
+      ) {
+      }
+      //console.log(this.name, this.email, this.company, this.role, this.sector, this.macrosector, this.income, this.password);
+    },
+    updateSector(newVal) {
+      this.sector = newVal;
+    },
+    updateMacrosector(newVal) {
+      this.macrosector = newVal;
+    },
+    updateIncome(newVal) {
+      this.income = newVal;
     },
     closeModal() {
       this.showModal = false;
@@ -235,14 +279,14 @@ export default {
     },
     getValClassMod(a, b, type) {
       if (!b && !type) {
-        if (this.validData && a==="") {
+        if (this.validData && a === "") {
           return "!border-rose-300";
         }
         return "";
       }
 
-      if (a === ""){
-        if(this.validData) return "!border-rose-300";
+      if (a === "") {
+        if (this.validData) return "!border-rose-300";
         return "";
       }
       return this.valClassMod(a, b, type);
@@ -252,9 +296,10 @@ export default {
       if (a === b && validType) return "!border-green-300";
       else return "!border-rose-300";
     },
-    getCheckClassMod(a){
-      if(!a&&this.validData) return "!border-rose-300 border-x-0 border-t-0 border-solid border-b-2";
-    }
+    getCheckClassMod(a) {
+      if (!a && this.validData)
+        return "!border-rose-300 border-x-0 border-t-0 border-solid border-b-2";
+    },
   },
   watch: {
     checkYes() {
@@ -287,8 +332,6 @@ const localStyles = {
     sm:py-12
     px-4
     py-8
-
- 
   `),
   section: ctl(`
     flex
@@ -311,9 +354,9 @@ const localStyles = {
     text-center
   `),
   checkbox: ctl(`
-    flex 
-    flex-row 
-    items-center 
+    flex
+    flex-row
+    items-center
     content-center
   `),
 };

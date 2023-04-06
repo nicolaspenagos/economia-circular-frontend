@@ -44,6 +44,7 @@ import ctl from "@netlify/classnames-template-literals";
 </template>
 <script>
 export default {
+  emits: ["update"],
   props: {
     placeholderMsg: {
       type: String,
@@ -86,6 +87,9 @@ export default {
     validData(newVal) {
       this.localValidData = newVal;
     },
+    option(){
+      this.$emit('update',this.option)
+    }
   },
   mounted() {
     if (this.option.length == 0) this.filteredOptions = this.options;
