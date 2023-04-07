@@ -10,8 +10,8 @@ export const useAuthStore = defineStore({
     user: null,
   }),
   getters: {
-    isAuthenticated(state) {
-      return !!state.token;
+    isAuthenticated() {
+      return this.token!==null&&this.user!=null;
     },
   },
   actions: {
@@ -27,6 +27,7 @@ export const useAuthStore = defineStore({
         const token = await APIService.post(LOGIN, {email, password});
         this.login(token.token)
 
+        return;
        // const questions = await APIService.get('questions');
        // console.log(questions)
 

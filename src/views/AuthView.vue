@@ -3,10 +3,10 @@ import ctl from "@netlify/classnames-template-literals";
 import Gradient from "../components/ui_utils/Gradient.vue";
 import Login from "../components/Login.vue";
 import SignUp from "../components/SignUp.vue";
+import { useRoute } from "vue-router";
 </script>
 <template>
-  <main :class="styles.main">
-
+  <main :class="styles.main + getClassProgressMod()">
     <aside
       :class="[
         authMode === IS_LOGGIN_IN ? 'sm:w-2/5' : 'sm:w-4/12',
@@ -31,17 +31,23 @@ import SignUp from "../components/SignUp.vue";
         v-if="authMode === IS_LOGGIN_IN"
         @handleChangeAuthMode="changeAuthMode"
       />
-      <SignUp v-else @handleChangeAuthMode="changeAuthMode" />
+      <SignUp
+        v-else
+        @handleChangeAuthMode="changeAuthMode"
+        @updateInProgress="setProgress"
+      />
     </section>
   </main>
 </template>
 <script>
-export const IS_LOGGIN_IN = "isLoggingIn";
-export const IS_SIGNING_UP = "isSigningUp";
+export const IS_LOGGIN_IN = "loggingIn";
+export const IS_SIGNING_UP = "signingUp";
 export default {
+  emits: ["toggleHeader"],
   data() {
     return {
       authMode: IS_LOGGIN_IN,
+      inProgress: false,
     };
   },
   methods: {
@@ -49,8 +55,22 @@ export default {
       this.authMode =
         this.authMode === IS_LOGGIN_IN ? IS_SIGNING_UP : IS_LOGGIN_IN;
     },
+    getClassProgressMod() {
+      if (this.inProgress) {
+        return " !cursor-progress";
+      } else {
+        return "";
+      }
+    },
+    setProgress(newVal) {
+      this.inProgress = newVal;
+    },
   },
   components: { SignUp },
+  mounted() {
+    this.$emit("toggleHeader", false);
+    this.authMode = useRoute().params.isLoggingIn;
+  },
 };
 export const styles = {
   main: ctl(`

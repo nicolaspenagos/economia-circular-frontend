@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import AuthView from '../views/AuthView.vue';
 import TermsAndConditionsView from '../views/TermsAndConditionsView.vue';
+import NotFoundView from '../views/NotFoundView.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -11,9 +12,10 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path:'/auth',
+      path:'/auth/:isLoggingIn',
       name:'auth',
-      component:AuthView
+      component:AuthView,
+      props:true
     },
     {
       path:'/terms-and-conditions',
@@ -21,12 +23,9 @@ const router = createRouter({
       component:TermsAndConditionsView
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      path: '/:catchAll(.*)',
+      name: 'not-found',
+      component: NotFoundView
     }
   ]
 })

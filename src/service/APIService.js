@@ -14,6 +14,8 @@ export class APIService {
         const response = await axios.post(API_URL + endpoint, data, config);
         return response.data;
     } catch (error) {
+      const errorData = error.response.data;
+     alert(errorData.code+"\n"+errorData.message);
       throw error.response.data;
     }
   }

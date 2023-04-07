@@ -19,6 +19,7 @@ import {
 import { RouterLink } from "vue-router";
 import { useAuthStore } from "../stores/auth";
 import { mapStores } from "pinia";
+import router from "../router";
 </script>
 <template>
   <Modal
@@ -81,7 +82,7 @@ import { mapStores } from "pinia";
           v-model="organization"
           placeholder="Empresa"
           type="text"
-          :classMod="getValClassMod(organization)"
+          :classMod=" getValClassMod(organization)"
         />
         <div :class="localStyles.sep"></div>
         <BaseInput
@@ -219,6 +220,7 @@ import { mapStores } from "pinia";
     <BaseButton
       text="Registrarse"
       class="w-3/4 max-w-[355px]"
+      classMod="sm:h-12"
       @click="checkData"
     />
     <section :class="localStyles.textContainer">
@@ -235,7 +237,7 @@ import { mapStores } from "pinia";
 <script>
 const TERMS_AND_CONDS_LINK = "./terms-and-conditions";
 export default {
-  emits: ["handleChangeAuthMode"],
+  emits: ["handleChangeAuthMode","updateInProgress"],
   data() {
     return {
       name: ref(""),
@@ -252,12 +254,23 @@ export default {
       sector: "",
       macrosector: "",
       income: "",
+      actionInProgress: false,
     };
   },
   methods: {
-    signUp() {
-      this.authStore.signUp(this.getNewUser());
+    getCursorClassMod(){
+      return (this.actionInProgress)?" !cursor-progress ":"";
+    },
+    async signUp() {
       this.closeModal();
+      this.$emit('updateInProgress',true);
+      this.actionInProgress = true;
+      console.log('HOLAAA 1');
+      await this.authStore.signUp(this.getNewUser());
+      console.log('HOLAAA 2');
+      this.$emit('updateInProgress',false);
+      this.actionInProgress = false;
+      router.push('/');
     },
     checkData() {
       this.validData = true;
@@ -293,13 +306,13 @@ export default {
     getValClassMod(a, b, type) {
       if (!b && !type) {
         if (this.validData && a === "") {
-          return "!border-rose-300";
+          return " !border-rose-300 ";
         }
         return "";
       }
 
       if (a === "") {
-        if (this.validData) return "!border-rose-300";
+        if (this.validData) return " !border-rose-300 ";
         return "";
       }
       return this.valClassMod(a, b, type);
@@ -314,9 +327,8 @@ export default {
         return "!border-rose-300 border-x-0 border-t-0 border-solid border-b-2";
     },
     getNewUser() {
-
       const date = new Date();
-      const currentDate = date.toISOString().slice(0, -2);;
+      const currentDate = date.toISOString().slice(0, -2);
 
       return {
         email: this.email,

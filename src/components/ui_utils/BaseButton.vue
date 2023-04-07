@@ -1,5 +1,5 @@
 <template>
-<button :class="altBtn?styles.button+' '+styles.alt:styles.button+' '+styles.default" type="button">
+<button :class="altBtn?styles.button+' '+styles.alt+' '+classMod:styles.button+' '+styles.default+' '+classMod" type="button">
     {{text}}
 </button>
 </template>
@@ -15,10 +15,14 @@ defineProps({
         type: Boolean,
         default: false
     },
+    classMod:{
+        type: String,
+        default: ""
+    }
 });
 const styles = {
     button: ctl(`
-        h-12
+        h-10
         rounded-full
     `),
     default: ctl(`
