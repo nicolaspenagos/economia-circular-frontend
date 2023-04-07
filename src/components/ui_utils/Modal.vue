@@ -15,13 +15,14 @@ import BaseButton from "./BaseButton.vue";
       <p :class="localStyles.p">{{ msg }}</p>
       <div :class="localStyles.btnsContainer">
         <BaseButton text="Volver" class="w-3/4 max-w-[100px]" :altBtn="true" @click="closeModal"/>
-        <BaseButton text="Aceptar" class="w-3/4 max-w-[100px] ml-2" />
+        <BaseButton text="Aceptar" class="w-3/4 max-w-[100px] ml-2" @click="accept"/>
       </div>
     </article>
   </div>
 </template>
 <script>
 export default {
+  emits: ['close', 'accept'],
   props: {
     msg: {
       type: String,
@@ -35,6 +36,9 @@ export default {
   methods:{
     closeModal(){
         this.$emit('close')
+    },
+    accept(){
+      this.$emit('accept')
     }
   },
   components: { BaseButton },

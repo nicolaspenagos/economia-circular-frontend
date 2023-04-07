@@ -10,8 +10,15 @@ import sectors from "../constants/sector";
 import incomes from "../constants/income";
 import Modal from "./ui_utils/Modal.vue";
 import modalMsgs from "../constants/modal";
-import { isValidInput, EMAIL, PASSWORD, TEXT } from "../utils/inputChecker.js";
+import {
+  isValidInput,
+  EMAIL,
+  PASSWORD,
+  isValidUser,
+} from "../utils/inputChecker.js";
 import { RouterLink } from "vue-router";
+import { useAuthStore } from "../stores/auth";
+import { mapStores } from "pinia";
 </script>
 <template>
   <Modal
@@ -19,6 +26,7 @@ import { RouterLink } from "vue-router";
     :msg="modalMsgs.AUTHORIZATION_STATEMENT"
     imgPath="/alert.svg"
     @close="closeModal"
+    @accept="signUp"
   />
   <form
     :class="authStyles.form + ' ' + localStyles.form"
@@ -70,10 +78,10 @@ import { RouterLink } from "vue-router";
         :class="localStyles.formCol + ' mt-8 sm:mt-0 sm:ml-4 hidden sm:flex'"
       >
         <BaseInput
-          v-model="company"
+          v-model="organization"
           placeholder="Empresa"
           type="text"
-          :classMod="getValClassMod(company)"
+          :classMod="getValClassMod(organization)"
         />
         <div :class="localStyles.sep"></div>
         <BaseInput
@@ -91,10 +99,10 @@ import { RouterLink } from "vue-router";
         />
         <div :class="localStyles.sep"></div>
         <BaseInput
-          v-model="role"
+          v-model="position"
           placeholder="Cargo"
           type="text"
-          :classMod="getValClassMod(role)"
+          :classMod="getValClassMod(position)"
         />
         <div :class="localStyles.sep"></div>
         <BaseInput
@@ -142,10 +150,10 @@ import { RouterLink } from "vue-router";
         />
         <div :class="localStyles.sep"></div>
         <BaseInput
-          v-model="company"
+          v-model="organization"
           placeholder="Empresa"
           type="text"
-          :classMod="getValClassMod(company)"
+          :classMod="getValClassMod(organization)"
         />
         <div :class="localStyles.sep"></div>
         <Autocomplete
@@ -156,10 +164,10 @@ import { RouterLink } from "vue-router";
         />
         <div :class="localStyles.sep"></div>
         <BaseInput
-          v-model="role"
+          v-model="position"
           placeholder="Cargo"
           type="text"
-          :classMod="getValClassMod(role)"
+          :classMod="getValClassMod(position)"
         />
 
         <div :class="localStyles.sep"></div>
@@ -225,17 +233,18 @@ import { RouterLink } from "vue-router";
 </template>
 
 <script>
+const TERMS_AND_CONDS_LINK = "./terms-and-conditions";
 export default {
-  emits: ['handleChangeAuthMode'],
+  emits: ["handleChangeAuthMode"],
   data() {
     return {
       name: ref(""),
       email: ref(""),
       emailValidation: ref(""),
-      company: ref(""),
+      organization: ref(""),
       password: ref(""),
       passwordValidation: ref(""),
-      role: ref(""),
+      position: ref(""),
       checkYes: false,
       checkNo: false,
       showModal: false,
@@ -246,18 +255,22 @@ export default {
     };
   },
   methods: {
+    signUp() {
+      this.authStore.signUp(this.getNewUser());
+      this.closeModal();
+    },
     checkData() {
-
       this.validData = true;
+
       if (
-        isValidInput(this.name, TEXT) &&
-        isValidInput(this.email, EMAIL) &&
-        isValidInput(this.company, TEXT) &&
-        isValidInput(this.role, TEXT) &&
-        this.checkYes
-      ) {
-      }
-      //console.log(this.name, this.email, this.company, this.role, this.sector, this.macrosector, this.income, this.password);
+        isValidUser(
+          this.getNewUser(),
+          this.passwordValidation,
+          this.emailValidation,
+          this.checkYes
+        )
+      )
+        this.openModal();
     },
     updateSector(newVal) {
       this.sector = newVal;
@@ -300,6 +313,31 @@ export default {
       if (!a && this.validData)
         return "!border-rose-300 border-x-0 border-t-0 border-solid border-b-2";
     },
+    getNewUser() {
+
+      const date = new Date();
+      const currentDate = date.toISOString().slice(0, -2);;
+
+      return {
+        email: this.email,
+        password: this.password,
+        name: this.name,
+        position: this.position,
+        sector: this.sector,
+        macrosector: this.macrosector,
+        organization: this.organization,
+        registrationDate: currentDate,
+        termsAndConditionsHistory: [
+          {
+            acceptanceDate: currentDate,
+            link: TERMS_AND_CONDS_LINK,
+          },
+        ],
+      };
+    },
+  },
+  computed: {
+    ...mapStores(useAuthStore),
   },
   watch: {
     checkYes() {
