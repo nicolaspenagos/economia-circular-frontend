@@ -197,10 +197,12 @@ import router from "../router";
         Autorizo el tratamiento de mis datos personales a la Universidad Icesi y
         acepto
         <a
-          href="./terms-and-conditions"
           target="_blank"
           :class="authStyles.link"
-          >Términos de Uso</a
+          @click="goToTermsAndConds"
+          >Términos de Uso
+          </a
+
         >
         de la plataforma.
       </p>
@@ -258,6 +260,9 @@ export default {
     };
   },
   methods: {
+    goToTermsAndConds(){
+      router.push('/terms-and-conditions')
+    },
     getCursorClassMod(){
       return (this.actionInProgress)?" !cursor-progress ":"";
     },

@@ -7,7 +7,7 @@ export const useAuthStore = defineStore({
   id: "auth",
   state: () => ({
     token: null,
-    user: null,
+    isLoggedIn: false,
   }),
   getters: {
     isAuthenticated() {
@@ -19,30 +19,36 @@ export const useAuthStore = defineStore({
 
         const reponse = await APIService.post(USERS, newUser);
         this.user = reponse;
-        console.log(this.user);
 
         //Login
-        const password = newUser.password;
-        const email = newUser.email;
-        const token = await APIService.post(LOGIN, {email, password});
-        this.login(token.token)
-
+        await this.login(newUser.email, newUser.password);
         return;
-       // const questions = await APIService.get('questions');
-       // console.log(questions)
+    
 
     },
-    login(token) {
-      console.log(token)
-      console.log(localStorage)
-      localStorage.setItem(TOKEN_KEY, token)
-      this.token = token
+    async login(email, password) {
+      const token = await APIService.post(LOGIN, {email, password});
+      this.setToken(token);
+      this.isLoggedIn=true;
     },
     logout() {
       this.token = null;
       this.user = null;
+      this.isLoggedIn = false;
       localStorage.removeItem("token");
-      localStorage.removeItem("user");
     },
+    setToken(token){
+      localStorage.setItem(TOKEN_KEY, token.token);
+      this.token = token;
+    },
+    checkIfLogged(){
+      const token = localStorage.getItem(TOKEN_KEY);
+      console.log(token);
+      if(token){
+        console.log('hola');
+        this.token = token;
+        this.isLoggedIn = true;
+      }
+    }
   },
 });

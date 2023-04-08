@@ -5,13 +5,14 @@ import { mapStores } from "pinia";
 import BaseButton from "./components/ui_utils/BaseButton.vue";
 import { useAuthStore } from "./stores/auth";
 import router from "./router";
+import { storeToRefs } from 'pinia'
 </script>
 
 <template>
-  <main class="bg-black h-screen">
+  <main class="bg-black h-full">
     <header :class="localStyles.header" v-if="showHeader">
       <img src="/horizontal-logo.svg" :class="localStyles.logo" />
-      <nav v-if="authStore.isAuthenticated" :class="localStyles.link">
+      <nav v-if="isLoggedIn" :class="localStyles.link">
         <RouterLink to="/" :class="localStyles.link">Inicio</RouterLink>
         <RouterLink to="/" :class="localStyles.link">Cuestionario</RouterLink>
         <RouterLink to="/" :class="localStyles.link">Reporte</RouterLink>
@@ -45,6 +46,9 @@ import router from "./router";
 export default {
   computed: {
     ...mapStores(useAuthStore),
+    isLoggedIn(){
+      return this.authStore.isLoggedIn;
+    }
   },
   methods: {
     logout() {
@@ -65,6 +69,9 @@ export default {
       showHeader: true,
     };
   },
+  mounted(){
+    this.authStore.checkIfLogged();
+  }
 };
 const localStyles = {
   header: ctl(`
