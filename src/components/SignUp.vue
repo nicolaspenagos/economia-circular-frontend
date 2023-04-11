@@ -20,6 +20,7 @@ import { RouterLink } from "vue-router";
 import { useAuthStore } from "../stores/auth";
 import { mapStores } from "pinia";
 import router from "../router";
+import { showError } from "../utils/errorUtils";
 </script>
 <template>
   <Modal
@@ -82,7 +83,7 @@ import router from "../router";
           v-model="organization"
           placeholder="Empresa"
           type="text"
-          :classMod=" getValClassMod(organization)"
+          :classMod="getValClassMod(organization)"
         />
         <div :class="localStyles.sep"></div>
         <BaseInput
@@ -193,17 +194,11 @@ import router from "../router";
     </section>
     <section :class="localStyles.textContainer">
       <p>
-        <RouterLink to="/about">About</RouterLink>
         Autorizo el tratamiento de mis datos personales a la Universidad Icesi y
         acepto
-        <a
-          target="_blank"
-          :class="authStyles.link"
-          @click="goToTermsAndConds"
+        <a target="_blank" :class="authStyles.link" href="/terms-and-conditions"
           >Términos de Uso
-          </a
-
-        >
+        </a>
         de la plataforma.
       </p>
       <div
@@ -239,7 +234,7 @@ import router from "../router";
 <script>
 const TERMS_AND_CONDS_LINK = "./terms-and-conditions";
 export default {
-  emits: ["handleChangeAuthMode","updateInProgress"],
+  emits: ["handleChangeAuthMode", "updateInProgress"],
   data() {
     return {
       name: ref(""),
@@ -260,22 +255,24 @@ export default {
     };
   },
   methods: {
-    goToTermsAndConds(){
-      router.push('/terms-and-conditions')
+    goToTermsAndConds() {
+      router.push("/terms-and-conditions");
     },
-    getCursorClassMod(){
-      return (this.actionInProgress)?" !cursor-progress ":"";
+    getCursorClassMod() {
+      return this.actionInProgress ? " !cursor-progress " : "";
     },
     async signUp() {
-      this.closeModal();
-      this.$emit('updateInProgress',true);
-      this.actionInProgress = true;
-      console.log('HOLAAA 1');
-      await this.authStore.signUp(this.getNewUser());
-      console.log('HOLAAA 2');
-      this.$emit('updateInProgress',false);
-      this.actionInProgress = false;
-      router.push('/');
+      try {
+        this.closeModal();
+        this.$emit("updateInProgress", true);
+        this.actionInProgress = true;
+        await this.authStore.signUp(this.getNewUser());
+        this.$emit("updateInProgress", false);
+        this.actionInProgress = false;
+        router.push("/");
+      } catch (error) {
+        showError(error);
+      }
     },
     checkData() {
       this.validData = true;

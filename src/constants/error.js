@@ -1,0 +1,1 @@
+export const SESSION_EXPIRED = 'Su sesión ha expirado, por favor vuelva a iniciar sesión para continuar.';

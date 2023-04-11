@@ -6,6 +6,7 @@ import { styles as authStyles } from "../views/AuthView.vue";
 import { useAuthStore } from "../stores/auth";
 import { mapStores } from "pinia";
 import router from "../router";
+import { showError } from "../utils/errorUtils";
 </script>
 <template>
   <form :class="authStyles.form" v-on:submit.prevent="onSubmit">
@@ -53,8 +54,12 @@ export default {
     async logIn() {
       this.validData = true;
       if (this.email !== "" && this.password !== "") {
-        await this.authStore.login(this.email, this.password);
-        router.push('/');
+        try{
+          await this.authStore.login(this.email, this.password);
+          router.push('/')
+        }catch(error){
+          showError(error);
+        }
       }
     },
     getClassMod(input) {

@@ -63,7 +63,8 @@ const localStyles = {
         bg-white
         z-50
         mx-auto
-        sm:w-5/12
+        sm:w-fit
+        sm:max-w-3xl
         p-6
         custom-border-radius
 

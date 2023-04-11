@@ -15,7 +15,7 @@ export function isValidInput(input, type) {
 }
 
 export function isValidUser(newUser, passwordVal, emailVal, termsAndCondsAcceptance) {
-  console.log(newUser);
+
   if(newUser.password!== passwordVal) return false;
   if(newUser.email!== emailVal) return false;
   return (

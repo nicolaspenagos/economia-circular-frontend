@@ -99,7 +99,7 @@ export default {
 const localStyles = {
   input: ctl(`
         w-full
-        cutom-text-color
+        custom-text-color
         placeholder-[#0B033C]
         border-b-2
         pb-3

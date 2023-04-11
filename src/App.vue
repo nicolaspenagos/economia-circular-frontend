@@ -1,28 +1,62 @@
 <script setup>
-import { RouterLink, RouterView, routerKey } from "vue-router";
+import { RouterLink, RouterView } from "vue-router";
 import ctl from "@netlify/classnames-template-literals";
 import { mapStores } from "pinia";
 import BaseButton from "./components/ui_utils/BaseButton.vue";
 import { useAuthStore } from "./stores/auth";
 import router from "./router";
-import { storeToRefs } from 'pinia'
+import { useRoute } from "vue-router";
+import { HOME, QUESTIONNAIRE, REPORT } from "./router/index.js";
+import Modal from "./components/ui_utils/Modal.vue";
+import modalMsgs from "./constants/modal.js";
+const route = useRoute();
 </script>
-
 <template>
+  <Modal
+    v-if="showModal"
+    :msg="modalMsgs.LOGOUT_STATEMENT"
+    imgPath="/logout-icon.svg"
+    @close="closeModal"
+    @accept="logout"
+  />
   <main class="bg-black h-full">
     <header :class="localStyles.header" v-if="showHeader">
-      <img src="/horizontal-logo.svg" :class="localStyles.logo" />
+      <img
+        src="/horizontal-logo.svg"
+        :class="localStyles.logo"
+        draggable="false"
+      />
       <nav v-if="isLoggedIn" :class="localStyles.link">
-        <RouterLink to="/" :class="localStyles.link">Inicio</RouterLink>
-        <RouterLink to="/" :class="localStyles.link">Cuestionario</RouterLink>
-        <RouterLink to="/" :class="localStyles.link">Reporte</RouterLink>
-        <BaseButton
-          text="Cerrar Sesión"
-          :altBtn="true"
-          @click="logout"
-          classMod="text-white"
-          class="w-36"
-        />
+        <RouterLink
+          :to="HOME"
+          :class="[
+            route.path === HOME ? 'custom-text-green font-bold underline' : '',
+            localStyles.link,
+          ]"
+          >Inicio</RouterLink
+        >
+        <RouterLink
+          :to="QUESTIONNAIRE"
+          :class="[
+            route.path === QUESTIONNAIRE
+              ? 'custom-text-green font-bold underline'
+              : '',
+            localStyles.link,
+          ]"
+          >Cuestionario</RouterLink
+        >
+        <RouterLink
+      
+          :to="REPORT"
+          :class="[
+            route.path === REPORT
+              ? 'custom-text-green font-bold underline'
+              : '',
+            localStyles.link,
+          ]"
+          >Reporte</RouterLink
+        >
+        <BaseButton text="Cerrar Sesión" @click="openModal" class="w-36" />
       </nav>
       <nav v-else>
         <BaseButton
@@ -30,7 +64,7 @@ import { storeToRefs } from 'pinia'
           @click="goToLogin"
           class="w-36"
           :altBtn="true"
-          classMod="text-white"
+          classMod="!text-white"
         ></BaseButton>
         <BaseButton
           text="Registrarse"
@@ -46,13 +80,21 @@ import { storeToRefs } from 'pinia'
 export default {
   computed: {
     ...mapStores(useAuthStore),
-    isLoggedIn(){
+    isLoggedIn() {
       return this.authStore.isLoggedIn;
-    }
+    },
   },
   methods: {
+    closeModal(){
+      this.showModal = false;
+    },
+    openModal(){
+      this.showModal = true;
+    },
     logout() {
+      this.closeModal();
       this.authStore.logout();
+      router.push(HOME);
     },
     goToLogin() {
       router.push("/auth/loggingIn");
@@ -67,11 +109,13 @@ export default {
   data() {
     return {
       showHeader: true,
+      currentView: "home",
+      showModal:false
     };
   },
-  mounted(){
+  mounted() {
     this.authStore.checkIfLogged();
-  }
+  },
 };
 const localStyles = {
   header: ctl(`
@@ -88,9 +132,11 @@ const localStyles = {
   link: ctl(`
     text-white
     mr-4
+    hover:text-[#38f0a2]
     `),
   nav: ctl(`
     gap-2
     `),
 };
 </script>
+

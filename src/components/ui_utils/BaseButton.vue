@@ -24,6 +24,7 @@ const styles = {
     button: ctl(`
         h-10
         rounded-full
+        custom-text-color
     `),
     default: ctl(`
         custom-bg-green

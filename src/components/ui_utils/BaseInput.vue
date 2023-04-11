@@ -30,7 +30,7 @@ defineProps({
 const styles = {
     input: ctl(`
         w-full
-        cutom-text-color
+        custom-text-color
         placeholder-slate-400
         border-b-2
         pb-3

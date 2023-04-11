@@ -146,6 +146,11 @@ import Footer from "../components/Footer.vue";
   <Footer/>
 </template>
 <script>
+export default{
+  mounted() {
+    this.$emit("toggleHeader", false);
+  },
+}
 const localStyles = {
   main: ctl(`
     flex

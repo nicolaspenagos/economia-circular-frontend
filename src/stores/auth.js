@@ -1,54 +1,60 @@
 import { defineStore } from "pinia";
-import { APIService, USERS,LOGIN } from "../service/APIService";
+import { APIService, USERS, LOGIN } from "../service/APIService";
+import { isTokenExpired, parseJwt } from "../utils/jwtUtils";
 
-const TOKEN_KEY = 'myapp-token';
+const TOKEN_KEY = "myapp-token";
 
 export const useAuthStore = defineStore({
   id: "auth",
   state: () => ({
     token: null,
     isLoggedIn: false,
+    user: null,
   }),
   getters: {
     isAuthenticated() {
-      return this.token!==null&&this.user!=null;
+      return this.isLoggedIn;
     },
   },
   actions: {
-    async signUp(newUser){
-
-        const reponse = await APIService.post(USERS, newUser);
-        this.user = reponse;
-
-        //Login
-        await this.login(newUser.email, newUser.password);
-        return;
-    
-
+    async signUp(newUser) {
+      this.user = await APIService.post(USERS, newUser);
+      await this.login(newUser.email, newUser.password);
+      return;
     },
     async login(email, password) {
-      const token = await APIService.post(LOGIN, {email, password});
-      this.setToken(token);
-      this.isLoggedIn=true;
+      this.logout();
+      const token = await APIService.post(LOGIN, { email, password });
+      localStorage.setItem(TOKEN_KEY, token.token);
+      this.setLoggedUserData(token.token);
+    },
+    async fetchLoggedUser() {
+
+      const fetchedUser = await APIService.get(
+        USERS + "/" + parseJwt(this.token).userId
+      );
+      this.user=fetchedUser;
+    },
+    setLoggedUserData(token) {
+      this.token = token;
+      this.isLoggedIn = true;
+      this.fetchLoggedUser();
     },
     logout() {
       this.token = null;
-      this.user = null;
       this.isLoggedIn = false;
-      localStorage.removeItem("token");
+      this.user = null;
+      localStorage.removeItem(TOKEN_KEY);
     },
-    setToken(token){
-      localStorage.setItem(TOKEN_KEY, token.token);
-      this.token = token;
-    },
-    checkIfLogged(){
+    checkIfLogged() {
       const token = localStorage.getItem(TOKEN_KEY);
-      console.log(token);
-      if(token){
-        console.log('hola');
-        this.token = token;
-        this.isLoggedIn = true;
+      if (token) {
+        if (!isTokenExpired(parseJwt(token).exp)) {
+          this.setLoggedUserData(token);
+        } else {
+          this.logout();
+        }
       }
-    }
+    },
   },
 });
