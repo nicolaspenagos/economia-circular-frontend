@@ -8,6 +8,7 @@
 :root {
   --green: #38f0a2;
   --green-hover: #2ee696;
+  --violet:#756EF2;
 }
 
 .custom-bg-green {
@@ -28,6 +29,10 @@
 
 .custom-text-green {
   color: var(--green);
+}
+
+.custom-text-violet{
+  color:var(--violet)
 }
 
 .custom-bg-gradient {

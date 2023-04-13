@@ -1,7 +1,8 @@
 <script setup>
 import { mapStores } from "pinia";
 import { useAuthStore } from "../stores/auth";
-import Onboarding from "../components/ui_utils/Onboarding.vue";
+import Onboarding from "../components/Onboarding.vue";
+import onboardingData from "../constants/onboarding.js";
 </script>
 <template>
   <Onboarding v-if="showModal" :data="dataArray"/>
@@ -12,8 +13,8 @@ export default {
 emits: ["toggleHeader"],
   data() {
     return {
-        showModal:false,
-        dataArray:[{name:"Name", lastname:"Last"}, {name:"Name", lastname:"Last"}]
+        showModal:true,
+        dataArray:onboardingData.QUESTIONNAIRE_ONBOARDING
     }
   },
   computed: {

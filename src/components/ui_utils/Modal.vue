@@ -47,7 +47,7 @@ const localStyles = {
   backdrop: ctl(`
     flex
     items-center
-    content-center
+    justify-center
     fixed
     h-screen
     w-screen
@@ -57,12 +57,12 @@ const localStyles = {
     z-40
     bg-black/25
     backdrop-blur
+
     `),
   modalContainer: ctl(`
         w-5/6
         bg-white
         z-50
-        mx-auto
         sm:w-fit
         sm:max-w-3xl
         p-6
