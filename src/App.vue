@@ -46,7 +46,6 @@ const route = useRoute();
           >Cuestionario</RouterLink
         >
         <RouterLink
-      
           :to="REPORT"
           :class="[
             route.path === REPORT
@@ -56,7 +55,7 @@ const route = useRoute();
           ]"
           >Reporte</RouterLink
         >
-        <BaseButton text="Cerrar Sesión" @click="openModal" class="w-36" />
+        <BaseButton text="Cerrar Sesión" @click="openModal" />
       </nav>
       <nav v-else>
         <BaseButton
@@ -72,6 +71,9 @@ const route = useRoute();
           class="w-36 ml-4"
         ></BaseButton>
       </nav>
+      <nav class="flex sm:hidden">
+        <img src="/menu.svg" :class="localStyles.mobileMenu" @click="goToQuestionnaire"/>
+      </nav>
     </header>
     <RouterView @toggleHeader="toggleHeader" />
   </main>
@@ -85,10 +87,10 @@ export default {
     },
   },
   methods: {
-    closeModal(){
+    closeModal() {
       this.showModal = false;
     },
-    openModal(){
+    openModal() {
       this.showModal = true;
     },
     logout() {
@@ -102,6 +104,9 @@ export default {
     goToSignUp() {
       router.push("/auth/signingUp");
     },
+    goToQuestionnaire(){
+      router.push("/questionnaire");
+    },
     toggleHeader(newVal) {
       this.showHeader = newVal;
     },
@@ -110,7 +115,7 @@ export default {
     return {
       showHeader: true,
       currentView: "home",
-      showModal:false
+      showModal: false,
     };
   },
   mounted() {
@@ -120,23 +125,36 @@ export default {
 const localStyles = {
   header: ctl(`
         flex
-        px-20
+        px-6
+        sm:px-20
         py-16
         justify-between
         items-center
+        fixed
+        w-full
+        z-30
+        h-[160px]
+        sm-h-[176px]
 
     `),
   logo: ctl(`
-        h-12
+       h-8
+       sm:h-12
     `),
   link: ctl(`
+    hidden
+    sm:flex
     text-white
     mr-4
     hover:text-[#38f0a2]
+    items-center
     `),
   nav: ctl(`
     gap-2
     `),
+  mobileMenu: ctl(`
+
+      h-6
+    `),
 };
 </script>
-

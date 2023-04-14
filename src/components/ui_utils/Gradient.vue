@@ -13,6 +13,7 @@ const styles = {
           custom-bg-gradient
           h-full
           w-full
+          top-0
         `),
 }
 </script>

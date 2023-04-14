@@ -25,6 +25,7 @@ const styles = {
         h-10
         rounded-full
         custom-text-color
+        px-4
     `),
     default: ctl(`
         custom-bg-green

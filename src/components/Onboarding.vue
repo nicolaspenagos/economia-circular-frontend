@@ -13,36 +13,54 @@ import BaseButton from "./ui_utils/BaseButton.vue";
   >
     <article :class="localStyles.modalContainer">
       <div :class="localStyles.left">
-        <div :class="localStyles.progressBar" class="text-black">
-          <ProgressDot
-            v-for="(val, index) in data"
-            :key="index"
-            :index="index"
-            :currentIndex="currentIndex"
-          />
+        <div>
+          <div :class="localStyles.progressBar" class="text-black">
+            <ProgressDot
+              v-for="(val, index) in data"
+              :key="index"
+              :index="index"
+              :currentIndex="currentIndex"
+            />
+          </div>
+          <p :class="localStyles.pagCounter">
+            {{ currentIndex + 1 + " de " + data.length }}
+          </p>
         </div>
-        <p :class="localStyles.pagCounter">
-          {{ currentIndex + 1 + " de " + data.length }}
-        </p>
-        <h1 :class="localStyles.title" v-html="data[currentIndex].title"></h1>
-
-        <img
-          :src="'/' + data[currentIndex].imgMobile"
-          :class="localStyles.mobileImg"
-        />
-        <p v-html="this.data[currentIndex].text" :class="localStyles.text"></p>
+        <div class="flex flex-col h-[440px] sm:h-[250px]">
+          <h1 :class="localStyles.title" v-html="data[currentIndex].title"></h1>
+          <img
+            :src="'/' + data[currentIndex].imgMobile"
+            :class="localStyles.mobileImg"
+            draggable="false"
+          />
+          <p
+            v-html="this.data[currentIndex].text"
+            :class="localStyles.text"
+          ></p>
+        </div>
         <div :class="localStyles.btnsContainer">
           <BaseButton
+            v-if="data[currentIndex].backBtn !== ''"
             :text="data[currentIndex].backBtn"
-            class="w-[120px] sm:w-[160px] mr-3"
+            class="min-w-[120px] sw-fit sm:min-w-[150px] mr-3"
             :altBtn="true"
+            @click="back"
           />
-          <BaseButton :text="data[currentIndex].nextBtn" class="w-[120px] sm:w-[160px]" />
+          <BaseButton
+            v-if="data[currentIndex].nextBtn !== ''"
+            :text="data[currentIndex].nextBtn"
+            class="min-w-[120px] w-fit sm:min-w-[150px]"
+            @click="next"
+          />
         </div>
       </div>
-      <img src="/onboarding-vector.svg" :class="localStyles.vector">
-      <div>
-       
+      <img src="/onboarding-vector.svg" :class="localStyles.vector"  draggable="false"/>
+      <div :class="localStyles.right">
+        <img
+          :src="'/' + data[currentIndex].imgDesktop"
+          :class="localStyles.desktopImg"
+          draggable="false"
+        />
       </div>
     </article>
   </div>
@@ -59,6 +77,16 @@ export default {
   methods: {
     closeModal() {
       this.$emit("close");
+    },
+    next() {
+      if(this.currentIndex===this.data.length-1)
+        this.closeModal();
+      else if(this.currentIndex + 1 < this.data.length) this.currentIndex++;
+    },
+    back() {
+      if (this.currentIndex == 0) {
+        this.closeModal();
+      } else if (this.currentIndex - 1 >= 0) this.currentIndex--;
     },
   },
   data() {
@@ -82,6 +110,7 @@ const localStyles = {
     z-40
     bg-black/25
     backdrop-blur
+    cursor-pointer
     `),
   modalContainer: ctl(`
         bg-white
@@ -90,25 +119,25 @@ const localStyles = {
         py-14
         custom-border-radius
         flex
-        flex-col
-        items-center
         px-6
+        h-fit
         sm:w-3/4
-        sm:p-6
+        sm:py-6
         sm:pl-20
-        sm:items-start
-        sm:h-3/4
+        sm:pr-0
         relative
+        cursor-auto
     `),
   progressBar: ctl(`
       flex
       items-center
       gap-2.5
       sm:gap-4
-      sm:mt-36
+      sm:mt-28
     `),
   pagCounter: ctl(`
       text-center
+      sm:text-left
       mt-4
     `),
   title: ctl(`
@@ -116,32 +145,53 @@ const localStyles = {
       text-center
       text-xl
       custom-text-violet
-      mt-10
+      mt-8
       sm:text-left
       sm:text-2xl
+      sm:mt-auto
   `),
   mobileImg: ctl(`
       sm:hidden
       mt-6
   `),
+  desktopImg: ctl(`
+    hidden
+    sm:flex
+    h-[400px]
+    ml-auto
+  `),
   text: ctl(`
       text-center
       mt-6
       sm:text-left
+      sm:mb-auto
   `),
   btnsContainer: ctl(`
     flex
-    mt-6
-    mb-6
+    sm:mb-28
   `),
-  left:ctl(`
+  left: ctl(`
     flex
     flex-col
     items-center
     sm:items-start
     sm:w-1/2
+    justify-between
+
   `),
-  vector:ctl(`
+  right: ctl(`
+    w-1/2 
+    hidden 
+    sm:flex
+    h-full
+    justify-center
+    items-center
+    sm:h-full
+    sm:mt-auto
+    sm:mb-auto
+
+    `),
+  vector: ctl(`
     absolute
     top-0
     right-0
@@ -149,6 +199,6 @@ const localStyles = {
     hidden
     sm:flex
 
-  `)
+  `),
 };
 </script>
