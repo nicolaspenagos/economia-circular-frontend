@@ -29,7 +29,7 @@ import QuestionnaireActivity from "../components/QuestionnaireActivity.vue";
   </header>
   <main class="custom-bg-gray p-6 sm:py-20 sm:px-20">
     <section
-      v-for="(val, index) in this.activitiesStore.activities"
+      v-for="(val, index) in this.activities"
       :class="localStyles.activitySection"
     >
       <aside :class="localStyles.aside">
@@ -50,7 +50,8 @@ export default {
     return {
       showModal: false,
       dataArray: onboardingData.QUESTIONNAIRE_ONBOARDING,
-      lastActivityCompleted:-1
+      lastActivityCompleted:-1,
+      activities:[]
     };
   },
   computed: {
@@ -68,13 +69,11 @@ export default {
         this.activitiesStore.activities.length === 0 ||
         this.questionsStore.questions.length === 0
       ) {
-        const activities = await this.activitiesStore.loadActivities();
-        const questions = await this.questionsStore.loadQuestions(activities);
-        console.log(
-          questions,
-          this.questionsStore.questionsByActivity,
-          activities
-        );
+        const tempActivities = await this.activitiesStore.loadActivities();
+        await this.questionsStore.loadQuestions(tempActivities);
+        this.activities = tempActivities;
+      }else{
+        this.activities=this.activitiesStore.activities;
       }
     },
     handleOnboarding() {
@@ -98,6 +97,7 @@ export default {
     this.$emit("toggleHeader", true);
     this.handleOnboarding();
     this.loadData();
+  
   },
   components: { Gradient },
 };

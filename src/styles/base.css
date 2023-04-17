@@ -37,6 +37,11 @@ input[type=checkbox] {
   height: 18px;
   width: 18px;
 }
+input[type=radio] {
+  accent-color: #756EF2;
+  height: 18px;
+  width: 18px;
+}
 
 h1{
   font-size: 28px;

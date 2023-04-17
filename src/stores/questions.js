@@ -19,12 +19,13 @@ export const useQuestionsStore = defineStore({
     async loadQuestions(activities) {
       this.questions = await APIService.get(QUESTIONS);
       this.filterQuestionsByActivity(this.questions, activities);
+      this.sortFilteredQuestions();
       return this.questionsByActivity;
     },
     filterQuestionsByActivity(questionsArray, activities) {
       questionsArray.forEach((question) => {
         const activity = activities.find(
-          (activity) => (activity.id == question.activityId)
+          (activity) => activity.id == question.activityId
         );
         if (this.questionsByActivity.has(activity.name)) {
           const temp = this.questionsByActivity.get(activity.name);
@@ -35,5 +36,17 @@ export const useQuestionsStore = defineStore({
         }
       });
     },
+    sortFilteredQuestions() {
+      for (const [key, value] of this.questionsByActivity) {
+        this.sortQuestionOpts(value);
+        const sortedQuestions = value.sort(function(a,b){return a.questionOrder-b.questionOrder});
+        this.questionsByActivity.set(key, sortedQuestions);
+      }
+    },
+    sortQuestionOpts(questions){
+        for(let i=0; i<questions.length; i++){
+            questions[i].questionOptions = questions[i].questionOptions.sort(function(a,b){return a.optionOrder-b.optionOrder});
+        }
+    }
   },
 });

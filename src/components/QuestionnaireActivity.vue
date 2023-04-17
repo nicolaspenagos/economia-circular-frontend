@@ -1,25 +1,38 @@
 <script setup>
 import ctl from "@netlify/classnames-template-literals";
+import Question from "./Question.vue";
+import { useQuestionsStore } from "../stores/questions";
+import { mapStores } from "pinia";
 </script>
 <template>
-  <section :class="[localStyles.card, getPadding()]">
-    <img
-      src="/polygon.svg"
-      :class="localStyles.cardTriangle"
-      draggable="false"
-    />
-    <h1 :class="localStyles.cardTitle">{{ activity.name }}</h1>
-    <h2 :class="localStyles.subtitle">{{ activity.title }}</h2>
-    <p :class="[localStyles.description, displayClassMod()]">
-      {{ activity.description }}
-    </p>
-    <img
-      src="/purple-v.svg"
-      :class="[localStyles.showBtn, getAbleClassMod()]"
-      draggable="false"
-      @click="toggleDisplay"
-    />
-  </section>
+  <main class="flex flex-col w-full">
+    <section :class="[localStyles.card, getPadding(), show?'  ':' mb-10 sm:mb-16']">
+      <img
+        src="/polygon.svg"
+        :class="localStyles.cardTriangle"
+        draggable="false"
+      />
+      <h1 :class="localStyles.cardTitle">{{ activity.name }}</h1>
+      <h2 :class="localStyles.subtitle">{{ activity.title }}</h2>
+      <p :class="[localStyles.description, displayClassMod()]">
+        {{ activity.description }}
+      </p>
+      <img
+        src="/purple-v.svg"
+        :class="[localStyles.showBtn, getAbleClassMod()]"
+        draggable="false"
+        @click="toggleDisplay"
+      />
+    </section>
+    <article
+      v-for="(val, index) in activityQuestions"
+      :key="index"
+      :class="[getQuestionSectionClass(), index===activityQuestions.length-1?'mb-12':'']"
+    >
+      <div :class="localStyles.line"></div>
+      <Question :question="val" />
+    </article>
+  </main>
 </template>
 <script>
 export default {
@@ -55,7 +68,6 @@ export default {
       else return "";
     },
     isAble() {
-        console.log(this.lastActivityCompleted, this.index);
       if (this.index === 0) {
         return true;
       }
@@ -66,25 +78,40 @@ export default {
       return false;
     },
     getAbleClassMod() {
-      if(this.isAble()){
-        return this.show?" rotate-180":"";
+      if (this.isAble()) {
+        return this.show ? " rotate-180" : "";
       }
       return " !opacity-50";
     },
+    getQuestionSectionClass() {
+      return this.show ? "flex flex-col" : "hidden";
+    },
+  },
+  mounted() {
+    if (this.questionsStore.questionsByActivity.get(this.activity.name))
+      console.log(
+        this.questionsStore.questionsByActivity.get(this.activity.name)
+      );
+  },
+  computed: {
+    ...mapStores(useQuestionsStore),
+    activityQuestions(){
+        return this.questionsStore.questionsByActivity.get(
+        this.activity.name
+      )
+    }
   },
 };
 const localStyles = {
   card: ctl(`
         bg-white
-        mb-10
-        sm:mb-16
         custom-border-radius
         custom-shadow
         relative
         p-4
         sm:px-12
         w-full
-        ml-3
+        sm:ml-3
         sm:mt-[-10px]
     `),
   cardTriangle: ctl(`
@@ -120,6 +147,15 @@ const localStyles = {
         h-3
         ease-out 
         duration-300
+    `),
+  line: ctl(`
+        w-0.5
+        custom_bg
+        custom_bg_purple
+        h-10
+        ml-6
+        sm:ml-10
+    
     `),
 };
 </script>
