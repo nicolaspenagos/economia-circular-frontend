@@ -19,7 +19,7 @@ import ctl from "@netlify/classnames-template-literals";
     />
     <div>
       <img
-        src="/v.svg"
+        src="/purple-v.svg"
         :class="[
           filteredOptions && modal ? 'sm:rotate-180' : '',
           localStyles.img,

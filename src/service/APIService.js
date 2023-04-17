@@ -6,6 +6,8 @@ import { showError } from "../utils/errorUtils";
 
 export const USERS = "users";
 export const LOGIN = "login";
+export const ACTIVITIES = "activities";
+export const QUESTIONS = "questions";
 const API_URL = "http://localhost:8080/";
 
 export class APIService {
@@ -32,8 +34,7 @@ export class APIService {
 
     if (webToken != "") {
       const tokenExpDate = parseJwt(webToken).exp;
-      console.log(parseJwt(webToken));
-      console.log();
+  
       if (isTokenExpired(tokenExpDate)) {
         throw new Error(SESSION_EXPIRED);
       }

@@ -4,7 +4,7 @@ import { useAuthStore } from "../stores/auth";
 </script>
 
 <template>
-  <main class="flex items-center justify-center">
+  <main class="flex items-center justify-center bg-black">
     <div class="text-white text-xl font-bold mt-32" v-if="!isLoggedIn">
       Hola, esto es el landing page! :)
     </div>

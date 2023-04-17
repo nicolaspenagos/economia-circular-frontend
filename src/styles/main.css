@@ -65,3 +65,12 @@
 .custom-border-radius {
   border-radius: 10px;
 }
+
+
+.custom_bg_purple{
+  background-color: var(--violet);
+}
+
+.left-drop-shadow{
+  filter: drop-shadow(-6px 0 5px rgba(10, 10, 10, 0.065));
+}

@@ -19,7 +19,7 @@ const route = useRoute();
     @close="closeModal"
     @accept="logout"
   />
-  <main class="bg-black h-full">
+  <main class="h-full">
     <header :class="localStyles.header" v-if="showHeader">
       <img
         src="/horizontal-logo.svg"
@@ -72,7 +72,11 @@ const route = useRoute();
         ></BaseButton>
       </nav>
       <nav class="flex sm:hidden">
-        <img src="/menu.svg" :class="localStyles.mobileMenu" @click="goToQuestionnaire"/>
+        <img
+          src="/menu.svg"
+          :class="localStyles.mobileMenu"
+          @click="goToQuestionnaire"
+        />
       </nav>
     </header>
     <RouterView @toggleHeader="toggleHeader" />
@@ -104,7 +108,7 @@ export default {
     goToSignUp() {
       router.push("/auth/signingUp");
     },
-    goToQuestionnaire(){
+    goToQuestionnaire() {
       router.push("/questionnaire");
     },
     toggleHeader(newVal) {
@@ -130,7 +134,7 @@ const localStyles = {
         py-16
         justify-between
         items-center
-        fixed
+        absolute
         w-full
         z-30
         h-[160px]
@@ -153,7 +157,7 @@ const localStyles = {
     gap-2
     `),
   mobileMenu: ctl(`
-
+      
       h-6
     `),
 };
