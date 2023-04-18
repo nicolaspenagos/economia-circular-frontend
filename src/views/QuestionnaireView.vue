@@ -4,6 +4,7 @@ import { mapStores } from "pinia";
 import { useAuthStore } from "../stores/auth";
 import { useQuestionsStore } from "../stores/questions";
 import { useActivitiesStore } from "../stores/activities";
+import { useReponsesStore } from "../stores/responses";
 import Onboarding from "../components/Onboarding.vue";
 import onboardingData from "../constants/onboarding.js";
 import Gradient from "../components/ui_utils/Gradient.vue";
@@ -55,7 +56,7 @@ export default {
     };
   },
   computed: {
-    ...mapStores(useAuthStore, useActivitiesStore, useQuestionsStore),
+    ...mapStores(useAuthStore, useActivitiesStore, useQuestionsStore, useReponsesStore),
   },
   methods: {
     closeModal() {
@@ -65,6 +66,8 @@ export default {
       this.showModal = true;
     },
     async loadData() {
+
+      await this.responsesStore.loadUserActiveResponse(this.authStore.user.id);
       if (
         this.activitiesStore.activities.length === 0 ||
         this.questionsStore.questions.length === 0

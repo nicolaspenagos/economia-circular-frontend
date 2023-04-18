@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { APIService, QUESTIONS } from "../service/APIService";
-
+export const MULTIPLE_CHOICE = 'MULTIPLE_CHOICE';
+export const INCREMENTAL_SINGLE_CHOICE = 'INCREMENTAL_SINGLE_CHOICE';
+export const SINGLE_CHOICE = 'SINGLE_CHOICE';
 export const useQuestionsStore = defineStore({
   id: "questions",
   state: () => ({

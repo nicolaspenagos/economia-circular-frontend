@@ -29,8 +29,8 @@ import { mapStores } from "pinia";
       :key="index"
       :class="[getQuestionSectionClass(), index===activityQuestions.length-1?'mb-12':'']"
     >
-      <div :class="localStyles.line"></div>
-      <Question :question="val" />
+      <div :class="localStyles.line" v-if="val.mandatory"></div>
+      <Question :question="val" v-if="val.mandatory"/>
     </article>
   </main>
 </template>
@@ -61,7 +61,7 @@ export default {
       else return "!hidden";
     },
     toggleDisplay() {
-      if (this.isAble()) this.show = !this.show;
+      this.show = !this.show;
     },
     getPadding() {
       if (this.show) return "sm:py-12";
