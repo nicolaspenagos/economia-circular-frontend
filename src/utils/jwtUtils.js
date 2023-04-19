@@ -10,9 +10,6 @@ export function parseJwt (token) {
 
 export function isTokenExpired(tokenExpDate){
     const HOUR = 3600000;
-
-    if(Date.now()>tokenExpDate-HOUR)
-        return false;
-    else 
-        return true;
+    const expiryDate = new Date(tokenExpDate*1000-HOUR)
+    return Date.now()>expiryDate;
 }

@@ -23,6 +23,7 @@ import { INCREMENTAL_SINGLE_CHOICE, SINGLE_CHOICE, MULTIPLE_CHOICE } from "../st
       v-model="justifyAnswer"
       placeholder="Por favor justifica tu respuesta"
       :class="localStyles.justify"
+      v-if="question.justify"
     >
     </textarea>
   </article>
