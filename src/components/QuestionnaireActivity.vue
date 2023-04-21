@@ -19,7 +19,8 @@ import { useActivitiesStore } from "../stores/activities";
   />
   <main class="flex flex-col w-full">
     <section
-      :class="[localStyles.card, getPadding(), show ? '  ' : ' mb-10 sm:mb-16']"
+      :class="[localStyles.card,' cursor-pointer', getPadding(), show ? '  ' : ' mb-10 sm:mb-16']"
+      @click="toggleDisplay"
     >
       <img
         src="/polygon.svg"
@@ -35,7 +36,6 @@ import { useActivitiesStore } from "../stores/activities";
         src="/purple-v.svg"
         :class="[localStyles.showBtn, getAbleClassMod()]"
         draggable="false"
-        @click="toggleDisplay"
       />
     </section>
     <article
@@ -50,7 +50,7 @@ import { useActivitiesStore } from "../stores/activities";
       <Question
         :question="val"
         v-if="shouldRender(val)"
-        :class="'question'+this.activity.name.replaceAll(' ', '')"
+        :class="'question' + this.activity.name.replaceAll(' ', '')"
       />
     </article>
     <BaseButton
@@ -84,7 +84,7 @@ export default {
       renderedQuestions: new Map(),
       numberOfRendered: 0,
       showModal: false,
-      rendredCounterMap: new Map()
+      rendredCounterMap: new Map(),
     };
   },
   methods: {
@@ -97,7 +97,6 @@ export default {
     closeModal() {
       this.showModal = false;
     },
-
     displayClassMod() {
       if (this.show) return "!flex";
       else return "!hidden";
@@ -113,7 +112,6 @@ export default {
       if (this.index === 0) {
         return true;
       }
-
       if (this.index <= this.lastActivityCompleted) {
         return true;
       }
@@ -140,13 +138,13 @@ export default {
     },
     saveAndContinue() {
       if (this.readyToSave()) {
-  
+        this.show = false;
+        this.$emit("updateLastActivity", this.index);
       } else {
         this.openModal();
       }
     },
     readyToSave() {
-    
       return (
         this.rendredCounterMap.get(this.activity.name) ===
         this.responsesStore.getCounterByActivity(this.activity.name)
@@ -154,7 +152,11 @@ export default {
     },
   },
 
-  mounted() {},
+  mounted() {
+    if (this.responsesStore.lastActivityCompleted + 1 === this.index) {
+      this.show = true;
+    }
+  },
   computed: {
     ...mapStores(useQuestionsStore, useReponsesStore, useActivitiesStore),
     activityQuestions() {
@@ -162,15 +164,27 @@ export default {
     },
   },
   updated() {
-
     this.rendredCounterMap = new Map();
-    this.activitiesStore.activities.forEach(a=>{
+    this.activitiesStore.activities.forEach((a) => {
       const currentActivityName = a.name;
-      const currentActivityQuestions = document.querySelectorAll('.question'+currentActivityName.replaceAll(' ',''));
-      this.rendredCounterMap.set(currentActivityName,currentActivityQuestions.length );
-
+      const currentActivityQuestions = document.querySelectorAll(
+        ".question" + currentActivityName.replaceAll(" ", "")
+      );
+      this.rendredCounterMap.set(
+        currentActivityName,
+        currentActivityQuestions.length
+      );
     });
-   
+  },
+  watch: {
+    "responsesStore.lastActivityCompleted": {
+      handler(newVal) {
+        if (this.responsesStore.lastActivityCompleted + 1 === this.index) {
+          this.show = true;
+        }
+      },
+      immediate: true,
+    },
   },
 };
 const localStyles = {

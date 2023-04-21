@@ -44,14 +44,13 @@ import QuestionnaireActivity from "../components/QuestionnaireActivity.vue";
         :lastActivityCompleted="lastActivityCompleted"
         :index="index"
         @updateLastActivity="updateLastActivity"
-        :ref="'child-' + index"
+        :ref="'act-' + index"
       />
     </section>
   </main>
-  <Footer />
+  <Footer/>
 </template>
 <script>
-
 export default {
   emits: ["toggleHeader"],
   data() {
@@ -104,17 +103,14 @@ export default {
       else return " !bg-slate-300";
     },
     updateLastActivity(activityIndex) {
-      if (activityIndex > this.lastActivityCompleted){
+      if (activityIndex > this.lastActivityCompleted) {
         this.lastActivityCompleted = activityIndex;
+        this.responsesStore.lastActivityCompleted = activityIndex;
+        this.scrollToElement();
 
-        console.log(  this.$refs['child-' + (activityIndex-1)][0]);
-        
-        this.$refs['child-' + (activityIndex-1)].openActivity();
       }
-
-
-      console.log(this.lastActivityCompleted);
     },
+ 
   },
   mounted() {
     this.$emit("toggleHeader", true);

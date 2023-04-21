@@ -13,6 +13,7 @@ export const useReponsesStore = defineStore({
   id: "responses",
   state: () => ({
     activeResponse: null,
+    lastActivityCompleted:-1
   }),
   getters: {
     getActiveResponse() {
