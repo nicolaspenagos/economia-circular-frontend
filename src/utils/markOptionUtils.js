@@ -3,7 +3,7 @@ export function mapMarkedInfoToSring(questionId, questionOptionId, questionType)
 }
 
 export function mapFromStringToMarkedInfo(infoString){
-    //console.log(infoString);
+    console.log(infoString);
     const parts = infoString.split(' ');
     return {
         questionId:parts[0].split(':')[1],

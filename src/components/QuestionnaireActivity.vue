@@ -4,6 +4,7 @@ import Question from "./Question.vue";
 import { useQuestionsStore } from "../stores/questions";
 import { useReponsesStore } from "../stores/responses";
 import { mapStores } from "pinia";
+import BaseButton from "./ui_utils/BaseButton.vue";
 </script>
 <template>
   <main class="flex flex-col w-full">
@@ -38,6 +39,7 @@ import { mapStores } from "pinia";
       <div :class="localStyles.line" v-if="shouldRender(val)"></div>
       <Question :question="val" v-if="shouldRender(val)" />
     </article>
+    <BaseButton text="Guardar y continuar" @click="saveAndContinue" v-if="this.show" :class="localStyles.saveButton"/>
   </main>
 </template>
 <script>
@@ -99,6 +101,9 @@ export default {
       }
       return this.responsesStore.searchSelectedDependentQuestionId(question.id);
   
+    },
+    saveAndContinue(){
+
     }
   },
   mounted() {
@@ -166,5 +171,15 @@ const localStyles = {
         sm:ml-10
     
     `),
+    saveButton:ctl(`
+      min-w-[120px] 
+      w-fit 
+      sm:min-w-[150px] 
+      ml-10 
+      mb-6 
+      mt-[-20px] 
+      sm:mb-[40px]
+    
+    `)
 };
 </script>

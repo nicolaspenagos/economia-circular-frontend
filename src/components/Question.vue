@@ -1,25 +1,53 @@
 <script setup>
 import ctl from "@netlify/classnames-template-literals";
-import { INCREMENTAL_SINGLE_CHOICE, SINGLE_CHOICE, MULTIPLE_CHOICE } from "../stores/questions";
+import {
+  INCREMENTAL_SINGLE_CHOICE,
+  SINGLE_CHOICE,
+  MULTIPLE_CHOICE,
+} from "../stores/questions";
 import { mapStores } from "pinia";
 import { useReponsesStore } from "../stores/responses";
-import {mapMarkedInfoToSring} from '../utils/markOptionUtils.js';
-
+import { mapMarkedInfoToSring } from "../utils/markOptionUtils.js";
+import { useQuestionsStore } from "../stores/questions";
 </script>
 <template>
   <article :class="localStyles.questionCard">
     <h1 :class="localStyles.questionTitle">
       {{ question.questionOrder + 1 + ". " + question.questionText }}
     </h1>
-    <section class="mt-6" v-if="question.type === SINGLE_CHOICE || question.type === INCREMENTAL_SINGLE_CHOICE">
-      <div v-for="(val, index) in question.questionOptions" class="flex items-center gap-2">
-        <input  type="radio" :name="'qtnOptGroup-' + question.id" :id="'opt-'+index" v-model="singlePicked" :value="mapMarkedInfoToSring(question.id, val.id, question.type)"/>
+    <section
+      class="mt-6"
+      v-if="
+        question.type === SINGLE_CHOICE ||
+        question.type === INCREMENTAL_SINGLE_CHOICE
+      "
+    >
+      <div
+        v-for="(val, index) in question.questionOptions"
+        class="flex items-center gap-2"
+      >
+        <input
+          type="radio"
+          :name="'qtnOptGroup-' + question.id"
+          :id="'opt-' + index"
+          v-model="singlePicked"
+          :value="mapMarkedInfoToSring(question.id, val.id, question.type)"
+        />
         <label :for="'opt-' + index">{{ val.optionValue }}</label>
       </div>
     </section>
-    <section class="mt-6" v-if="question.type === MULTIPLE_CHOICE ">
-      <div v-for="(val, index) in question.questionOptions" class="flex items-center gap-2">
-        <input  type="checkbox" :name="'qtnOptGroup-' + question.id" :id="'opt-'+index" v-model="multiplePicked" :value="mapMarkedInfoToSring(question.id, val.id, question.type)"/>
+    <section class="mt-6" v-if="question.type === MULTIPLE_CHOICE">
+      <div
+        v-for="(val, index) in question.questionOptions"
+        class="flex items-center gap-2"
+      >
+        <input
+          type="checkbox"
+          :name="'qtnOptGroup-' + question.id"
+          :id="'opt-' + index"
+          v-model="multiplePicked"
+          :value="mapMarkedInfoToSring(question.id, val.id, question.type)"
+        />
         <label :for="'opt-' + index">{{ val.optionValue }}</label>
       </div>
     </section>
@@ -40,28 +68,37 @@ export default {
   },
   data() {
     return {
-        justifyAnswer: "",
-        singlePicked:null,
-        multiplePicked:[],
-    }
+      justifyAnswer: "",
+      singlePicked: null,
+      multiplePicked: [],
+    };
   },
-  watch:{
-    singlePicked(newPicked, oldPicked){
-      this.responsesStore.handleMarkAnswer(oldPicked, newPicked);
+  watch: {
+    singlePicked(newPicked, oldPicked) {
+      this.responsesStore.handleMarkSingleAnswer(oldPicked, newPicked);
     },
-    multiplePicked(newMultiplePicked, oldMultiplePicked){
-      console.log(newMultiplePicked,'\n\n', oldMultiplePicked);
-    }
-
+    multiplePicked(newMultiplePicked, oldMultiplePicked) {
+     
+      this.responsesStore.handleMarkMultipleAnswers(
+        newMultiplePicked,
+        oldMultiplePicked
+      );
+    },
   },
-  computed:{
-    ...mapStores(useReponsesStore),
+  computed: {
+    ...mapStores(useReponsesStore, useQuestionsStore),
   },
-  mounted(){
+  mounted() {
     //console.log(this.responsesStore.getQuestionResponse(this.question.id, this.question.type));
-    this.singlePicked = this.responsesStore.getQuestionResponse(this.question.id, this.question.type);
-  }
 
+    const questionResponse = this.responsesStore.getQuestionResponse(
+      this.question.id,
+      this.question.type
+    );
+    if (this.questionsStore.isSingleChoice(this.question.type))
+      this.singlePicked = questionResponse;
+    else this.multiplePicked = questionResponse;
+  },
 };
 const localStyles = {
   questionCard: ctl(`

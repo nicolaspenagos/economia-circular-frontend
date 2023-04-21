@@ -34,7 +34,7 @@ export const useReponsesStore = defineStore({
         this.activeResponse = activeReponsesArray[0];
       }
     },
-    handleMarkAnswer(oldPicked, newPicked) {
+    handleMarkSingleAnswer(oldPicked, newPicked) {
       const newMarkedInfo = mapFromStringToMarkedInfo(newPicked);
 
       if (this.activeResponse == null) {
@@ -54,6 +54,29 @@ export const useReponsesStore = defineStore({
 
       currentSet.add(newMarkedInfo.questionOptionId);
       this.activeResponse.set(newMarkedInfo.questionId, currentSet);
+    },
+    handleMarkMultipleAnswers(newMultiplePicked, oldMultiplePicked) {
+      if (this.activeResponse == null) {
+        this.activeResponse = new Map();
+      }
+
+      const currentSet = new Set();
+
+      let tempElement;
+      newMultiplePicked.forEach((selectionStr) => {
+        tempElement = mapFromStringToMarkedInfo(selectionStr);
+        currentSet.add(tempElement.questionOptionId);
+      });
+
+      if (newMultiplePicked.length > 0) {
+        this.activeResponse.set(tempElement.questionId, currentSet);
+      } else {
+        if (oldMultiplePicked.length > 0) {
+          this.activeResponse.delete(
+            mapFromStringToMarkedInfo(oldMultiplePicked[0]).questionId
+          );
+        }
+      }
     },
 
     searchSelectedDependentQuestionId(dependentQuestionId) {
@@ -80,19 +103,25 @@ export const useReponsesStore = defineStore({
       return false;
     },
     getQuestionResponse(questionId, questionType) {
-      let questionResponse = null;
+      const isSingleChoice = useQuestionsStore().isSingleChoice(questionType);
+      let questionResponse = isSingleChoice ? null : [];
 
       if (this.activeResponse && this.activeResponse.get(questionId)) {
         const selectionArray = Array.from(this.activeResponse.get(questionId));
-        const selectedOption = useQuestionsStore().isSingleChoice(questionType)
-          ? selectionArray[0]
-          : selectionArray.join();
 
-        questionResponse = mapMarkedInfoToSring(
-          questionId,
-          selectedOption,
-          questionType
-        );
+        if (isSingleChoice) {
+          questionResponse = mapMarkedInfoToSring(
+            questionId,
+            selectionArray[0],
+            questionType
+          );
+        } else {
+          selectionArray.forEach((selectedOpt) => {
+            questionResponse.push(
+              mapMarkedInfoToSring(questionId, selectedOpt, questionType)
+            );
+          });
+        }
       }
       return questionResponse;
     },
