@@ -2,11 +2,14 @@
 import ctl from "@netlify/classnames-template-literals";
 import Question from "./Question.vue";
 import { useQuestionsStore } from "../stores/questions";
+import { useReponsesStore } from "../stores/responses";
 import { mapStores } from "pinia";
 </script>
 <template>
   <main class="flex flex-col w-full">
-    <section :class="[localStyles.card, getPadding(), show?'  ':' mb-10 sm:mb-16']">
+    <section
+      :class="[localStyles.card, getPadding(), show ? '  ' : ' mb-10 sm:mb-16']"
+    >
       <img
         src="/polygon.svg"
         :class="localStyles.cardTriangle"
@@ -27,10 +30,13 @@ import { mapStores } from "pinia";
     <article
       v-for="(val, index) in activityQuestions"
       :key="index"
-      :class="[getQuestionSectionClass(), index===activityQuestions.length-1?'mb-12':'']"
+      :class="[
+        getQuestionSectionClass(),
+        index === activityQuestions.length - 1 ? 'mb-12' : '',
+      ]"
     >
-      <div :class="localStyles.line" ></div>
-      <Question :question="val" />
+      <div :class="localStyles.line" v-if="shouldRender(val)"></div>
+      <Question :question="val" v-if="shouldRender(val)" />
     </article>
   </main>
 </template>
@@ -61,7 +67,7 @@ export default {
       else return "!hidden";
     },
     toggleDisplay() {
-       this.show = !this.show;
+      if (this.isAble()) this.show = !this.show;
     },
     getPadding() {
       if (this.show) return "sm:py-12";
@@ -86,20 +92,23 @@ export default {
     getQuestionSectionClass() {
       return this.show ? "flex flex-col" : "hidden";
     },
+    shouldRender(question){
+
+      if(question.mandatory){
+        return true;
+      }
+      return this.responsesStore.searchSelectedDependentQuestionId(question.id);
+  
+    }
   },
   mounted() {
-    if (this.questionsStore.questionsByActivity.get(this.activity.name))
-      console.log(
-        this.questionsStore.questionsByActivity.get(this.activity.name)
-      );
+  
   },
   computed: {
-    ...mapStores(useQuestionsStore),
-    activityQuestions(){
-        return this.questionsStore.questionsByActivity.get(
-        this.activity.name
-      )
-    }
+    ...mapStores(useQuestionsStore, useReponsesStore),
+    activityQuestions() {
+      return this.questionsStore.questionsByActivity.get(this.activity.name);
+    },
   },
 };
 const localStyles = {

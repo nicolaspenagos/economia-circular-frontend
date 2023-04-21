@@ -1,6 +1,10 @@
 <script setup>
 import ctl from "@netlify/classnames-template-literals";
 import { INCREMENTAL_SINGLE_CHOICE, SINGLE_CHOICE, MULTIPLE_CHOICE } from "../stores/questions";
+import { mapStores } from "pinia";
+import { useReponsesStore } from "../stores/responses";
+import {mapMarkedInfoToSring} from '../utils/markOptionUtils.js';
+
 </script>
 <template>
   <article :class="localStyles.questionCard">
@@ -9,13 +13,13 @@ import { INCREMENTAL_SINGLE_CHOICE, SINGLE_CHOICE, MULTIPLE_CHOICE } from "../st
     </h1>
     <section class="mt-6" v-if="question.type === SINGLE_CHOICE || question.type === INCREMENTAL_SINGLE_CHOICE">
       <div v-for="(val, index) in question.questionOptions" class="flex items-center gap-2">
-        <input  type="radio" :name="'qtnOptGroup-' + question.id" :id="'opt-'+index" v-model="singlePicked" :value="question.id+' '+val.id+' '+question.type"/>
+        <input  type="radio" :name="'qtnOptGroup-' + question.id" :id="'opt-'+index" v-model="singlePicked" :value="mapMarkedInfoToSring(question.id, val.id, question.type)"/>
         <label :for="'opt-' + index">{{ val.optionValue }}</label>
       </div>
     </section>
     <section class="mt-6" v-if="question.type === MULTIPLE_CHOICE ">
       <div v-for="(val, index) in question.questionOptions" class="flex items-center gap-2">
-        <input  type="checkbox" :name="'qtnOptGroup-' + question.id" :id="'opt-'+index" v-model="multiplePicked" :value="question.id+' '+val.id+' '+question.type"/>
+        <input  type="checkbox" :name="'qtnOptGroup-' + question.id" :id="'opt-'+index" v-model="multiplePicked" :value="mapMarkedInfoToSring(question.id, val.id, question.type)"/>
         <label :for="'opt-' + index">{{ val.optionValue }}</label>
       </div>
     </section>
@@ -37,20 +41,27 @@ export default {
   data() {
     return {
         justifyAnswer: "",
-        singlePicked:'WITHOUT_ANSWER',
+        singlePicked:null,
         multiplePicked:[],
     }
   },
   watch:{
     singlePicked(newPicked, oldPicked){
-      console.log(newPicked,'\n\n', oldPicked);
-
+      this.responsesStore.handleMarkAnswer(oldPicked, newPicked);
     },
     multiplePicked(newMultiplePicked, oldMultiplePicked){
       console.log(newMultiplePicked,'\n\n', oldMultiplePicked);
     }
 
+  },
+  computed:{
+    ...mapStores(useReponsesStore),
+  },
+  mounted(){
+    //console.log(this.responsesStore.getQuestionResponse(this.question.id, this.question.type));
+    this.singlePicked = this.responsesStore.getQuestionResponse(this.question.id, this.question.type);
   }
+
 };
 const localStyles = {
   questionCard: ctl(`

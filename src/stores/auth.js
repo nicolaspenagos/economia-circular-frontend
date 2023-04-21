@@ -49,7 +49,7 @@ export const useAuthStore = defineStore({
     checkIfLogged() {
       const token = localStorage.getItem(TOKEN_KEY);
       if (token) {
-        console.log(isTokenExpired(parseJwt(token).exp));
+     
         if (isTokenExpired(parseJwt(token).exp)) {
           this.logout();
         } else {
