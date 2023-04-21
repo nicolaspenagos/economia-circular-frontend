@@ -124,6 +124,10 @@ export default {
   },
   mounted() {
     this.authStore.checkIfLogged();
+    const divElements = document.querySelectorAll('div');
+    const myDiv = this.$refs.myDiv;
+    
+
   },
 };
 const localStyles = {

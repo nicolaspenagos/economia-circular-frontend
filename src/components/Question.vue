@@ -31,9 +31,9 @@ import { useQuestionsStore } from "../stores/questions";
           :name="'qtnOptGroup-' + question.id"
           :id="'opt-' + index"
           v-model="singlePicked"
-          :value="mapMarkedInfoToSring(question.id, val.id, question.type)"
+          :value="mapMarkedInfoToSring(question.id, val.id, question.type, val.dependentQuestionId)"
         />
-        <label :for="'opt-' + index">{{ val.optionValue }}</label>
+        <label :for="'opt-' + index">{{val.optionValue  }}</label>
       </div>
     </section>
     <section class="mt-6" v-if="question.type === MULTIPLE_CHOICE">
@@ -46,7 +46,7 @@ import { useQuestionsStore } from "../stores/questions";
           :name="'qtnOptGroup-' + question.id"
           :id="'opt-' + index"
           v-model="multiplePicked"
-          :value="mapMarkedInfoToSring(question.id, val.id, question.type)"
+          :value="mapMarkedInfoToSring(question.id, val.id, question.type, val.depedentQuestionId)"
         />
         <label :for="'opt-' + index">{{ val.optionValue }}</label>
       </div>
@@ -62,6 +62,7 @@ import { useQuestionsStore } from "../stores/questions";
 </template>
 <script>
 export default {
+  emits:['optionMarked'],
   props: {
     question: Object,
     default: null,
@@ -89,7 +90,7 @@ export default {
     ...mapStores(useReponsesStore, useQuestionsStore),
   },
   mounted() {
-    //console.log(this.responsesStore.getQuestionResponse(this.question.id, this.question.type));
+  
 
     const questionResponse = this.responsesStore.getQuestionResponse(
       this.question.id,

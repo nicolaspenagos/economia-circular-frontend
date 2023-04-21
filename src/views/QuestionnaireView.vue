@@ -37,26 +37,38 @@ import QuestionnaireActivity from "../components/QuestionnaireActivity.vue";
         <div :class="[localStyles.activityNumber, isActive(index)]">
           {{ index + 1 }}
         </div>
-        <div :class="[localStyles.line, isActive(index+1)]"></div>
+        <div :class="[localStyles.line, isActive(index + 1)]"></div>
       </aside>
-      <QuestionnaireActivity :activity="val" :lastActivityCompleted="lastActivityCompleted" :index="index"/>
+      <QuestionnaireActivity
+        :activity="val"
+        :lastActivityCompleted="lastActivityCompleted"
+        :index="index"
+        @updateLastActivity="updateLastActivity"
+        :ref="'child-' + index"
+      />
     </section>
   </main>
   <Footer />
 </template>
 <script>
+
 export default {
   emits: ["toggleHeader"],
   data() {
     return {
       showModal: false,
       dataArray: onboardingData.QUESTIONNAIRE_ONBOARDING,
-      lastActivityCompleted:-1,
-      activities:[]
+      lastActivityCompleted: -1,
+      activities: [],
     };
   },
   computed: {
-    ...mapStores(useAuthStore, useActivitiesStore, useQuestionsStore, useReponsesStore),
+    ...mapStores(
+      useAuthStore,
+      useActivitiesStore,
+      useQuestionsStore,
+      useReponsesStore
+    ),
   },
   methods: {
     closeModal() {
@@ -66,7 +78,6 @@ export default {
       this.showModal = true;
     },
     async loadData() {
-
       await this.responsesStore.loadUserActiveResponse(this.authStore.user.id);
       if (
         this.activitiesStore.activities.length === 0 ||
@@ -75,8 +86,8 @@ export default {
         const tempActivities = await this.activitiesStore.loadActivities();
         await this.questionsStore.loadQuestions(tempActivities);
         this.activities = tempActivities;
-      }else{
-        this.activities=this.activitiesStore.activities;
+      } else {
+        this.activities = this.activitiesStore.activities;
       }
     },
     handleOnboarding() {
@@ -88,19 +99,27 @@ export default {
         this.openModal();
       }
     },
-    isActive(index){
-      if(index===0)
-        return ' custom_bg_purple';
-      else
-        return ' !bg-slate-300'
-      
-    }
+    isActive(index) {
+      if (index === 0) return " custom_bg_purple";
+      else return " !bg-slate-300";
+    },
+    updateLastActivity(activityIndex) {
+      if (activityIndex > this.lastActivityCompleted){
+        this.lastActivityCompleted = activityIndex;
+
+        console.log(  this.$refs['child-' + (activityIndex-1)][0]);
+        
+        this.$refs['child-' + (activityIndex-1)].openActivity();
+      }
+
+
+      console.log(this.lastActivityCompleted);
+    },
   },
   mounted() {
     this.$emit("toggleHeader", true);
     this.handleOnboarding();
     this.loadData();
-  
   },
   components: { Gradient },
 };

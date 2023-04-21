@@ -5,8 +5,18 @@ import { useQuestionsStore } from "../stores/questions";
 import { useReponsesStore } from "../stores/responses";
 import { mapStores } from "pinia";
 import BaseButton from "./ui_utils/BaseButton.vue";
+import Modal from "./ui_utils/Modal.vue";
+import modalMsgs from "../constants/modal.js";
+import { useActivitiesStore } from "../stores/activities";
 </script>
 <template>
+  <Modal
+    v-if="showModal"
+    :msg="modalMsgs.INCOMPLETE_ANSWERS"
+    imgPath="/alert.svg"
+    @accept="closeModal"
+    :onlyAccept="true"
+  />
   <main class="flex flex-col w-full">
     <section
       :class="[localStyles.card, getPadding(), show ? '  ' : ' mb-10 sm:mb-16']"
@@ -37,13 +47,23 @@ import BaseButton from "./ui_utils/BaseButton.vue";
       ]"
     >
       <div :class="localStyles.line" v-if="shouldRender(val)"></div>
-      <Question :question="val" v-if="shouldRender(val)" />
+      <Question
+        :question="val"
+        v-if="shouldRender(val)"
+        :class="'question'+this.activity.name.replaceAll(' ', '')"
+      />
     </article>
-    <BaseButton text="Guardar y continuar" @click="saveAndContinue" v-if="this.show" :class="localStyles.saveButton"/>
+    <BaseButton
+      text="Guardar y continuar"
+      @click="saveAndContinue"
+      v-if="this.show"
+      :class="localStyles.saveButton"
+    />
   </main>
 </template>
 <script>
 export default {
+  emits: ["updateLastActivity"],
   props: {
     activity: {
       type: Object,
@@ -61,9 +81,23 @@ export default {
   data() {
     return {
       show: false,
+      renderedQuestions: new Map(),
+      numberOfRendered: 0,
+      showModal: false,
+      rendredCounterMap: new Map()
     };
   },
   methods: {
+    openActivity() {
+      this.show = true;
+    },
+    openModal() {
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
+    },
+
     displayClassMod() {
       if (this.show) return "!flex";
       else return "!hidden";
@@ -94,26 +128,49 @@ export default {
     getQuestionSectionClass() {
       return this.show ? "flex flex-col" : "hidden";
     },
-    shouldRender(question){
-
-      if(question.mandatory){
+    shouldRender(question) {
+      if (question.mandatory) {
         return true;
       }
-      return this.responsesStore.searchSelectedDependentQuestionId(question.id);
-  
-    },
-    saveAndContinue(){
+      if (this.responsesStore.searchSelectedDependentQuestionId(question.id)) {
+        return true;
+      }
 
-    }
-  },
-  mounted() {
+      return false;
+    },
+    saveAndContinue() {
+      if (this.readyToSave()) {
   
+      } else {
+        this.openModal();
+      }
+    },
+    readyToSave() {
+    
+      return (
+        this.rendredCounterMap.get(this.activity.name) ===
+        this.responsesStore.getCounterByActivity(this.activity.name)
+      );
+    },
   },
+
+  mounted() {},
   computed: {
-    ...mapStores(useQuestionsStore, useReponsesStore),
+    ...mapStores(useQuestionsStore, useReponsesStore, useActivitiesStore),
     activityQuestions() {
       return this.questionsStore.questionsByActivity.get(this.activity.name);
     },
+  },
+  updated() {
+
+    this.rendredCounterMap = new Map();
+    this.activitiesStore.activities.forEach(a=>{
+      const currentActivityName = a.name;
+      const currentActivityQuestions = document.querySelectorAll('.question'+currentActivityName.replaceAll(' ',''));
+      this.rendredCounterMap.set(currentActivityName,currentActivityQuestions.length );
+
+    });
+   
   },
 };
 const localStyles = {
@@ -151,7 +208,7 @@ const localStyles = {
         mb-1
     `),
   description: ctl(`
- 
+
     `),
   showBtn: ctl(`
         absolute
@@ -159,7 +216,7 @@ const localStyles = {
         right-6
         cursor-pointer
         h-3
-        ease-out 
+        ease-out
         duration-300
     `),
   line: ctl(`
@@ -169,17 +226,17 @@ const localStyles = {
         h-10
         ml-6
         sm:ml-10
-    
+
     `),
-    saveButton:ctl(`
-      min-w-[120px] 
-      w-fit 
-      sm:min-w-[150px] 
-      ml-10 
-      mb-6 
-      mt-[-20px] 
+  saveButton: ctl(`
+      min-w-[120px]
+      w-fit
+      sm:min-w-[150px]
+      ml-12
+      mb-6
+      mt-[-20px]
       sm:mb-[40px]
-    
-    `)
+
+    `),
 };
 </script>
