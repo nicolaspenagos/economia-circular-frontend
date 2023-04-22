@@ -10,6 +10,7 @@ import onboardingData from "../constants/onboarding.js";
 import Gradient from "../components/ui_utils/Gradient.vue";
 import Footer from "../components/Footer.vue";
 import QuestionnaireActivity from "../components/QuestionnaireActivity.vue";
+
 </script>
 <template>
   <Onboarding v-if="showModal" :data="dataArray" @close="closeModal" />
@@ -37,14 +38,13 @@ import QuestionnaireActivity from "../components/QuestionnaireActivity.vue";
         <div :class="[localStyles.activityNumber, isActive(index)]">
           {{ index + 1 }}
         </div>
-        <div :class="[localStyles.line, isActive(index + 1)]"></div>
+        <div :class="[localStyles.line, isActive(index+1)]"></div>
       </aside>
       <QuestionnaireActivity
         :activity="val"
         :lastActivityCompleted="lastActivityCompleted"
         :index="index"
         @updateLastActivity="updateLastActivity"
-        :ref="'act-' + index"
       />
     </section>
   </main>
@@ -53,6 +53,9 @@ import QuestionnaireActivity from "../components/QuestionnaireActivity.vue";
 <script>
 export default {
   emits: ["toggleHeader"],
+  setup(){
+
+  },
   data() {
     return {
       showModal: false,
@@ -99,14 +102,15 @@ export default {
       }
     },
     isActive(index) {
-      if (index === 0) return " custom_bg_purple";
+   
+      if (index-1 <= this.responsesStore.lastActivityCompleted) return " custom_bg_purple";
       else return " !bg-slate-300";
     },
     updateLastActivity(activityIndex) {
       if (activityIndex > this.lastActivityCompleted) {
         this.lastActivityCompleted = activityIndex;
         this.responsesStore.lastActivityCompleted = activityIndex;
-        this.scrollToElement();
+    
 
       }
     },
@@ -171,7 +175,7 @@ const localStyles = {
       sm:flex
       w-0.5 
       grow
-      custom_bg_purple
+
     `),
   aside: ctl(`
     sm:flex 

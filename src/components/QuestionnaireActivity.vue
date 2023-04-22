@@ -17,9 +17,14 @@ import { useActivitiesStore } from "../stores/activities";
     @accept="closeModal"
     :onlyAccept="true"
   />
-  <main class="flex flex-col w-full">
+  <main class="flex flex-col w-full" ref="activityMain">
     <section
-      :class="[localStyles.card,' cursor-pointer', getPadding(), show ? '  ' : ' mb-10 sm:mb-16']"
+      :class="[
+        localStyles.card,
+        ' cursor-pointer',
+        getPadding(),
+        show ? '  ' : ' mb-10 sm:mb-16',
+      ]"
       @click="toggleDisplay"
     >
       <img
@@ -54,7 +59,7 @@ import { useActivitiesStore } from "../stores/activities";
       />
     </article>
     <BaseButton
-      text="Guardar y continuar"
+      text="Guardar progreso"
       @click="saveAndContinue"
       v-if="this.show"
       :class="localStyles.saveButton"
@@ -64,6 +69,12 @@ import { useActivitiesStore } from "../stores/activities";
 <script>
 export default {
   emits: ["updateLastActivity"],
+  setup() {
+    const activityMain = ref(null);
+    return {
+      activityMain,
+    };
+  },
   props: {
     activity: {
       type: Object,
@@ -112,7 +123,8 @@ export default {
       if (this.index === 0) {
         return true;
       }
-      if (this.index <= this.lastActivityCompleted) {
+      console.log(this.index, this.lastActivityCompleted);
+      if (this.index <= this.lastActivityCompleted+1) {
         return true;
       }
       return false;
@@ -121,6 +133,7 @@ export default {
       if (this.isAble()) {
         return this.show ? " rotate-180" : "";
       }
+      if(this.index<=this.responsesStore.lastActivityCompleted+1) return '';
       return " !opacity-50";
     },
     getQuestionSectionClass() {
@@ -138,7 +151,6 @@ export default {
     },
     saveAndContinue() {
       if (this.readyToSave()) {
-        this.show = false;
         this.$emit("updateLastActivity", this.index);
       } else {
         this.openModal();
@@ -150,7 +162,11 @@ export default {
         this.responsesStore.getCounterByActivity(this.activity.name)
       );
     },
+    showToggle(){
+      if(this.index===0)return true;
+    }
   },
+
 
   mounted() {
     if (this.responsesStore.lastActivityCompleted + 1 === this.index) {
@@ -180,7 +196,13 @@ export default {
     "responsesStore.lastActivityCompleted": {
       handler(newVal) {
         if (this.responsesStore.lastActivityCompleted + 1 === this.index) {
-          this.show = true;
+          setTimeout(() => this.show = true, 1200);
+        }
+        if (this.responsesStore.lastActivityCompleted === this.index) {
+          if (this.$refs.activityMain) {
+            this.$refs.activityMain.scrollIntoView({ behavior: "smooth" });
+          }
+          setTimeout(() => this.show = false, 1200);
         }
       },
       immediate: true,
@@ -194,7 +216,7 @@ const localStyles = {
         custom-shadow
         relative
         p-4
-        sm:px-12
+        sm:px-14
         w-full
         sm:ml-3
         sm:mt-[-10px]
@@ -246,7 +268,7 @@ const localStyles = {
       min-w-[120px]
       w-fit
       sm:min-w-[150px]
-      ml-12
+      ml-4
       mb-6
       mt-[-20px]
       sm:mb-[40px]
