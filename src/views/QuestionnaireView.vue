@@ -10,7 +10,6 @@ import onboardingData from "../constants/onboarding.js";
 import Gradient from "../components/ui_utils/Gradient.vue";
 import Footer from "../components/Footer.vue";
 import QuestionnaireActivity from "../components/QuestionnaireActivity.vue";
-
 </script>
 <template>
   <Onboarding v-if="showModal" :data="dataArray" @close="closeModal" />
@@ -38,7 +37,10 @@ import QuestionnaireActivity from "../components/QuestionnaireActivity.vue";
         <div :class="[localStyles.activityNumber, isActive(index)]">
           {{ index + 1 }}
         </div>
-        <div :class="[localStyles.line, isActive(index+1)]" v-if="index<this.activities.length-1"></div>
+        <div
+          :class="[localStyles.line, isActive(index + 1)]"
+          v-if="index < this.activities.length - 1"
+        ></div>
       </aside>
       <QuestionnaireActivity
         :activity="val"
@@ -48,14 +50,12 @@ import QuestionnaireActivity from "../components/QuestionnaireActivity.vue";
       />
     </section>
   </main>
-  <Footer/>
+  <Footer />
 </template>
 <script>
 export default {
   emits: ["toggleHeader"],
-  setup(){
-
-  },
+  setup() {},
   data() {
     return {
       showModal: false,
@@ -102,20 +102,16 @@ export default {
       }
     },
     isActive(index) {
-   
-    
-      if (index-1 <= this.responsesStore.lastActivityCompleted) return " custom_bg_purple";
+      if (index - 1 <= this.responsesStore.lastActivityCompleted)
+        return " custom_bg_purple";
       else return " !bg-slate-300";
     },
     updateLastActivity(activityIndex) {
       if (activityIndex > this.responsesStore.lastActivityCompleted) {
         this.lastActivityCompleted = activityIndex;
         this.responsesStore.lastActivityCompleted = activityIndex;
-    
-
       }
     },
- 
   },
   mounted() {
     this.$emit("toggleHeader", true);

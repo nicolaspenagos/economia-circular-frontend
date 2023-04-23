@@ -13,12 +13,16 @@ import {
   replaceNumbersWithWords,
 } from "../utils/markOptionUtils.js";
 import { useQuestionsStore } from "../stores/questions";
+import Hint from "./ui_utils/Hint.vue";
 </script>
 <template>
   <article :class="localStyles.questionCard">
-    <h1 :class="localStyles.questionTitle">
+    <div class="flex items-center">
+      <h1 :class="localStyles.questionTitle">
       {{ question.questionOrder + 1 + ". " + question.questionText }}
     </h1>
+    <Hint v-if="question.hint!==''" :hintText="question.hint"/>
+    </div>
     <section
       class="mt-6"
       v-if="
@@ -83,7 +87,8 @@ import { useQuestionsStore } from "../stores/questions";
           "
         />
         <label :for="'opt-' + index">{{ val.optionValue }}</label>
-        
+        <Hint v-if="val.hint!==''" :hintText="val.hint"/>
+      
       </div>
     </section>
     <textarea
@@ -167,6 +172,7 @@ const localStyles = {
         `),
   questionTitle: ctl(`
         font-bold
+        mr-1
     `),
   justify: ctl(`
         w-full
@@ -176,8 +182,6 @@ const localStyles = {
         p-3
         mt-6
         sm:p-6
-        
-
     `),
 };
 </script>
