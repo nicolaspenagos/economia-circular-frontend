@@ -13,7 +13,7 @@ export const useReponsesStore = defineStore({
   id: "responses",
   state: () => ({
     activeResponse: null,
-    lastActivityCompleted:-1
+    lastActivityCompleted: -1,
   }),
   getters: {
     getActiveResponse() {
@@ -47,6 +47,7 @@ export const useReponsesStore = defineStore({
             JSON.stringify({
               questionOptionId: oldPickedInfo.questionOptionId,
               dependentQuestionId: oldPickedInfo.dependentQuestionId,
+              exclusive:oldPickedInfo.exclusive,
             })
           );
           this.activeResponse.delete(oldPickedInfo.dependentQuestionId);
@@ -57,6 +58,7 @@ export const useReponsesStore = defineStore({
         JSON.stringify({
           questionOptionId: newMarkedInfo.questionOptionId,
           dependentQuestionId: newMarkedInfo.dependentQuestionId,
+          exclusive:newMarkedInfo.exclusive
         })
       );
       this.activeResponse.set(newMarkedInfo.questionId, currentSet);
@@ -67,27 +69,59 @@ export const useReponsesStore = defineStore({
       }
 
       const currentSet = new Set();
-
+      let isExclusive = false;
       let tempElement;
       newMultiplePicked.forEach((selectionStr) => {
         tempElement = mapFromStringToMarkedInfo(selectionStr);
+        if(tempElement.exclusive){
+          isExclusive = true;
+        }
         currentSet.add(
           JSON.stringify({
             questionOptionId: tempElement.questionOptionId,
             dependentQuestionId: tempElement.dependentQuestionId,
+            exclusive:tempElement.exclusive
           })
         );
       });
+
+      if(oldMultiplePicked && isExclusive){
+        this.deleteMultipleDependent(oldMultiplePicked);
+      }
 
       if (newMultiplePicked.length > 0) {
         this.activeResponse.set(tempElement.questionId, currentSet);
       } else {
         if (oldMultiplePicked.length > 0) {
-          console.log(oldMultiplePicked);
           this.activeResponse.delete(
             mapFromStringToMarkedInfo(oldMultiplePicked[0]).questionId
           );
         }
+      }
+    },
+    /*
+    checkIfExclusive(questionId, questionOptionId) {
+      const questionsById = useQuestionsStore().questionsById;
+      const questionOptions = questionsById.get(questionId).questionOptions;
+
+      for (let i = 0; i < questionOptions.length; i++) {
+        if (
+          questionOptions[i].id === questionOptionId &&
+          questionOptions[i].exclusive
+        ) {
+          return true;
+        }
+      }
+      return false;
+    },*/
+    deleteMultipleDependent(oldMultiplePicked){
+      console.log(oldMultiplePicked);
+      for(let i=0; i<oldMultiplePicked.length; i++){
+          const currentSelection = mapFromStringToMarkedInfo(oldMultiplePicked[i]);
+          if(currentSelection.dependentQuestionId){
+            this.activeResponse.delete(currentSelection.dependentQuestionId);
+            i = Infinity;
+          }
       }
     },
 
@@ -127,7 +161,8 @@ export const useReponsesStore = defineStore({
             questionId,
             selection.questionOptionId,
             questionType,
-            selection.dependentQuestionId
+            selection.dependentQuestionId,
+            selection.exclusive
           );
         } else {
           selectionArray.forEach((selectedOpt) => {
@@ -137,7 +172,8 @@ export const useReponsesStore = defineStore({
                 questionId,
                 selection.questionOptionId,
                 questionType,
-                selection.dependentQuestionId
+                selection.dependentQuestionId,
+                selection.exclusive
               )
             );
           });
@@ -151,15 +187,17 @@ export const useReponsesStore = defineStore({
       if (this.activeResponse) {
         let keys = Array.from(this.activeResponse.keys());
         keys.forEach((id) => {
-     
-          if (useQuestionsStore().questionsByActivity.get(activity).findIndex(x=>x.id==id)!==-1)
+          if (
+            useQuestionsStore()
+              .questionsByActivity.get(activity)
+              .findIndex((x) => x.id == id) !== -1
+          )
             counter++;
         });
       }
 
-      console.log(counter);
       return counter;
     },
   },
 });
-//questionId, questionOptionId, questionTyp
+

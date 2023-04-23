@@ -32,8 +32,8 @@ import { useActivitiesStore } from "../stores/activities";
         :class="localStyles.cardTriangle"
         draggable="false"
       />
-      <h1 :class="localStyles.cardTitle">{{ activity.name }}</h1>
-      <h2 :class="localStyles.subtitle">{{ activity.title }}</h2>
+      <h1 :class="[localStyles.cardTitle, this.isIndexAble()?'opacity-100':'opacity-50']">{{ activity.name }}</h1>
+      <h2 :class="[localStyles.subtitle, this.isIndexAble()?'opacity-100':'opacity-50']">{{ activity.title }}</h2>
       <p :class="[localStyles.description, displayClassMod()]">
         {{ activity.description }}
       </p>
@@ -123,8 +123,9 @@ export default {
       if (this.index === 0) {
         return true;
       }
-      console.log(this.index, this.lastActivityCompleted);
-      if (this.index <= this.lastActivityCompleted+1) {
+      console.log('index: '+this.index);
+      console.log('lastActivityCompleted+1: '+(this.lastActivityCompleted+1));
+      if (this.isIndexAble()) {
         return true;
       }
       return false;
@@ -164,6 +165,9 @@ export default {
     },
     showToggle(){
       if(this.index===0)return true;
+    },
+    isIndexAble(){
+      return this.index <= this.responsesStore.lastActivityCompleted+1;
     }
   },
 

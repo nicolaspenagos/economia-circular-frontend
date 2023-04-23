@@ -7,7 +7,11 @@ import {
 } from "../stores/questions";
 import { mapStores } from "pinia";
 import { useReponsesStore } from "../stores/responses";
-import { mapMarkedInfoToSring } from "../utils/markOptionUtils.js";
+import {
+  mapMarkedInfoToSring,
+  isExlusive,
+  replaceNumbersWithWords,
+} from "../utils/markOptionUtils.js";
 import { useQuestionsStore } from "../stores/questions";
 </script>
 <template>
@@ -31,12 +35,20 @@ import { useQuestionsStore } from "../stores/questions";
           :name="'qtnOptGroup-' + question.id"
           :id="'opt-' + index"
           v-model="singlePicked"
-          :value="mapMarkedInfoToSring(question.id, val.id, question.type, val.dependentQuestionId)"
+          :value="
+            mapMarkedInfoToSring(
+              question.id,
+              val.id,
+              question.type,
+              val.dependentQuestionId,
+              val.exclusive
+            )
+          "
         />
-        <label :for="'opt-' + index">{{val.optionValue  }}</label>
+        <label :for="'opt-' + index">{{ val.optionValue }}</label>
       </div>
     </section>
-    <section class="mt-6" v-if="question.type === MULTIPLE_CHOICE">
+    <section class="mt-6" v-if="question.type === MULTIPLE_CHOICE" ref="inputs">
       <div
         v-for="(val, index) in question.questionOptions"
         class="flex items-center gap-2"
@@ -46,9 +58,32 @@ import { useQuestionsStore } from "../stores/questions";
           :name="'qtnOptGroup-' + question.id"
           :id="'opt-' + index"
           v-model="multiplePicked"
-          :value="mapMarkedInfoToSring(question.id, val.id, question.type, val.depedentQuestionId)"
+          :class="replaceNumbersWithWords(val.id)"
+          @click="
+            handleExclusive(
+              mapMarkedInfoToSring(
+                question.id,
+                val.id,
+                question.type,
+                val.dependentQuestionId,
+                val.exclusive
+              ),
+              val.exclusive,
+              val.id
+            )
+          "
+          :value="
+            mapMarkedInfoToSring(
+              question.id,
+              val.id,
+              question.type,
+              val.dependentQuestionId,
+              val.exclusive
+            )
+          "
         />
         <label :for="'opt-' + index">{{ val.optionValue }}</label>
+        
       </div>
     </section>
     <textarea
@@ -62,7 +97,7 @@ import { useQuestionsStore } from "../stores/questions";
 </template>
 <script>
 export default {
-  emits:['optionMarked'],
+  emits: ["optionMarked"],
   props: {
     question: Object,
     default: null,
@@ -79,7 +114,6 @@ export default {
       this.responsesStore.handleMarkSingleAnswer(oldPicked, newPicked);
     },
     multiplePicked(newMultiplePicked, oldMultiplePicked) {
-     
       this.responsesStore.handleMarkMultipleAnswers(
         newMultiplePicked,
         oldMultiplePicked
@@ -89,9 +123,28 @@ export default {
   computed: {
     ...mapStores(useReponsesStore, useQuestionsStore),
   },
-  mounted() {
-  
+  methods: {
+    handleExclusive(optStr, exclusive, id) {
 
+      if (exclusive) {
+        const checked = this.$refs.inputs.querySelector(
+          "." + replaceNumbersWithWords(id)
+        ).checked;
+        if (checked) {
+          this.multiplePicked = [optStr];
+        }
+      } else {
+        const exclusiveIndex = this.multiplePicked.findIndex(isExlusive);
+        if (exclusiveIndex >= 0) {
+ 
+          this.multiplePicked.splice(exclusiveIndex, 1);
+          this.multiplePicked.push(optStr);
+        }
+      }
+    },
+  },
+
+  mounted() {
     const questionResponse = this.responsesStore.getQuestionResponse(
       this.question.id,
       this.question.type
