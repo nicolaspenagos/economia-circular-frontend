@@ -14,6 +14,7 @@ export const useReponsesStore = defineStore({
   state: () => ({
     activeResponse: null,
     lastActivityCompleted: -1,
+    activeJustify: null,
   }),
   getters: {
     getActiveResponse() {
@@ -21,6 +22,12 @@ export const useReponsesStore = defineStore({
     },
   },
   actions: {
+    handleUpdateJustify(questionId, newJustifyText) {
+      if (!this.activeJustify) {
+        this.activeJustify = new Map();
+      }
+      this.activeJustify.set(questionId, newJustifyText);
+    },
     async loadUserActiveResponse(loggedUserId) {
       // Array length is either zero or one element
       const activeReponsesArray = await APIService.get(
@@ -47,7 +54,7 @@ export const useReponsesStore = defineStore({
             JSON.stringify({
               questionOptionId: oldPickedInfo.questionOptionId,
               dependentQuestionId: oldPickedInfo.dependentQuestionId,
-              exclusive:oldPickedInfo.exclusive,
+              exclusive: oldPickedInfo.exclusive,
             })
           );
           this.activeResponse.delete(oldPickedInfo.dependentQuestionId);
@@ -58,7 +65,7 @@ export const useReponsesStore = defineStore({
         JSON.stringify({
           questionOptionId: newMarkedInfo.questionOptionId,
           dependentQuestionId: newMarkedInfo.dependentQuestionId,
-          exclusive:newMarkedInfo.exclusive
+          exclusive: newMarkedInfo.exclusive,
         })
       );
       this.activeResponse.set(newMarkedInfo.questionId, currentSet);
@@ -73,19 +80,19 @@ export const useReponsesStore = defineStore({
       let tempElement;
       newMultiplePicked.forEach((selectionStr) => {
         tempElement = mapFromStringToMarkedInfo(selectionStr);
-        if(tempElement.exclusive){
+        if (tempElement.exclusive) {
           isExclusive = true;
         }
         currentSet.add(
           JSON.stringify({
             questionOptionId: tempElement.questionOptionId,
             dependentQuestionId: tempElement.dependentQuestionId,
-            exclusive:tempElement.exclusive
+            exclusive: tempElement.exclusive,
           })
         );
       });
 
-      if(oldMultiplePicked && isExclusive){
+      if (oldMultiplePicked && isExclusive) {
         this.deleteMultipleDependent(oldMultiplePicked);
       }
 
@@ -99,29 +106,15 @@ export const useReponsesStore = defineStore({
         }
       }
     },
-    /*
-    checkIfExclusive(questionId, questionOptionId) {
-      const questionsById = useQuestionsStore().questionsById;
-      const questionOptions = questionsById.get(questionId).questionOptions;
-
-      for (let i = 0; i < questionOptions.length; i++) {
-        if (
-          questionOptions[i].id === questionOptionId &&
-          questionOptions[i].exclusive
-        ) {
-          return true;
+    deleteMultipleDependent(oldMultiplePicked) {
+      for (let i = 0; i < oldMultiplePicked.length; i++) {
+        const currentSelection = mapFromStringToMarkedInfo(
+          oldMultiplePicked[i]
+        );
+        if (currentSelection.dependentQuestionId) {
+          this.activeResponse.delete(currentSelection.dependentQuestionId);
+          i = Infinity;
         }
-      }
-      return false;
-    },*/
-    deleteMultipleDependent(oldMultiplePicked){
-      console.log(oldMultiplePicked);
-      for(let i=0; i<oldMultiplePicked.length; i++){
-          const currentSelection = mapFromStringToMarkedInfo(oldMultiplePicked[i]);
-          if(currentSelection.dependentQuestionId){
-            this.activeResponse.delete(currentSelection.dependentQuestionId);
-            i = Infinity;
-          }
       }
     },
 
@@ -198,6 +191,12 @@ export const useReponsesStore = defineStore({
 
       return counter;
     },
+    getJustifyAnswer(questionId){
+      if(this.activeJustify&&this.activeJustify.has(questionId)){
+        return this.activeJustify.get(questionId);
+      }else{
+        return '';
+      }
+    }
   },
 });
-

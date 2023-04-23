@@ -123,8 +123,7 @@ export default {
       if (this.index === 0) {
         return true;
       }
-      console.log('index: '+this.index);
-      console.log('lastActivityCompleted+1: '+(this.lastActivityCompleted+1));
+  
       if (this.isIndexAble()) {
         return true;
       }

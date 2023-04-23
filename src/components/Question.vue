@@ -112,6 +112,7 @@ export default {
       justifyAnswer: "",
       singlePicked: null,
       multiplePicked: [],
+
     };
   },
   watch: {
@@ -124,6 +125,9 @@ export default {
         oldMultiplePicked
       );
     },
+    justifyAnswer(newJustify){
+      this.responsesStore.handleUpdateJustify(this.question.id, newJustify);
+    }
   },
   computed: {
     ...mapStores(useReponsesStore, useQuestionsStore),
@@ -157,6 +161,8 @@ export default {
     if (this.questionsStore.isSingleChoice(this.question.type))
       this.singlePicked = questionResponse;
     else this.multiplePicked = questionResponse;
+
+    this.justifyAnswer = this.responsesStore.getJustifyAnswer(this.question.id);
   },
 };
 const localStyles = {

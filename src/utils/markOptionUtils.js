@@ -5,7 +5,7 @@ export function mapMarkedInfoToSring(
   dependentQuestionId,
   exclusive
 ) {
-  console.log(dependentQuestionId);
+
   return (
     "questionId:" +
     questionId +
@@ -22,8 +22,7 @@ export function mapMarkedInfoToSring(
 
 export function mapFromStringToMarkedInfo(infoString) {
   const parts = infoString.split(" ");
-  console.log( infoString);
-  console.log( parts[3].split(":")[1]);
+
   return {
     questionId: parts[0].split(":")[1],
     questionOptionId: parts[1].split(":")[1],
