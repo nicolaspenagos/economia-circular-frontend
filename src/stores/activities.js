@@ -5,6 +5,7 @@ export const useActivitiesStore = defineStore({
     id:"activities",
     state:()=>({
         activities: [],
+        activitiesById:new Map()
     }),
     getter:{
         getActivities(){
@@ -14,6 +15,9 @@ export const useActivitiesStore = defineStore({
     actions:{
         async loadActivities(){
             this.activities = await APIService.get(ACTIVITIES);
+            this.activities.forEach(a=>{
+                this.activitiesById.set(a.id, a);
+            });
             return this.activities;
         }
     }

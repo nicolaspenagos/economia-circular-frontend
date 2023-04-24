@@ -9,6 +9,7 @@ export const LOGIN = "login";
 export const ACTIVITIES = "activities";
 export const QUESTIONS = "questions";
 export const GET_ACTIVE_RESPONSES_PLUS_ID = "response/users/active/";
+export const RESPONSE = "response";
 const API_URL = "http://localhost:8080/";
 
 export class APIService {
@@ -19,9 +20,21 @@ export class APIService {
   }
 
   static async get(endpoint) {
+   
     try {
       const config = this.getHeaderConfig();
       const response = await axios.get(API_URL + endpoint, config);
+      return response.data;
+    } catch (error) {
+      showError(error);
+    }
+  }
+
+  static async patch(endpoint,newData){
+    try {
+      console.log(API_URL+endpoint);
+      const config = this.getHeaderConfig();
+      const response = await axios.patch(API_URL+endpoint, newData, config);
       return response.data;
     } catch (error) {
       showError(error);

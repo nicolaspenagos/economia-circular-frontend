@@ -12,8 +12,8 @@ import { useActivitiesStore } from "../stores/activities";
 <template>
   <Modal
     v-if="showModal"
-    :msg="modalMsgs.INCOMPLETE_ANSWERS"
-    imgPath="/alert.svg"
+    :msg="modalMsg"
+    :imgPath="modalImgPath"
     @accept="closeModal"
     :onlyAccept="true"
   />
@@ -32,8 +32,22 @@ import { useActivitiesStore } from "../stores/activities";
         :class="localStyles.cardTriangle"
         draggable="false"
       />
-      <h1 :class="[localStyles.cardTitle, this.isIndexAble()?'opacity-100':'opacity-50']">{{ activity.name }}</h1>
-      <h2 :class="[localStyles.subtitle, this.isIndexAble()?'opacity-100':'opacity-50']">{{ activity.title }}</h2>
+      <h1
+        :class="[
+          localStyles.cardTitle,
+          this.isIndexAble() ? 'opacity-100' : 'opacity-50',
+        ]"
+      >
+        {{ activity.name }}
+      </h1>
+      <h2
+        :class="[
+          localStyles.subtitle,
+          this.isIndexAble() ? 'opacity-100' : 'opacity-50',
+        ]"
+      >
+        {{ activity.title }}
+      </h2>
       <p :class="[localStyles.description, displayClassMod()]">
         {{ activity.description }}
       </p>
@@ -53,6 +67,7 @@ import { useActivitiesStore } from "../stores/activities";
     >
       <div :class="localStyles.line" v-if="shouldRender(val)"></div>
       <Question
+        :loaded="loaded"
         :question="val"
         v-if="shouldRender(val)"
         :class="'question' + this.activity.name.replaceAll(' ', '')"
@@ -67,6 +82,8 @@ import { useActivitiesStore } from "../stores/activities";
   </main>
 </template>
 <script>
+const alertImg = "/alert.svg";
+const savedImg = '/saved.svg';
 export default {
   emits: ["updateLastActivity"],
   setup() {
@@ -88,6 +105,10 @@ export default {
       type: Number,
       default: Infinity,
     },
+    loaded: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -96,6 +117,8 @@ export default {
       numberOfRendered: 0,
       showModal: false,
       rendredCounterMap: new Map(),
+      modalMsg: modalMsgs.INCOMPLETE_ANSWERS,
+      modalImgPath: alertImg,
     };
   },
   methods: {
@@ -123,7 +146,7 @@ export default {
       if (this.index === 0) {
         return true;
       }
-  
+
       if (this.isIndexAble()) {
         return true;
       }
@@ -133,7 +156,8 @@ export default {
       if (this.isAble()) {
         return this.show ? " rotate-180" : "";
       }
-      if(this.index<=this.responsesStore.lastActivityCompleted+1) return '';
+      if (this.index <= this.responsesStore.lastActivityCompleted + 1)
+        return "";
       return " !opacity-50";
     },
     getQuestionSectionClass() {
@@ -149,10 +173,16 @@ export default {
 
       return false;
     },
-    saveAndContinue() {
+    async saveAndContinue() {
       if (this.readyToSave()) {
+        await this.responsesStore.saveResponse();
+        this.modalMsg = modalMsgs.ANSWERS_SAVED;
+        this.modalImgPath = savedImg;
+        this.openModal();
         this.$emit("updateLastActivity", this.index);
       } else {
+        this.modalMsg = modalMsgs.INCOMPLETE_ANSWERS;
+        this.modalImgPath = alertImg;
         this.openModal();
       }
     },
@@ -162,14 +192,13 @@ export default {
         this.responsesStore.getCounterByActivity(this.activity.name)
       );
     },
-    showToggle(){
-      if(this.index===0)return true;
+    showToggle() {
+      if (this.index === 0) return true;
     },
-    isIndexAble(){
-      return this.index <= this.responsesStore.lastActivityCompleted+1;
-    }
+    isIndexAble() {
+      return this.index <= this.responsesStore.lastActivityCompleted + 1;
+    },
   },
-
 
   mounted() {
     if (this.responsesStore.lastActivityCompleted + 1 === this.index) {
@@ -199,13 +228,13 @@ export default {
     "responsesStore.lastActivityCompleted": {
       handler(newVal) {
         if (this.responsesStore.lastActivityCompleted + 1 === this.index) {
-          setTimeout(() => this.show = true, 1200);
+          setTimeout(() => (this.show = true), 1200);
         }
         if (this.responsesStore.lastActivityCompleted === this.index) {
           if (this.$refs.activityMain) {
             this.$refs.activityMain.scrollIntoView({ behavior: "smooth" });
           }
-          setTimeout(() => this.show = false, 1200);
+          setTimeout(() => (this.show = false), 1200);
         }
       },
       immediate: true,

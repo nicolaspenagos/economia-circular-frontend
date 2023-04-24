@@ -2,19 +2,23 @@ import { defineStore } from "pinia";
 import {
   APIService,
   GET_ACTIVE_RESPONSES_PLUS_ID,
+  RESPONSE,
 } from "../service/APIService";
 import {
   mapFromStringToMarkedInfo,
   mapMarkedInfoToSring,
 } from "../utils/markOptionUtils";
 import { useQuestionsStore } from "./questions";
-
+import { useAuthStore } from "./auth";
+import { useActivitiesStore } from "./activities";
 export const useReponsesStore = defineStore({
   id: "responses",
   state: () => ({
     activeResponse: null,
     lastActivityCompleted: -1,
     activeJustify: null,
+    backendActiveResponse: null,
+    activeReponseLoadedFromBack: false,
   }),
   getters: {
     getActiveResponse() {
@@ -34,8 +38,50 @@ export const useReponsesStore = defineStore({
         GET_ACTIVE_RESPONSES_PLUS_ID + loggedUserId
       );
       if (activeReponsesArray.length > 0) {
-        this.activeResponse = activeReponsesArray[0];
+        this.activeReponseLoadedFromBack = true;
+        this.backendActiveResponse = activeReponsesArray[0];
+        this.mapToActiveResponse(activeReponsesArray[0].selectedOptions);
+        this.mapToJustifyList(activeReponsesArray[0].justifyList);
       }
+    },
+    mapToJustifyList(justifyList) {
+      this.activeJustify = new Map();
+      justifyList.forEach((j) => {
+        this.activeJustify.set(j.questionIdReference, j.justify);
+      });
+    },
+    mapToActiveResponse(selectedOptionsArray) {
+      this.activeResponse = new Map();
+      this.activeJustify = new Map();
+      const activitiesMap = useActivitiesStore().activitiesById;
+      let lastActivityIndex = -1;
+      selectedOptionsArray.forEach((selection) => {
+        const question = useQuestionsStore().questionsById.get(
+          selection.questionIdReference
+        );
+        const activityIndex = parseInt(
+          activitiesMap.get(question.activityId).name.split(" ")[1]
+        );
+        if (activityIndex - 1 > lastActivityIndex) {
+          lastActivityIndex = activityIndex - 1;
+        }
+        const questionOption = question.questionOptions.find(
+          (x) => x.id === selection.optionIdReference
+        );
+        let currentSet = new Set();
+        if (this.activeResponse.has(question.id)) {
+          currentSet = this.activeResponse.get(question.id);
+        }
+        currentSet.add(
+          JSON.stringify({
+            questionOptionId: questionOption.id,
+            dependentQuestionId: questionOption.dependentQuestionId,
+            exclusive: questionOption.exclusive,
+          })
+        );
+        this.activeResponse.set(question.id, currentSet);
+      });
+      this.lastActivityCompleted = lastActivityIndex;
     },
     handleMarkSingleAnswer(oldPicked, newPicked) {
       const newMarkedInfo = mapFromStringToMarkedInfo(newPicked);
@@ -191,12 +237,72 @@ export const useReponsesStore = defineStore({
 
       return counter;
     },
-    getJustifyAnswer(questionId){
-      if(this.activeJustify&&this.activeJustify.has(questionId)){
+    getJustifyAnswer(questionId) {
+      if (this.activeJustify && this.activeJustify.has(questionId)) {
         return this.activeJustify.get(questionId);
-      }else{
-        return '';
+      } else {
+        return "";
       }
-    }
+    },
+    async saveResponse() {
+      this.setupBackendActiveResponse();
+      this.backendActiveResponse = {
+        ...this.backendActiveResponse,
+        justifyList: this.getJustifyList(),
+        selectedOptions: this.getResponseOptionsArray(),
+      };
+
+      if (!this.activeReponseLoadedFromBack) {
+        APIService.post(RESPONSE, this.backendActiveResponse);
+      } else {
+        APIService.patch(
+          RESPONSE + "/" + this.backendActiveResponse.id,
+          this.backendActiveResponse
+        );
+      }
+    },
+    setupBackendActiveResponse() {
+      if (!this.backendActiveResponse) {
+        const date = new Date();
+        const currentDate = date.toISOString().slice(0, -2);
+
+        this.getResponseOptionsArray();
+        this.backendActiveResponse = {
+          id: null,
+          responseDate: currentDate,
+          userId: useAuthStore().user.id,
+          complete: false,
+          selectedOptions: this.getResponseOptionsArray(),
+          justifyList: this.getJustifyList(),
+        };
+      }
+    },
+    getResponseOptionsArray() {
+      let selectedOptions = [];
+      if (this.activeResponse) {
+        for (const [key, value] of this.activeResponse) {
+          let selectedOpts = Array.from(value);
+          selectedOpts.forEach((opt) => {
+            selectedOptions.push({
+              questionIdReference: key,
+              optionIdReference: JSON.parse(opt).questionOptionId,
+            });
+          });
+        }
+      }
+      return selectedOptions;
+    },
+    getJustifyList() {
+      let justifyList = [];
+      if (this.activeJustify) {
+        for (const [key, value] of this.activeJustify) {
+          justifyList.push({
+            questionIdReference: key,
+            justify: value,
+          });
+        }
+      }
+      return justifyList;
+    },
   },
 });

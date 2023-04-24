@@ -1,7 +1,9 @@
 import { defineStore } from "pinia";
 import { APIService, USERS, LOGIN } from "../service/APIService";
 import { isTokenExpired, parseJwt } from "../utils/jwtUtils";
-
+import { useReponsesStore } from "./responses";
+import { useQuestionsStore } from "./questions";
+import {useActivitiesStore} from "./activities";
 const TOKEN_KEY = "myapp-token";
 
 export const useAuthStore = defineStore({
@@ -34,11 +36,19 @@ export const useAuthStore = defineStore({
         USERS + "/" + parseJwt(this.token).userId
       );
       this.user=fetchedUser;
+      const activities = await useActivitiesStore().loadActivities();
+      console.log('H1');
+      await useQuestionsStore().loadQuestions(activities);
+      console.log('H2');
+      await useReponsesStore().loadUserActiveResponse(this.user.id);
+      console.log('H3');
+    
     },
     setLoggedUserData(token) {
       this.token = token;
       this.isLoggedIn = true;
       this.fetchLoggedUser();
+
     },
     logout() {
       this.token = null;

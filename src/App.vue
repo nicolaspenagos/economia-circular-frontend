@@ -4,6 +4,7 @@ import ctl from "@netlify/classnames-template-literals";
 import { mapStores } from "pinia";
 import BaseButton from "./components/ui_utils/BaseButton.vue";
 import { useAuthStore } from "./stores/auth";
+import { useReponsesStore } from "./stores/responses";
 import router from "./router";
 import { useRoute } from "vue-router";
 import { HOME, QUESTIONNAIRE, REPORT } from "./router/index.js";
@@ -85,7 +86,7 @@ const route = useRoute();
 <script>
 export default {
   computed: {
-    ...mapStores(useAuthStore),
+    ...mapStores(useAuthStore, useReponsesStore),
     isLoggedIn() {
       return this.authStore.isLoggedIn;
     },
@@ -127,7 +128,7 @@ export default {
     const divElements = document.querySelectorAll('div');
     const myDiv = this.$refs.myDiv;
     
-
+   
   },
 };
 const localStyles = {

@@ -4,6 +4,7 @@ import {
   INCREMENTAL_SINGLE_CHOICE,
   SINGLE_CHOICE,
   MULTIPLE_CHOICE,
+  SINGLE_CHOICE_DEPENDENT
 } from "../stores/questions";
 import { mapStores } from "pinia";
 import { useReponsesStore } from "../stores/responses";
@@ -19,15 +20,16 @@ import Hint from "./ui_utils/Hint.vue";
   <article :class="localStyles.questionCard">
     <div class="flex items-center">
       <h1 :class="localStyles.questionTitle">
-      {{ question.questionOrder + 1 + ". " + question.questionText }}
-    </h1>
-    <Hint v-if="question.hint!==''" :hintText="question.hint"/>
+        {{ question.questionOrder + 1 + ". " + question.questionText }}
+      </h1>
+      <Hint v-if="question.hint !== ''" :hintText="question.hint" />
     </div>
     <section
       class="mt-6"
       v-if="
         question.type === SINGLE_CHOICE ||
-        question.type === INCREMENTAL_SINGLE_CHOICE
+        question.type === INCREMENTAL_SINGLE_CHOICE ||
+        question.type === SINGLE_CHOICE_DEPENDENT
       "
     >
       <div
@@ -87,8 +89,7 @@ import Hint from "./ui_utils/Hint.vue";
           "
         />
         <label :for="'opt-' + index">{{ val.optionValue }}</label>
-        <Hint v-if="val.hint!==''" :hintText="val.hint"/>
-      
+        <Hint v-if="val.hint !== ''" :hintText="val.hint" />
       </div>
     </section>
     <textarea
@@ -98,21 +99,28 @@ import Hint from "./ui_utils/Hint.vue";
       v-if="question.justify"
     >
     </textarea>
+
   </article>
 </template>
 <script>
 export default {
   emits: ["optionMarked"],
   props: {
-    question: Object,
-    default: null,
+    question: {
+      type: Object,
+      default: null,
+    },
+    loaded:{
+      type:Boolean,
+      default: false
+
+    }
   },
   data() {
     return {
       justifyAnswer: "",
       singlePicked: null,
       multiplePicked: [],
-
     };
   },
   watch: {
@@ -125,16 +133,16 @@ export default {
         oldMultiplePicked
       );
     },
-    justifyAnswer(newJustify){
+    justifyAnswer(newJustify) {
       this.responsesStore.handleUpdateJustify(this.question.id, newJustify);
-    }
+    },
+
   },
   computed: {
     ...mapStores(useReponsesStore, useQuestionsStore),
   },
   methods: {
     handleExclusive(optStr, exclusive, id) {
-
       if (exclusive) {
         const checked = this.$refs.inputs.querySelector(
           "." + replaceNumbersWithWords(id)
@@ -145,7 +153,6 @@ export default {
       } else {
         const exclusiveIndex = this.multiplePicked.findIndex(isExlusive);
         if (exclusiveIndex >= 0) {
- 
           this.multiplePicked.splice(exclusiveIndex, 1);
           this.multiplePicked.push(optStr);
         }

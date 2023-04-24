@@ -43,10 +43,12 @@ import QuestionnaireActivity from "../components/QuestionnaireActivity.vue";
         ></div>
       </aside>
       <QuestionnaireActivity
+        :loaded="loaded"
         :activity="val"
         :lastActivityCompleted="lastActivityCompleted"
         :index="index"
         @updateLastActivity="updateLastActivity"
+        v-if="loaded"
       />
     </section>
   </main>
@@ -62,6 +64,7 @@ export default {
       dataArray: onboardingData.QUESTIONNAIRE_ONBOARDING,
       lastActivityCompleted: -1,
       activities: [],
+      loaded:false
     };
   },
   computed: {
@@ -80,7 +83,7 @@ export default {
       this.showModal = true;
     },
     async loadData() {
-      await this.responsesStore.loadUserActiveResponse(this.authStore.user.id);
+      
       if (
         this.activitiesStore.activities.length === 0 ||
         this.questionsStore.questions.length === 0
@@ -88,8 +91,14 @@ export default {
         const tempActivities = await this.activitiesStore.loadActivities();
         await this.questionsStore.loadQuestions(tempActivities);
         this.activities = tempActivities;
+        if (!this.responsesStore.activeResponse) {
+          this.responsesStore.loadUserActiveResponse(this.authStore.user.id);
+        }
       } else {
         this.activities = this.activitiesStore.activities;
+        if (!this.responsesStore.activeResponse) {
+          this.responsesStore.loadUserActiveResponse(this.authStore.user.id);
+        }
       }
     },
     handleOnboarding() {
@@ -113,10 +122,12 @@ export default {
       }
     },
   },
-  mounted() {
+  async mounted() {
     this.$emit("toggleHeader", true);
     this.handleOnboarding();
-    this.loadData();
+    await this.loadData();
+    this.loaded = true;
+
   },
   components: { Gradient },
 };
