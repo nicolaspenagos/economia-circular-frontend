@@ -58,7 +58,7 @@ const route = useRoute();
         >
         <BaseButton text="Cerrar Sesión" @click="openModal" />
       </nav>
-      <nav v-else>
+      <nav v-else :class="localStyles.link">
         <BaseButton
           text="Iniciar Sesión"
           @click="goToLogin"
