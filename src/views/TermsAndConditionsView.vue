@@ -2,6 +2,7 @@
 import ctl from "@netlify/classnames-template-literals";
 import Gradient from "../components/ui_utils/Gradient.vue";
 import Footer from "../components/Footer.vue";
+
 </script>
 
 <template>
@@ -147,10 +148,10 @@ import Footer from "../components/Footer.vue";
 </template>
 <script>
 export default{
-  mounted() {
+  mounted(){
     this.$emit("toggleHeader", false);
-  },
-}
+  }
+};
 const localStyles = {
   main: ctl(`
     flex

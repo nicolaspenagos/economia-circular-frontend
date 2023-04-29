@@ -83,7 +83,7 @@ import { useActivitiesStore } from "../stores/activities";
 </template>
 <script>
 const alertImg = "/alert.svg";
-const savedImg = '/saved.svg';
+const savedImg = "/saved.svg";
 export default {
   emits: ["updateLastActivity"],
   setup() {
@@ -175,11 +175,13 @@ export default {
     },
     async saveAndContinue() {
       if (this.readyToSave()) {
-        await this.responsesStore.saveResponse();
+        await this.responsesStore.saveResponse(false);
+   
         this.modalMsg = modalMsgs.ANSWERS_SAVED;
         this.modalImgPath = savedImg;
         this.openModal();
         this.$emit("updateLastActivity", this.index);
+      
       } else {
         this.modalMsg = modalMsgs.INCOMPLETE_ANSWERS;
         this.modalImgPath = alertImg;
@@ -203,6 +205,10 @@ export default {
   mounted() {
     if (this.responsesStore.lastActivityCompleted + 1 === this.index) {
       this.show = true;
+      if(this.index>=1)
+      if (this.$refs.activityMain) {
+        this.$refs.activityMain.scrollIntoView({ behavior: "smooth" });
+      }
     }
   },
   computed: {

@@ -75,5 +75,10 @@ export const useQuestionsStore = defineStore({
         questionType === SINGLE_CHOICE_DEPENDENT
       );
     },
+    resetStore(){
+      this.questions = [];
+      this.questionsByActivity = new Map();
+      this.questionsById = new Map();
+    }
   },
 });

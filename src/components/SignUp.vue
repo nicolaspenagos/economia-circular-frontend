@@ -29,6 +29,7 @@ import { showError } from "../utils/errorUtils";
     imgPath="/alert.svg"
     @close="closeModal"
     @accept="signUp"
+    :xxl="true"
   />
   <form
     :class="authStyles.form + ' ' + localStyles.form"

@@ -29,7 +29,7 @@ import Footer from "../components/Footer.vue";
           >Economía Circular!</span
         >
       </h1>
-      <BaseButton text="¡Comienza Ahora!" class="mt-8" />
+      <BaseButton text="¡Comienza Ahora!" class="my-8 sm:mb-0 sm:mt-6" />
     </article>
     <img
       src="/home-intersect.svg"
@@ -44,15 +44,25 @@ import Footer from "../components/Footer.vue";
           src="/home-mockup.png"
           draggable="false"
           :class="localStyles.imgMockup"
+          data-aos="fade-up"
+          data-aos-duration="1000"
         />
-        <p :class="localStyles.pWidth">
+        <p
+          :class="localStyles.pWidth"
+          data-aos="fade-up"
+          data-aos-duration="500"
+        >
           Con <strong>Economía Circular en Icesi</strong> podrás
           <strong>autoevaluar </strong> el estado actual de tu empresa con
           respecto
           <strong>a los principios de la economía circular.</strong> Asimismo,
           tu empresa podrá:
         </p>
-        <div :class="localStyles.cardsContainer">
+        <div
+          :class="localStyles.cardsContainer"
+          data-aos="fade-up"
+          data-aos-duration="500"
+        >
           <article :class="localStyles.card">
             <img
               src="/home-mag-glass.svg"
@@ -97,7 +107,11 @@ import Footer from "../components/Footer.vue";
         :class="localStyles.leftImg"
         draggable="false"
       />
-      <article :class="localStyles.bodyTexContainer">
+      <article
+        :class="localStyles.bodyTexContainer"
+        data-aos="fade-left"
+        data-aos-duration="500"
+      >
         <h1 :class="localStyles.bodyTitle">
           Evalúa a tu empresa a través de un cuestionario
         </h1>
@@ -138,7 +152,11 @@ import Footer from "../components/Footer.vue";
           draggable="false"
         />
       </div>
-      <div :class="localStyles.bodyTexContainer + 'text-center'">
+      <div
+        :class="localStyles.bodyTexContainer + 'text-center'"
+        data-aos="fade-right"
+        data-aos-duration="500"
+      >
         <h1 :class="localStyles.bodyTitle + ' mt-6'">
           Podrás conocer el reporte con los resultados de tu evaluación
         </h1>
@@ -162,7 +180,11 @@ import Footer from "../components/Footer.vue";
         draggable="false"
       />
       <div class="w-[500px] flex flex-col items-center justify-center">
-        <h1 :class="localStyles.bodyTitle + ' !text-white text-center mb-4 sm:m-0'">
+        <h1
+          :class="
+            localStyles.bodyTitle + ' !text-white text-center mb-4 sm:m-0'
+          "
+        >
           ¡Déjanos acompañarte en este camino y separa una cita con nosotros!
         </h1>
         <BaseButton text="Contáctanos" @click="sendEmail" />
@@ -259,6 +281,7 @@ const localStyles = {
     flex
     flex-col
     items-center
+    mt-[-50px]
     sm:mt-[-220px]
     `),
   pWidth: ctl(`

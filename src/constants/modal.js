@@ -4,10 +4,13 @@ const LOGOUT_STATEMENT = "¿Estás seguro que quieres cerrar sesión?";
 const INCOMPLETE_ANSWERS =
   "Debes responder todas las preguntas <br> para continuar";
 const ANSWERS_SAVED =
-  "¡Tus respuestas de esta actividad se han <br> guardado exitosamente! Puedes salir del<br> cuestionario sin perder el progreso.";
+  "¡Tus respuestas de esta actividad se han guardado exitosamente! Puedes salir del cuestionario sin perder el progreso.";
+const SEND_ANSWERS =
+  "¿Seguro que quieres enviar tus respuestas y obtener el informe de resultados? <strong>Una vez aceptado, no podrás cambiar las respuestas,</strong> pero siempre puedes volver a diligenciar el cuestionario para obtener un nuevo informe.";
 export default {
   AUTHORIZATION_STATEMENT,
   LOGOUT_STATEMENT,
   INCOMPLETE_ANSWERS,
-  ANSWERS_SAVED
+  ANSWERS_SAVED,
+  SEND_ANSWERS,
 };

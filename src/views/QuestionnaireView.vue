@@ -10,6 +10,11 @@ import onboardingData from "../constants/onboarding.js";
 import Gradient from "../components/ui_utils/Gradient.vue";
 import Footer from "../components/Footer.vue";
 import QuestionnaireActivity from "../components/QuestionnaireActivity.vue";
+import BaseButton from "../components/ui_utils/BaseButton.vue";
+import Modal from "../components/ui_utils/Modal.vue";
+import modalMsgs from "../constants/modal.js";
+import router from "../router";
+import { REPORT, HOME } from "../router/index.js"; 
 </script>
 <template>
   <Onboarding v-if="showModal" :data="dataArray" @close="closeModal" />
@@ -39,7 +44,7 @@ import QuestionnaireActivity from "../components/QuestionnaireActivity.vue";
         </div>
         <div
           :class="[localStyles.line, isActive(index + 1)]"
-          v-if="index < this.activities.length - 1"
+          v-if="index < activities.length - 1"
         ></div>
       </aside>
       <QuestionnaireActivity
@@ -51,6 +56,22 @@ import QuestionnaireActivity from "../components/QuestionnaireActivity.vue";
         v-if="loaded"
       />
     </section>
+    <BaseButton
+      text="Enviar respuestas"
+      :class="[
+        responsesStore.lastActivityCompleted + 1 < activities.length
+          ? 'opacity-50'
+          : '',
+      ]"
+      @click="openAnswersModal"
+    />
+    <Modal
+      :msg="modalMsgs.SEND_ANSWERS"
+      imgPath="/stats.svg"
+      @accept="sendAnswers"
+      @close="closeAnswersModal"
+      v-if="answersModal"
+    />
   </main>
   <Footer />
 </template>
@@ -64,7 +85,8 @@ export default {
       dataArray: onboardingData.QUESTIONNAIRE_ONBOARDING,
       lastActivityCompleted: -1,
       activities: [],
-      loaded:false
+      loaded: false,
+      answersModal: false,
     };
   },
   computed: {
@@ -76,14 +98,24 @@ export default {
     ),
   },
   methods: {
+    async sendAnswers(){
+      this.closeAnswersModal();
+      await this.responsesStore.saveResponse(true);
+      router.push(REPORT);
+    },
     closeModal() {
       this.showModal = false;
     },
     openModal() {
       this.showModal = true;
     },
+    openAnswersModal() {
+      this.answersModal = true;
+    },
+    closeAnswersModal() {
+      this.answersModal = false;
+    },
     async loadData() {
-      
       if (
         this.activitiesStore.activities.length === 0 ||
         this.questionsStore.questions.length === 0
@@ -123,13 +155,15 @@ export default {
     },
   },
   async mounted() {
+    if(!this.authStore.isLoggedIn){
+      router.push(HOME);
+    }
     this.$emit("toggleHeader", true);
     this.handleOnboarding();
     await this.loadData();
     this.loaded = true;
-
   },
-  components: { Gradient },
+  components: { Gradient, BaseButton },
 };
 const localStyles = {
   header: ctl(`

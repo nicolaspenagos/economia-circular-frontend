@@ -54,6 +54,10 @@ export const useAuthStore = defineStore({
       this.token = null;
       this.isLoggedIn = false;
       this.user = null;
+      useReponsesStore().resetStore();
+      useQuestionsStore().resetStore();
+      useActivitiesStore().resetStore();
+      
       localStorage.removeItem(TOKEN_KEY);
     },
     checkIfLogged() {

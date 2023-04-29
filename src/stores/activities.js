@@ -13,6 +13,10 @@ export const useActivitiesStore = defineStore({
         }
     },
     actions:{
+        resetStore(){
+            this.activities = [];
+            this.activitiesById = new Map();
+        },
         async loadActivities(){
             this.activities = await APIService.get(ACTIVITIES);
             this.activities.forEach(a=>{
@@ -20,5 +24,6 @@ export const useActivitiesStore = defineStore({
             });
             return this.activities;
         }
+      
     }
 });

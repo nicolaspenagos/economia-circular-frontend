@@ -10,7 +10,7 @@ import BaseButton from "./BaseButton.vue";
     @touchmove.prevent
     @scroll.prevent
   >
-    <article :class="localStyles.modalContainer">
+    <article :class="[localStyles.modalContainer, xxl?'sm:max-w-3xl':'sm:max-w-xl']">
       <img :src="imgPath" class="h-16 mb-6 mt-3 mx-auto" draggable="false" />
       <p :class="localStyles.p" v-html="msg "></p>
       <div :class="localStyles.btnsContainer">
@@ -33,6 +33,10 @@ export default {
       default: "",
     },
     onlyAccept:{
+      type:Boolean,
+      default:false
+    },
+    xxl:{
       type:Boolean,
       default:false
     }
@@ -68,7 +72,6 @@ const localStyles = {
         bg-white
         z-50
         sm:w-fit
-        sm:max-w-3xl
         p-6
         custom-border-radius
 

@@ -10,6 +10,7 @@ import { useRoute } from "vue-router";
 import { HOME, QUESTIONNAIRE, REPORT } from "./router/index.js";
 import Modal from "./components/ui_utils/Modal.vue";
 import modalMsgs from "./constants/modal.js";
+import AOS from 'aos';
 const route = useRoute();
 </script>
 <template>
@@ -127,7 +128,8 @@ export default {
     this.authStore.checkIfLogged();
     const divElements = document.querySelectorAll('div');
     const myDiv = this.$refs.myDiv;
-    
+
+    AOS.init();
    
   },
 };
