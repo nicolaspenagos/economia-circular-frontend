@@ -125,15 +125,48 @@ import Footer from "../components/Footer.vue";
         </div>
       </article>
     </section>
-    <section class="px-6 pt-1 pb-12 text-center">
-      <img src="/final-mockup-mobile.png" class="mb-1 sm:mb-0" />
-      <h1 :class="localStyles.bodyTitle + ' mt-6'">
-        Podrás conocer el reporte con los resultados de tu evaluación
-      </h1>
-      <p class="mt-4">
-        Y encontrarás recomendaciones que ayudarán a tu empresa a <strong>evolucionar</strong>
-        hacía un modelo económico <strong>más circular.</strong>
-      </p>
+    <section :class="localStyles.mobileInfo1">
+      <div class="relative">
+        <img
+          src="/final-mockup-mobile.png"
+          class="mb-1 w-11/12 mx-auto sm:mx-0 sm:mb-0 sm:h-[422px] sm:w-[694px] z-30"
+          draggable="false"
+        />
+        <img
+          src="/mockup-circle.png"
+          class="absolute top-[-50px] right-[-10px] hidden sm:block h-40"
+          draggable="false"
+        />
+      </div>
+      <div :class="localStyles.bodyTexContainer + 'text-center'">
+        <h1 :class="localStyles.bodyTitle + ' mt-6'">
+          Podrás conocer el reporte con los resultados de tu evaluación
+        </h1>
+        <p class="mt-4 mx-8 sm:mx-0">
+          Y encontrarás recomendaciones que ayudarán a tu empresa a
+          <strong>evolucionar</strong> hacía un modelo económico
+          <strong>más circular.</strong>
+        </p>
+      </div>
+    </section>
+    <section :class="localStyles.lastSection">
+      <Gradient />
+      <img
+        src="/end-vectors-right.svg"
+        class="absolute right-0 h-full hidden sm:flex"
+        draggable="false"
+      />
+      <img
+        src="/end-vectors-left.svg"
+        class="absolute left-0 h-full hidden sm:flex"
+        draggable="false"
+      />
+      <div class="w-[500px] flex flex-col items-center justify-center">
+        <h1 :class="localStyles.bodyTitle + ' !text-white text-center mb-4 sm:m-0'">
+          ¡Déjanos acompañarte en este camino y separa una cita con nosotros!
+        </h1>
+        <BaseButton text="Contáctanos" @click="sendEmail" />
+      </div>
     </section>
   </main>
   <Footer />
@@ -152,6 +185,14 @@ export default {
       if (this.authStore.user && this.authStore.user.name)
         return this.authStore.user.name;
       else return "";
+    },
+  },
+  methods: {
+    sendEmail() {
+      console.log("HOLA");
+      const email = "economiacircularenicesi@gmail.com";
+      const mailtoUrl = `mailto:${email}`;
+      window.location.href = mailtoUrl;
     },
   },
 };
@@ -260,7 +301,7 @@ const localStyles = {
     sm:gap-8 
     mt-8
     sm:mt-16
-    px-4
+    px-6
     `),
   leftImg: ctl(`
       h-72
@@ -284,7 +325,7 @@ const localStyles = {
   w-full 
   items-center 
   sm:pr-20 
-  sm:my-56 
+  sm:my-36
   hidden 
   sm:flex`),
   mobileInfo: ctl(`
@@ -296,13 +337,46 @@ const localStyles = {
     text-center
   `),
   mobileInfoImg: ctl(`
-          w-full
-          h-32
+          h-36
           bg-[url('/home-info-mobile.jpg')]
           bg-cover
           bg-center
           bg-no-repeat
           rounded-t-[10px]
+  `),
+  mobileInfo1: ctl(`
+    sm:pb-21
+    px-6
+    pt-1 
+    pb-12 
+    text-center 
+    flex 
+    flex-col
+    sm:flex-row-reverse
+    sm:items-center
+    justify-center
+    sm:justify-between
+    sm:w-full
+    sm:px-20 
+    sm:text-left
+    sm:mb-24
+  `),
+  lastSection: ctl(`
+  flex 
+  items-center
+  justify-center
+  sm:sm:mb-44
+  w-full
+  h-fit
+  px-4
+  py-8
+  mb-12
+  sm:h-80
+  sm:p-0
+  bg-[url('/end-home-img.jpg')]
+  bg-cover
+  bg-center
+  bg-no-repeat
   `),
 };
 </script>
