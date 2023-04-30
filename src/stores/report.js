@@ -18,7 +18,6 @@ export const useReportStore = defineStore({
     actions: {
         async loadCompletedResponses(){
             const response = await APIService.get(RESPONSE+'/users/'+useAuthStore().user.id);
-            console.log(response);
         }
     },
   });

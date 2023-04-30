@@ -37,12 +37,9 @@ export const useAuthStore = defineStore({
       );
       this.user=fetchedUser;
       const activities = await useActivitiesStore().loadActivities();
-      console.log('H1');
       await useQuestionsStore().loadQuestions(activities);
-      console.log('H2');
       await useReponsesStore().loadUserActiveResponse(this.user.id);
-      console.log('H3');
-    
+     
     },
     setLoggedUserData(token) {
       this.token = token;

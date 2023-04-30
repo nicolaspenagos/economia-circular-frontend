@@ -211,7 +211,6 @@ export default {
   },
   methods: {
     sendEmail() {
-      console.log("HOLA");
       const email = "economiacircularenicesi@gmail.com";
       const mailtoUrl = `mailto:${email}`;
       window.location.href = mailtoUrl;

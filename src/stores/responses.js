@@ -253,8 +253,6 @@ export const useReponsesStore = defineStore({
         selectedOptions: this.getResponseOptionsArray(),
       };
       
-      console.log(this.backendActiveResponse);
-
       if (!this.activeReponseLoadedFromBack) {
         await APIService.post(RESPONSE, this.backendActiveResponse);
       } else {

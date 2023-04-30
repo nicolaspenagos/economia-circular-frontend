@@ -32,7 +32,6 @@ export class APIService {
 
   static async patch(endpoint,newData){
     try {
-      console.log(API_URL+endpoint);
       const config = this.getHeaderConfig();
       const response = await axios.patch(API_URL+endpoint, newData, config);
       return response.data;
