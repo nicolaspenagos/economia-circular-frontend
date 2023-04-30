@@ -37,6 +37,10 @@ export const useReponsesStore = defineStore({
       const activeReponsesArray = await APIService.get(
         GET_ACTIVE_RESPONSES_PLUS_ID + loggedUserId
       );
+      this.configResponseFromBack(activeReponsesArray);
+    },
+
+    configResponseFromBack(activeReponsesArray) {
       if (activeReponsesArray.length > 0) {
         this.activeReponseLoadedFromBack = true;
         this.backendActiveResponse = activeReponsesArray[0];
@@ -103,8 +107,12 @@ export const useReponsesStore = defineStore({
               exclusive: oldPickedInfo.exclusive,
             })
           );
-          if (oldPickedInfo.exclusive)
+          if (
+            !newMarkedInfo.dependentQuestionId &&
+            oldPickedInfo.dependentQuestionId
+          )
             this.activeResponse.delete(oldPickedInfo.dependentQuestionId);
+            this.activeJustify.delete(oldPickedInfo.dependentQuestionId);
         }
       }
 
@@ -139,7 +147,7 @@ export const useReponsesStore = defineStore({
         );
       });
 
-      if (oldMultiplePicked && isExclusive) {
+      if (oldMultiplePicked && isExclusive||newMultiplePicked.length===0) {
         this.deleteMultipleDependent(oldMultiplePicked);
       }
 
@@ -160,12 +168,14 @@ export const useReponsesStore = defineStore({
         );
         if (currentSelection.dependentQuestionId) {
           this.activeResponse.delete(currentSelection.dependentQuestionId);
+          this.activeJustify.delete(currentSelection.dependentQuestionId);
           i = Infinity;
         }
       }
     },
 
     searchSelectedDependentQuestionId(dependentQuestionId) {
+   
       if (!this.activeResponse) {
         return false;
       }
@@ -181,11 +191,12 @@ export const useReponsesStore = defineStore({
           );
 
           if (option && option.dependentQuestionId === dependentQuestionId) {
+        
             return true;
           }
         }
       }
-
+  
       return false;
     },
     getQuestionResponse(questionId, questionType, dependentQuestionId) {
@@ -252,19 +263,24 @@ export const useReponsesStore = defineStore({
         justifyList: this.getJustifyList(),
         selectedOptions: this.getResponseOptionsArray(),
       };
-      
+
       if (!this.activeReponseLoadedFromBack) {
-        await APIService.post(RESPONSE, this.backendActiveResponse);
+        const response = await APIService.post(
+          RESPONSE,
+          this.backendActiveResponse
+        );
+        this.configResponseFromBack([response]);
       } else {
         if (isDone) {
           this.backendActiveResponse.complete = true;
         }
 
-        await APIService.patch(
+        const response = await APIService.patch(
           RESPONSE + "/" + this.backendActiveResponse.id,
           this.backendActiveResponse
         );
-        if(isDone){
+
+        if (isDone) {
           this.resetStore();
         }
       }
@@ -319,5 +335,7 @@ export const useReponsesStore = defineStore({
       this.backendActiveResponse = null;
       this.activeReponseLoadedFromBack = false;
     },
+   
   },
+
 });

@@ -164,6 +164,7 @@ export default {
       return this.show ? "flex flex-col" : "hidden";
     },
     shouldRender(question) {
+  
       if (question.mandatory) {
         return true;
       }

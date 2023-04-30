@@ -4,7 +4,7 @@ import {
   INCREMENTAL_SINGLE_CHOICE,
   SINGLE_CHOICE,
   MULTIPLE_CHOICE,
-  SINGLE_CHOICE_DEPENDENT
+  SINGLE_CHOICE_DEPENDENT,
 } from "../stores/questions";
 import { mapStores } from "pinia";
 import { useReponsesStore } from "../stores/responses";
@@ -99,9 +99,9 @@ import Hint from "./ui_utils/Hint.vue";
       v-if="question.justify"
     >
     </textarea>
-
   </article>
 </template>
+
 <script>
 export default {
   emits: ["optionMarked"],
@@ -110,11 +110,10 @@ export default {
       type: Object,
       default: null,
     },
-    loaded:{
-      type:Boolean,
-      default: false
-
-    }
+    loaded: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -136,17 +135,17 @@ export default {
     justifyAnswer(newJustify) {
       this.responsesStore.handleUpdateJustify(this.question.id, newJustify);
     },
-
   },
   computed: {
     ...mapStores(useReponsesStore, useQuestionsStore),
   },
   methods: {
     handleExclusive(optStr, exclusive, id) {
+      const checked = this.$refs.inputs.querySelector(
+        "." + replaceNumbersWithWords(id)
+      ).checked;
+
       if (exclusive) {
-        const checked = this.$refs.inputs.querySelector(
-          "." + replaceNumbersWithWords(id)
-        ).checked;
         if (checked) {
           this.multiplePicked = [optStr];
         }
@@ -155,6 +154,7 @@ export default {
         if (exclusiveIndex >= 0) {
           this.multiplePicked.splice(exclusiveIndex, 1);
           this.multiplePicked.push(optStr);
+          this.multiplePicked = JSON.parse(JSON.stringify(this.multiplePicked));
         }
       }
     },
