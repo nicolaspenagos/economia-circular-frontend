@@ -8,7 +8,7 @@ import Footer from "../components/Footer.vue";
   <main :class="localStyles.main">
     <aside :class="localStyles.aside">
       <Gradient />
-      <img src="/logo.svg" :class="localStyles.logo" draggable="false"/>
+      <img src="/logo.svg" :class="localStyles.logo" draggable="false" />
     </aside>
     <section :class="localStyles.section">
       <article :class="localStyles.card">
@@ -143,15 +143,17 @@ import Footer from "../components/Footer.vue";
       </article>
     </section>
   </main>
-  <Footer/>
+  <Footer />
 </template>
 <script>
-export default{
-  mounted(){
+export default {
+  emits: ["toggleHeader", "toggleFooter"],
+  async mounted() {
     this.$emit("toggleHeader", false);
     this.$emit("toggleFooter", true);
-  }
+  },
 };
+
 const localStyles = {
   main: ctl(`
     flex
@@ -191,11 +193,11 @@ const localStyles = {
           hidden
           sm:flex
     `),
-    logo:ctl(`
+  logo: ctl(`
         sm:h-[120px]
         sm:mb-auto
         sm:mt-32
         sm:mx-auto
-    `)
+    `),
 };
 </script>

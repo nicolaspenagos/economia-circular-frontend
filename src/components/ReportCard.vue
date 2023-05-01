@@ -1,26 +1,32 @@
 <script setup>
 import ctl from "@netlify/classnames-template-literals";
 import { ORDINAL_NUMBERS_LIST } from "../constants/ordinals.js";
+import { useReportStore } from "../stores/report";
+import { mapStores } from "pinia";
 </script>
 <template>
   <article
     :class="[localStyles.reportCard, getColor()]"
     data-aos-duration="1000"
     data-aos="flip-left"
+    @click="getReport"
   >
     <div>
       <h1 :class="localStyles.title">
         Resultados del {{ ORDINAL_NUMBERS_LIST[index] }} diagnóstico
       </h1>
-      <p class="text-white">{{ report.val }}</p>
+      <p class="text-white">{{ getDate() }}</p>
     </div>
-    <img src="/stats-repor-card.svg" class="mr-auto" />
+    <img src="/stats-repor-card.svg" class="mr-auto" draggable="false" />
   </article>
 </template>
 <script>
 const NUMBER_OF_COLUMNS = 4;
 
 export default {
+  computed:{
+    ...mapStores(useReportStore)
+  },
   props: {
     report: {
       type: Object,
@@ -44,8 +50,18 @@ export default {
           ? "sm:bg-[#34ce8b]  bg-[#756EF2]"
           : "sm:bg-[#756EF2] bg-[#34ce8b]";
       }
+
     },
+    getDate(){
+      return this.report.responseDate.split('T')[0];
+    },
+    getReport(){
+      console.log("hOLA");
+     this.reportStore.getReport(this.report);
+    }
   },
+
+
 };
 const localStyles = {
   reportCard: ctl(`

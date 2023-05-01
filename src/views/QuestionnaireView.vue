@@ -97,6 +97,7 @@ export default {
   },
   methods: {
     async sendAnswers() {
+      
       this.closeAnswersModal();
       await this.responsesStore.saveResponse(true);
       router.push(REPORT);
@@ -108,7 +109,11 @@ export default {
       this.showModal = true;
     },
     openAnswersModal() {
-      this.answersModal = true;
+      if (
+        this.responsesStore.lastActivityCompleted + 1 ===
+        this.activities.length
+      )
+        this.answersModal = true;
     },
     closeAnswersModal() {
       this.answersModal = false;

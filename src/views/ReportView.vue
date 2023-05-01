@@ -36,10 +36,10 @@ import ReportCard from "../components/ReportCard.vue";
   </header>
   <main :class="localStyles.main">
     <section
-      v-for="(val, index) in reportStore.test"
+      v-for="(val, index) in reportStore.completedResponses"
       :class="localStyles.gridSection"
     >
-      <ReportCard :report="{val}" :index="index" />
+      <ReportCard :report="val" :index="index" />
     </section>
   </main>
 </template>
@@ -51,10 +51,11 @@ export default {
     this.$emit("toggleFooter", true);
     await this.reportStore.loadCompletedResponses();
     this.handleShowModal();
+  
   },
   data() {
     return {
-      showModal: true,
+      showModal: false,
     };
   },
   computed: {
@@ -65,12 +66,14 @@ export default {
       router.push(QUESTIONNAIRE);
     },
     handleShowModal() {
-        console.log(this.reportStore.completedResponses.length);
       if (this.reportStore.completedResponses.length > 0) {
         this.showModal = false;
+      } else {
+        this.showModal = true;
       }
     },
   },
+
 };
 const localStyles = {
   header: ctl(`

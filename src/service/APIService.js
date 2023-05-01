@@ -10,6 +10,7 @@ export const ACTIVITIES = "activities";
 export const QUESTIONS = "questions";
 export const GET_ACTIVE_RESPONSES_PLUS_ID = "response/users/active/";
 export const RESPONSE = "response";
+export const REPORT = "report";
 const API_URL = "http://localhost:8080/";
 
 export class APIService {

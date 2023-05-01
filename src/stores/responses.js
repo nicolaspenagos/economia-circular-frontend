@@ -271,7 +271,7 @@ export const useReponsesStore = defineStore({
         justifyList: this.getJustifyList(),
         selectedOptions: this.getResponseOptionsArray(),
       };
-
+      
       if (!this.activeReponseLoadedFromBack) {
         const response = await APIService.post(
           RESPONSE,
@@ -282,12 +282,11 @@ export const useReponsesStore = defineStore({
         if (isDone) {
           this.backendActiveResponse.complete = true;
         }
-
         const response = await APIService.patch(
           RESPONSE + "/" + this.backendActiveResponse.id,
           this.backendActiveResponse
         );
-
+        this.configResponseFromBack([response]);
         if (isDone) {
           this.resetStore();
         }
