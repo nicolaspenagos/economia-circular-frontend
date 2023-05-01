@@ -1,0 +1,23 @@
+export const ORDINAL_NUMBERS_LIST = [
+  "primer",
+  "segundo",
+  "tercer",
+  "cuarto",
+  "quinto",
+  "sexto",
+  "séptimo",
+  "octavo",
+  "noveno",
+  "décimo",
+  "undécimo",
+  "duodécimo",
+  "decimotercero",
+  "decimocuarto",
+  "decimoquinto",
+  "decimosexto",
+  "decimoséptimo",
+  "decimoctavo",
+  "decimonoveno",
+  "vigésimo",
+];
+

@@ -38,6 +38,7 @@ import router from "../router";
 </template>
 <script>
 export default {
+  emits: ["toggleHeader", "toggleFooter"],
   methods:{
     goToHome(){
       router.push('/');
@@ -45,6 +46,7 @@ export default {
   },
   mounted() {
     this.$emit("toggleHeader", false);
+    this.$emit("toggleFooter", false);
   },
 };
 const localStyles = {

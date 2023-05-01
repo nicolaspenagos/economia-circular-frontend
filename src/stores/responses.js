@@ -94,6 +94,10 @@ export const useReponsesStore = defineStore({
         this.activeResponse = new Map();
       }
 
+      if (this.activeJustify == null) {
+        this.activeJustify = new Map();
+      }
+
       let currentSet = new Set();
 
       if (this.activeResponse.has(newMarkedInfo.questionId)) {
@@ -128,6 +132,10 @@ export const useReponsesStore = defineStore({
     handleMarkMultipleAnswers(newMultiplePicked, oldMultiplePicked) {
       if (this.activeResponse == null) {
         this.activeResponse = new Map();
+      }
+
+      if (this.activeJustify == null) {
+        this.activeJustify = new Map();
       }
 
       const currentSet = new Set();

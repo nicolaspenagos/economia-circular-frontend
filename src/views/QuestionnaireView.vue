@@ -8,19 +8,18 @@ import { useReponsesStore } from "../stores/responses";
 import Onboarding from "../components/Onboarding.vue";
 import onboardingData from "../constants/onboarding.js";
 import Gradient from "../components/ui_utils/Gradient.vue";
-import Footer from "../components/Footer.vue";
 import QuestionnaireActivity from "../components/QuestionnaireActivity.vue";
 import BaseButton from "../components/ui_utils/BaseButton.vue";
 import Modal from "../components/ui_utils/Modal.vue";
 import modalMsgs from "../constants/modal.js";
 import router from "../router";
-import { REPORT, HOME } from "../router/index.js"; 
+import { REPORT, HOME } from "../router/index.js";
 </script>
 <template>
   <Onboarding v-if="showModal" :data="dataArray" @close="closeModal" />
   <header :class="localStyles.header">
     <Gradient />
-    <div class="px-4">
+    <div class="px-4" data-aos="fade-up" data-aos-duration="1000">
       <h1 :class="localStyles.headerTitle">
         ¡Es momento de
         <span class="custom-text-green font-bold">autoevaluar</span> las
@@ -73,11 +72,10 @@ import { REPORT, HOME } from "../router/index.js";
       v-if="answersModal"
     />
   </main>
-  <Footer />
 </template>
 <script>
 export default {
-  emits: ["toggleHeader"],
+  emits: ["toggleHeader", "toggleFooter"],
   setup() {},
   data() {
     return {
@@ -98,7 +96,7 @@ export default {
     ),
   },
   methods: {
-    async sendAnswers(){
+    async sendAnswers() {
       this.closeAnswersModal();
       await this.responsesStore.saveResponse(true);
       router.push(REPORT);
@@ -155,11 +153,13 @@ export default {
     },
   },
   async mounted() {
-    if(!this.authStore.isLoggedIn){
+    if (!this.authStore.isLoggedIn) {
       router.push(HOME);
     }
     this.$emit("toggleHeader", true);
     this.handleOnboarding();
+    this.$emit("toggleFooter", true);
+
     await this.loadData();
     this.loaded = true;
   },
@@ -168,7 +168,7 @@ export default {
 const localStyles = {
   header: ctl(`
       relative
-      h-fit
+      sm:h-[400px]
       w-full
       bg-amber-200
       pt-[160px]

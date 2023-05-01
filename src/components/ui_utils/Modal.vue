@@ -14,8 +14,8 @@ import BaseButton from "./BaseButton.vue";
       <img :src="imgPath" class="h-16 mb-6 mt-3 mx-auto" draggable="false" />
       <p :class="localStyles.p" v-html="msg "></p>
       <div :class="localStyles.btnsContainer">
-        <BaseButton text="Volver" class="w-3/4 max-w-[100px]" :altBtn="true" @click="closeModal" v-if="!onlyAccept"/>
-        <BaseButton text="Aceptar" class="w-3/4 max-w-[100px] ml-2" @click="accept"/>
+        <BaseButton text="Volver" class="min-w-[100px] w-fit " :altBtn="true" @click="closeModal" v-if="!onlyAccept"/>
+        <BaseButton :text="acceptMsg" class="min-w-[100px] w-fit ml-2" @click="accept"/>
       </div>
     </article>
   </div>
@@ -39,6 +39,10 @@ export default {
     xxl:{
       type:Boolean,
       default:false
+    },
+    acceptMsg:{
+      type:String,
+      default:"Aceptar"
     }
   },
   methods:{

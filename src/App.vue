@@ -11,6 +11,7 @@ import { HOME, QUESTIONNAIRE, REPORT } from "./router/index.js";
 import Modal from "./components/ui_utils/Modal.vue";
 import modalMsgs from "./constants/modal.js";
 import AOS from 'aos';
+import Footer from "./components/Footer.vue";
 const route = useRoute();
 </script>
 <template>
@@ -81,8 +82,9 @@ const route = useRoute();
         />
       </nav>
     </header>
-    <RouterView @toggleHeader="toggleHeader" />
+    <RouterView @toggleHeader="toggleHeader" @toggleFooter="toggleFooter" />
   </main>
+  <Footer v-if="showFooter" />
 </template>
 <script>
 export default {
@@ -116,12 +118,16 @@ export default {
     toggleHeader(newVal) {
       this.showHeader = newVal;
     },
+    toggleFooter(newVal){
+      this.showFooter = newVal;
+    }
   },
   data() {
     return {
       showHeader: true,
       currentView: "home",
       showModal: false,
+      showFooter:true
     };
   },
   mounted() {

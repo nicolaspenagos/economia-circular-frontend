@@ -7,10 +7,12 @@ const ANSWERS_SAVED =
   "¡Tus respuestas de esta actividad se han guardado exitosamente! Puedes salir del cuestionario sin perder el progreso.";
 const SEND_ANSWERS =
   "¿Seguro que quieres enviar tus respuestas y obtener el informe de resultados? <strong>Una vez aceptado, no podrás cambiar las respuestas,</strong> pero siempre puedes volver a diligenciar el cuestionario para obtener un nuevo informe.";
+const NO_RESPONSE_COMPLETED = "Parece que aún no has contestado el cuestionario. Por favor dirígete a esta opción para obtener el reporte de tu empresa.";
 export default {
   AUTHORIZATION_STATEMENT,
   LOGOUT_STATEMENT,
   INCOMPLETE_ANSWERS,
   ANSWERS_SAVED,
   SEND_ANSWERS,
+  NO_RESPONSE_COMPLETED
 };

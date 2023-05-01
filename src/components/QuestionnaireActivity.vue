@@ -26,6 +26,7 @@ import { useActivitiesStore } from "../stores/activities";
         show ? '  ' : ' mb-10 sm:mb-16',
       ]"
       @click="toggleDisplay"
+   
     >
       <img
         src="/polygon.svg"

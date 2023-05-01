@@ -4,7 +4,6 @@ import { useAuthStore } from "../stores/auth";
 import ctl from "@netlify/classnames-template-literals";
 import Gradient from "../components/ui_utils/Gradient.vue";
 import BaseButton from "../components/ui_utils/BaseButton.vue";
-import Footer from "../components/Footer.vue";
 </script>
 
 <template>
@@ -20,7 +19,11 @@ import Footer from "../components/Footer.vue";
       :class="[localStyles.vectors, 'left-0']"
       draggable="false"
     />
-    <article :class="localStyles.headerContent">
+    <article
+      :class="localStyles.headerContent"
+      data-aos="fade-up"
+      data-aos-duration="1000"
+    >
       <h1 :class="localStyles.title">¡Queremos ayudar a tu</h1>
       <h1 :class="localStyles.title">empresa a evolucionar hacia</h1>
       <h1 :class="localStyles.title">
@@ -179,7 +182,8 @@ import Footer from "../components/Footer.vue";
         class="absolute left-0 h-full hidden sm:flex"
         draggable="false"
       />
-      <div class="w-[500px] flex flex-col items-center justify-center">
+      <div class="w-[500px] flex flex-col items-center justify-center"       data-aos="fade-up"
+        data-aos-duration="500">
         <h1
           :class="
             localStyles.bodyTitle + ' !text-white text-center mb-4 sm:m-0'
@@ -191,11 +195,12 @@ import Footer from "../components/Footer.vue";
       </div>
     </section>
   </main>
-  <Footer />
 </template>
 <script>
 export default {
+  emits: ["toggleHeader", "toggleFooter"],
   mounted() {
+    this.$emit("toggleFooter", true);
     this.$emit("toggleHeader", true);
   },
   computed: {

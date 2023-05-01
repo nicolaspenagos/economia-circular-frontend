@@ -43,7 +43,7 @@ import { useRoute } from "vue-router";
 export const IS_LOGGIN_IN = "loggingIn";
 export const IS_SIGNING_UP = "signingUp";
 export default {
-  emits: ["toggleHeader"],
+  emits: ["toggleHeader", "toggleFooter"],
   data() {
     return {
       authMode: IS_LOGGIN_IN,
@@ -69,6 +69,7 @@ export default {
   components: { SignUp },
   mounted() {
     this.$emit("toggleHeader", false);
+    this.$emit("toggleFooter", false);
     this.authMode = useRoute().params.isLoggingIn;
   },
 };
