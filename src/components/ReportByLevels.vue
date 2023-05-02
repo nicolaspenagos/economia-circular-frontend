@@ -2,31 +2,23 @@
 import ctl from "@netlify/classnames-template-literals";
 import { useReportStore } from "../stores/report";
 import { mapStores } from "pinia";
-import { Pie } from "vue-chartjs";
+
+import { getPieChartConfig,getColorsMapClasses } from "../utils/chartUtils.js";
 import {
   Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale,
+  RadialLinearScale,
   ArcElement,
-} from "chart.js";
-
-ChartJS.register(
-  Title,
   Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  ArcElement
-);
+  Legend
+} from 'chart.js'
+import { PolarArea } from 'vue-chartjs'
+
+
+ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend)
 </script>
 <template>
   <article>
-    <h1 :class="localStyles.title">Gráfica de desempeño</h1>
+    <h1 :class="localStyles.title">{{ selectedTab }}</h1>
     <p class="text-center mt-4">
       Esta gráfica muestra el puntaje obtenido en una escala de<strong>
         0 a 1000</strong
@@ -35,7 +27,18 @@ ChartJS.register(
       <strong>{{ selectedTab }}</strong>
     </p>
     <div :class="localStyles.chartContainer">
-      <Pie id="my-chart-id" :options="chartOptions" :data="chartData" />
+      <div class="flex flex-wrap w-full justify-center mb-6" v-if="loaded">
+        <div v-for="(val, index) in reportData.labels" :key="index" class="text-xs flex w-fit">
+          <div :class="[localStyles.dot, getColor(val)]"></div>
+          <p class="mr-2">{{ val }}</p>
+        </div>
+      </div>
+      <PolarArea
+        id="my-chart-id"
+        :options="chartOptions"
+        :data="chartData"
+        v-if="loaded"
+      />
     </div>
   </article>
 </template>
@@ -51,20 +54,13 @@ export default {
     ...mapStores(useReportStore),
   },
   mounted() {
-    console.log(this.reportStore.getLevelData(this.selectedTab));
+    this.loadChart();
   },
   data() {
     return {
-      chartData: {
-        labels: ["VueJs", "EmberJs", "ReactJs", "AngularJs"],
-        datasets: [
-          {
-            backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#DD1B16"],
-            data: [40, 20, 80, 10],
-            pointStyle: "circle",
-          },
-        ],
-      },
+      loaded: false,
+      reportData: null,
+      chartData: null,
       chartOptions: {
         responsive: true,
         plugins: {
@@ -74,6 +70,28 @@ export default {
         },
       },
     };
+  },
+  methods: {
+    loadChart() {
+      this.reportData = getPieChartConfig(
+        this.reportStore.getLevelData(this.selectedTab)
+      );
+
+      this.chartData = {
+        labels: this.reportData.labels,
+        datasets: [
+          {
+            backgroundColor: this.reportData.backgroundColor,
+            data: this.reportData.data,
+            pointStyle: "circle",
+          },
+        ],
+      };
+      this.loaded = true;
+    },
+    getColor(principle) {
+      return getColorsMapClasses().get(principle);
+    },
   },
 };
 const localStyles = {
@@ -88,6 +106,13 @@ const localStyles = {
          custom-border-radius
          p-12
          mt-12
+         
+  `),
+  dot: ctl(`
+    h-4
+    w-4
+    rounded-full
+    mr-2
   `),
 };
 </script>
