@@ -89,6 +89,7 @@ export default {
   emits: ["updateLastActivity"],
   setup() {
     const activityMain = ref(null);
+   
     return {
       activityMain,
     };

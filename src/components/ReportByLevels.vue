@@ -2,23 +2,22 @@
 import ctl from "@netlify/classnames-template-literals";
 import { useReportStore } from "../stores/report";
 import { mapStores } from "pinia";
-
-import { getPieChartConfig,getColorsMapClasses } from "../utils/chartUtils.js";
+import ProgressBar from "./ui_utils/ProgressBar.vue";
+import { getPieChartConfig, getColorsMapClasses } from "../utils/chartUtils.js";
 import {
   Chart as ChartJS,
   RadialLinearScale,
   ArcElement,
   Tooltip,
-  Legend
-} from 'chart.js'
-import { PolarArea } from 'vue-chartjs'
+  Legend,
+} from "chart.js";
+import { PolarArea } from "vue-chartjs";
 
-
-ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend)
+ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
 </script>
 <template>
-  <article>
-    <h1 :class="localStyles.title">{{ selectedTab }}</h1>
+  <article v-if="loaded">
+    <h1 :class="localStyles.title + ' !text-2xl'">{{ selectedTab }}</h1>
     <p class="text-center mt-4">
       Esta gráfica muestra el puntaje obtenido en una escala de<strong>
         0 a 1000</strong
@@ -26,20 +25,35 @@ ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend)
       en cada uno de los principios que se evalúan en el nivel
       <strong>{{ selectedTab }}</strong>
     </p>
-    <div :class="localStyles.chartContainer">
-      <div class="flex flex-wrap w-full justify-center mb-6" v-if="loaded">
-        <div v-for="(val, index) in reportData.labels" :key="index" class="text-xs flex w-fit">
-          <div :class="[localStyles.dot, getColor(val)]"></div>
-          <p class="mr-2">{{ val }}</p>
+    <section class="flex flex-col sm:flex-row sm:justify-between">
+      <div :class="localStyles.chartContainer + ' sm:mr-10'">
+        <h1 :class="localStyles.title">Distribución puntaje por principios</h1>
+        <div :class="localStyles.legend" v-if="loaded">
+          <div
+            v-for="(val, index) in reportData.labels"
+            :key="index"
+            class="text-xs flex w-fit"
+          >
+            <div :class="[localStyles.dot, getColor(val)]"></div>
+            <p class="mr-2">{{ val }}</p>
+          </div>
         </div>
+        <PolarArea
+          id="my-chart-id"
+          :options="chartOptions"
+          :data="chartData"
+          v-if="loaded"
+        />
+        <div class="text-center mt-4 mb-12">
+          <strong>
+            Puntaje total nivel {{ selectedTab.toLowerCase() }}:
+          </strong>
+          {{ reportData.totalObtained.toFixed(1) }}
+        </div>
+        <ProgressBar :reportData="reportData" />
       </div>
-      <PolarArea
-        id="my-chart-id"
-        :options="chartOptions"
-        :data="chartData"
-        v-if="loaded"
-      />
-    </div>
+      <div :class="localStyles.chartContainer + ' h-32'"></div>
+    </section>
   </article>
 </template>
 <script>
@@ -53,11 +67,15 @@ export default {
   computed: {
     ...mapStores(useReportStore),
   },
-  mounted() {
-    this.loadChart();
+
+  watch: {
+    selectedTab() {
+      this.loadChart();
+    },
   },
   data() {
     return {
+      progressBarWidth: 0,
       loaded: false,
       reportData: null,
       chartData: null,
@@ -70,6 +88,9 @@ export default {
         },
       },
     };
+  },
+  mounted(){
+    this.loadChart();
   },
   methods: {
     loadChart() {
@@ -92,6 +113,7 @@ export default {
     getColor(principle) {
       return getColorsMapClasses().get(principle);
     },
+    
   },
 };
 const localStyles = {
@@ -99,13 +121,16 @@ const localStyles = {
         font-bold
         text-center
         sm:text-xl
+        mb-6
     `),
   chartContainer: ctl(`
-         w-5/12
+        w-full
+         sm:w-1/2
          custom-shadow
          custom-border-radius
          p-12
          mt-12
+    
          
   `),
   dot: ctl(`
@@ -114,5 +139,11 @@ const localStyles = {
     rounded-full
     mr-2
   `),
+  legend: ctl(`
+  flex 
+  flex-wrap 
+  w-full 
+  justify-center 
+  mb-6`),
 };
 </script>

@@ -76,7 +76,6 @@ import { REPORT_HISTORY, HOME } from "../router/index.js";
 <script>
 export default {
   emits: ["toggleHeader", "toggleFooter"],
-  setup() {},
   data() {
     return {
       showModal: false,
