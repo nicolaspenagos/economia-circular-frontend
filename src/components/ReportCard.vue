@@ -3,6 +3,7 @@ import ctl from "@netlify/classnames-template-literals";
 import { ORDINAL_NUMBERS_LIST } from "../constants/ordinals.js";
 import { useReportStore } from "../stores/report";
 import { mapStores } from "pinia";
+import router, { REPORT } from "../router";
 </script>
 <template>
   <article
@@ -55,9 +56,9 @@ export default {
     getDate(){
       return this.report.responseDate.split('T')[0];
     },
-    getReport(){
-      console.log("hOLA");
-     this.reportStore.getReport(this.report);
+    async getReport(){
+      await this.reportStore.getReport(this.index);
+      router.push(REPORT); 
     }
   },
 

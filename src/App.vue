@@ -7,7 +7,7 @@ import { useAuthStore } from "./stores/auth";
 import { useReponsesStore } from "./stores/responses";
 import router from "./router";
 import { useRoute } from "vue-router";
-import { HOME, QUESTIONNAIRE, REPORT } from "./router/index.js";
+import { HOME, QUESTIONNAIRE, REPORT_HISTORY, REPORT } from "./router/index.js";
 import Modal from "./components/ui_utils/Modal.vue";
 import modalMsgs from "./constants/modal.js";
 import AOS from 'aos';
@@ -49,9 +49,9 @@ const route = useRoute();
           >Cuestionario</RouterLink
         >
         <RouterLink
-          :to="REPORT"
+          :to="REPORT_HISTORY"
           :class="[
-            route.path === REPORT
+            route.path === REPORT_HISTORY || route.path === REPORT
               ? 'custom-text-green font-bold underline'
               : '',
             localStyles.link,

@@ -1,45 +1,50 @@
 <script setup>
-import { useReportStore } from "../stores/report";
-import ctl from "@netlify/classnames-template-literals";
-import { mapStores } from "pinia";
 import Gradient from "../components/ui_utils/Gradient.vue";
-import Modal from "../components/ui_utils/Modal.vue";
-import modalMsg from "../constants/modal.js";
-import router, { QUESTIONNAIRE } from "../router";
-import ReportCard from "../components/ReportCard.vue";
+import ctl from "@netlify/classnames-template-literals";
+import { ORDINAL_NUMBERS_LIST } from "../constants/ordinals.js";
+import { useReportStore } from "../stores/report";
+import { mapStores } from "pinia";
+import { useAuthStore } from "../stores/auth";
 </script>
 <template>
-  <Modal
-    :msg="modalMsg.NO_RESPONSE_COMPLETED"
-    imgPath="/modal-file.svg"
-    :onlyAccept="true"
-    acceptMsg="ir a cuestionario"
-    @accept="goToQuestionnaire"
-    v-if="showModal"
-  />
   <header :class="localStyles.header">
     <Gradient />
-    <div class="px-4" data-aos="fade-up" data-aos-duration="1000">
+    <div
+      class="px-4 mt-[-50px] sm:mt-0"
+      data-aos="fade-up"
+      data-aos-duration="1000"
+    >
       <h1 :class="localStyles.headerTitle">
-        En esta
-        <span class="custom-text-green font-bold">sección</span> encontrarás el
-        <br class="hidden sm:inline" />
-        el historial de tus
-        <span class="custom-text-green font-bold"> reportes </span>
+        ¡Conoce los resultados <br class="hidden sm:inline" />
+        de tu
+        <span class="custom-text-green font-bold"
+          >{{ getOrdinal() }} diagnóstico!</span
+        >
       </h1>
       <p :class="localStyles.headerSubtitle">
-        Podrás acceder a los resultados y obtener una Hoja de Ruta que
-        <br class="hidden sm:inline" />
-        ayudará a tu empresa a fortalecer su circularidad
+        Aquí encontrarás la calificación de tu empresa
       </p>
     </div>
   </header>
   <main :class="localStyles.main">
-    <section
-      v-for="(val, index) in reportStore.completedResponses"
-      :class="localStyles.gridSection"
-    >
-      <ReportCard :report="val" :index="index" />
+    <section :class="localStyles.info">
+      <div :class="localStyles.infoTextContainer">
+        <h1 class="font-bold">Empresa:</h1>
+        <p>{{ authStore.user.organization }}</p>
+      </div>
+      <div :class="localStyles.line"></div>
+      <div :class="localStyles.infoTextContainer">
+        <h1 class="font-bold">Contacto:</h1>
+        <p>{{ authStore.user.name }}</p>
+      </div>
+      <div :class="localStyles.line"></div>
+      <div :class="localStyles.infoTextContainer">
+        <h1 class="font-bold">Fecha:</h1>
+        <p>{{ reportStore.selectedResponse.responseDate.split("T")[0] }}</p>
+      </div>
+    </section>
+    <section :class="localStyles.section">
+        <h1 :class="localStyles.title">Reporte por Niveles</h1>
     </section>
   </main>
 </template>
@@ -49,31 +54,20 @@ export default {
   async mounted() {
     this.$emit("toggleHeader", true);
     this.$emit("toggleFooter", true);
-    await this.reportStore.loadCompletedResponses();
-    this.handleShowModal();
-  
-  },
-  data() {
-    return {
-      showModal: false,
-    };
   },
   computed: {
-    ...mapStores(useReportStore),
+    ...mapStores(useReportStore, useAuthStore),
   },
   methods: {
-    goToQuestionnaire() {
-      router.push(QUESTIONNAIRE);
-    },
-    handleShowModal() {
-      if (this.reportStore.completedResponses.length > 0) {
-        this.showModal = false;
-      } else {
-        this.showModal = true;
-      }
+    getOrdinal() {
+      return this.reportStore.currentResponseIndex >= 0
+        ? ORDINAL_NUMBERS_LIST[this.reportStore.currentResponseIndex]
+        : "";
     },
   },
-
+  mounted() {
+    window.scrollTo(0, 0);
+  },
 };
 const localStyles = {
   header: ctl(`
@@ -83,7 +77,7 @@ const localStyles = {
       bg-amber-200
       pt-[160px]
       pb-[60px]
-      sm:pt-[160px]
+      sm:pt-[145px]
       sm:pb-[120px]
       bg-[url('/report-header.jpg')]
       bg-cover
@@ -108,22 +102,60 @@ const localStyles = {
   main: ctl(`
     flex
     flex-col
-    justify-center
+    items-center
     min-h-[600px]
-    px-10
+    px-5
     sm:px-20
     py-16
-    sm:grid-cols-4
-    sm:inline-grid
     w-full
     `),
-  gridSection: ctl(`
-    w-full 
-    h-full 
+  info: ctl(`
+    w-full
+    custom-shadow
+    bg-white
+    h-fit
+    p-5
+    custom-border-radius
+    sm:mt-[-124px]
+    mt-[-100px]
     flex 
-
-    justify-center 
-    mb-14
+    flex-col
+    sm:flex-row
+    sm:h-[115px]
     `),
+  infoTextContainer: ctl(`
+    text-center
+    sm:w-1/3
+    h-full
+    sm:flex
+    sm:flex-col
+    sm:justify-center
+    `),
+  line: ctl(`
+  w-full 
+  h-0.5 
+  sm:w-0.5
+  custom-border-radius
+  bg-slate-300 
+  my-3
+  sm:my-0
+  sm:h-full
+    `),
+    section:ctl(`
+    py-12
+    flex
+    flex-col
+    justify-start
+    items-start
+    w-full
+    
+
+    
+    `),
+    title:ctl(`
+        font-bold
+        sm:text-xl
+     
+    `)
 };
 </script>

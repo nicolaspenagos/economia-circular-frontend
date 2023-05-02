@@ -1,7 +1,6 @@
 <script setup>
 import ctl from "@netlify/classnames-template-literals";
 import Gradient from "../components/ui_utils/Gradient.vue";
-import Footer from "../components/Footer.vue";
 </script>
 
 <template>
@@ -143,7 +142,6 @@ import Footer from "../components/Footer.vue";
       </article>
     </section>
   </main>
-  <Footer />
 </template>
 <script>
 export default {

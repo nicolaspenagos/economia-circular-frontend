@@ -13,7 +13,7 @@ import BaseButton from "../components/ui_utils/BaseButton.vue";
 import Modal from "../components/ui_utils/Modal.vue";
 import modalMsgs from "../constants/modal.js";
 import router from "../router";
-import { REPORT, HOME } from "../router/index.js";
+import { REPORT_HISTORY, HOME } from "../router/index.js";
 </script>
 <template>
   <Onboarding v-if="showModal" :data="dataArray" @close="closeModal" />
@@ -100,7 +100,7 @@ export default {
       
       this.closeAnswersModal();
       await this.responsesStore.saveResponse(true);
-      router.push(REPORT);
+      router.push(REPORT_HISTORY);
     },
     closeModal() {
       this.showModal = false;

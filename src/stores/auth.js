@@ -4,6 +4,7 @@ import { isTokenExpired, parseJwt } from "../utils/jwtUtils";
 import { useReponsesStore } from "./responses";
 import { useQuestionsStore } from "./questions";
 import {useActivitiesStore} from "./activities";
+import { useReportStore } from "./report";
 const TOKEN_KEY = "myapp-token";
 
 export const useAuthStore = defineStore({
@@ -54,6 +55,8 @@ export const useAuthStore = defineStore({
       useReponsesStore().resetStore();
       useQuestionsStore().resetStore();
       useActivitiesStore().resetStore();
+      useReportStore().resetStore();
+
       
       localStorage.removeItem(TOKEN_KEY);
     },

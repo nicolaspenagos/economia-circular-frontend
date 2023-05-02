@@ -4,13 +4,14 @@ import AuthView from '../views/AuthView.vue';
 import TermsAndConditionsView from '../views/TermsAndConditionsView.vue';
 import NotFoundView from '../views/NotFoundView.vue';
 import QuestionnaireView from '../views/QuestionnaireView.vue';
+import ReportHistoryView from '../views/ReportHistoryView.vue';
 import ReportView from '../views/ReportView.vue';
-
 export const HOME = "/";
 export const QUESTIONNAIRE = "/questionnaire";
 export const TERMS_AND_CONDS = "/terms-and-conditions";
 export const AUTH = "/auth";
-export const REPORT = "/report";
+export const REPORT_HISTORY = "/report_history";
+export const REPORT = "/report"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,9 +38,15 @@ const router = createRouter({
       component:QuestionnaireView
     },
     {
+      path:REPORT_HISTORY,
+      name:'report-history',
+      component:ReportHistoryView
+    },
+    {
       path:REPORT,
       name:'report',
       component:ReportView
+
     },
     {
       path: '/:catchAll(.*)',

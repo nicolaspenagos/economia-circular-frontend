@@ -5,11 +5,16 @@ export const useReportStore = defineStore({
   id: "report",
   state: () => ({
     completedResponses: [],
+    selectedResponse:null,
+    currentResponseIndex:-1
   }),
   getters: {
     getCompletedResponses() {
       return this.completedResponses;
     },
+    getSelectedResponse(){
+      return this.selectedResponse;
+    }
   },
   actions: {
     async loadCompletedResponses() {
@@ -24,9 +29,17 @@ export const useReportStore = defineStore({
         return new Date(a.responseDate) - new Date(b.responseDate);
       });
     },
-    async getReport(response){
-      const report = await APIService.get(REPORT+'/'+useAuthStore().user.id+'/'+response.id);
-      console.log(report);
+    async getReport(index){
+      this.currentResponseIndex = index;
+      this.selectedResponse = this.completedResponses[index];
+      //const report = await APIService.get(REPORT+'/'+useAuthStore().user.id+'/'+response.id);
+     // console.log(report);
+    },
+    
+    resetStore(){
+      this.completedResponses = [];
+      this.selectedResponse = null;
+      this.currentResponseIndex = -1;
     }
   },
 });
