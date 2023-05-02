@@ -7,7 +7,7 @@ import router, { REPORT } from "../router";
 </script>
 <template>
   <article
-    :class="[localStyles.reportCard, getColor()]"
+    :class="[localStyles.reportCard, getColor(), isLoading?'!cursor-wait': 'cursor-pointer' ]"
     data-aos-duration="1000"
     data-aos="flip-left"
     @click="getReport"
@@ -57,10 +57,17 @@ export default {
       return this.report.responseDate.split('T')[0];
     },
     async getReport(){
+      this.isLoading = true;
       await this.reportStore.getReport(this.index);
+      this.isLoading = false;
       router.push(REPORT); 
     }
   },
+  data(){
+    return {
+      isLoading:false
+    }
+  }
 
 
 };

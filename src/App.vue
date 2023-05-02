@@ -113,7 +113,7 @@ export default {
       router.push("/auth/signingUp");
     },
     goToQuestionnaire() {
-      router.push("/questionnaire");
+      router.push("/report_history");
     },
     toggleHeader(newVal) {
       this.showHeader = newVal;

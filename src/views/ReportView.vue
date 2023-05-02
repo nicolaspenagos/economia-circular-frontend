@@ -5,6 +5,8 @@ import { ORDINAL_NUMBERS_LIST } from "../constants/ordinals.js";
 import { useReportStore } from "../stores/report";
 import { mapStores } from "pinia";
 import { useAuthStore } from "../stores/auth";
+import ReportSection from '../components/ReportSection.vue';
+import REPORT_BY_LEVELS from "../constants/report";
 </script>
 <template>
   <header :class="localStyles.header">
@@ -29,22 +31,23 @@ import { useAuthStore } from "../stores/auth";
   <main :class="localStyles.main">
     <section :class="localStyles.info">
       <div :class="localStyles.infoTextContainer">
-        <h1 class="font-bold">Empresa:</h1>
+        <h1 class="font-bold sm:text-lg">Empresa:</h1>
         <p>{{ authStore.user.organization }}</p>
       </div>
       <div :class="localStyles.line"></div>
       <div :class="localStyles.infoTextContainer">
-        <h1 class="font-bold">Contacto:</h1>
+        <h1 class="font-bold sm:text-lg">Contacto:</h1>
         <p>{{ authStore.user.name }}</p>
       </div>
       <div :class="localStyles.line"></div>
       <div :class="localStyles.infoTextContainer">
-        <h1 class="font-bold">Fecha:</h1>
+        <h1 class="font-bold sm:text-lg">Fecha:</h1>
         <p>{{ reportStore.selectedResponse.responseDate.split("T")[0] }}</p>
       </div>
     </section>
     <section :class="localStyles.section">
         <h1 :class="localStyles.title">Reporte por Niveles</h1>
+        <ReportSection :reportConstantMap="REPORT_BY_LEVELS"/>
     </section>
   </main>
 </template>
@@ -97,7 +100,6 @@ const localStyles = {
       text-center
       mt-2
       sm:mt-4
-
     `),
   main: ctl(`
     flex
@@ -132,14 +134,14 @@ const localStyles = {
     sm:justify-center
     `),
   line: ctl(`
-  w-full 
-  h-0.5 
-  sm:w-0.5
-  custom-border-radius
-  bg-slate-300 
-  my-3
-  sm:my-0
-  sm:h-full
+    w-full 
+    h-0.5 
+    sm:w-0.5
+    custom-border-radius
+    bg-slate-300 
+    my-3
+    sm:my-0
+    sm:h-full
     `),
     section:ctl(`
     py-12
@@ -148,14 +150,14 @@ const localStyles = {
     justify-start
     items-start
     w-full
-    
-
-    
     `),
     title:ctl(`
         font-bold
-        sm:text-xl
-     
+        sm:text-2xl
+        sm:text-left
+        text-center
+        text-xl
+        w-full
     `)
 };
 </script>
