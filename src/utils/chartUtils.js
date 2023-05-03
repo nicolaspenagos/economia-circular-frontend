@@ -55,7 +55,6 @@ export function getPieChartConfig(princples){
     princples.forEach(principle => {
         labels.push(principle.shortname);
         data.push(principle.obtainedScore);
-        console.log(principle.shortname);
         backgroundColor.push(colorsMap.get(principle.shortname));
         totalObtained+=principle.obtainedScore;
         totalPossible += principle.possibleScore;

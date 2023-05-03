@@ -1,0 +1,85 @@
+<script setup>
+import ctl from "@netlify/classnames-template-literals";
+import { convertNumberString } from "../../utils/reportUtils.js";
+</script>
+<template>
+  <table :class="localStyles.table">
+    <thead>
+      <tr>
+        <th
+          v-for="(val, index) in tableHeader"
+          :class="[localStyles.th, (index==0)?'rounded-tl-sm':'',(index+1===tableHeader.length)?'rounded-tr-sm !border-r-0':'']"
+          :key="'th-' + index"
+        >
+          {{ val }}
+        </th>
+      </tr>
+    </thead>
+    <tbody :class="localStyles.tableBody">
+      <tr v-for="(val, index) in tableData" :key="'tr-' + index">
+        <td
+          v-for="(tdVal, tdIndex) in val"
+          :key="'td-' + tdIndex"
+          :class="[localStyles.td, tdIndex > 0 ? 'text-center' : '', index+1===tableData.length?'font-bold':'' ]"
+        >
+          {{ convertNumberString(tdVal) }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</template>
+<script>
+export default {
+  props: {
+    tableData: {
+      type: Object,
+      default: null,
+    },
+    tableHeader: {
+      type: Array,
+      default: [],
+    },
+  },
+  mounted() {
+    console.log(this.tableData);
+  },
+};
+const localStyles = {
+  table: ctl(`
+  w-full
+  border-[1px]
+  border-[#9995ff]
+  border-solid
+  border-spacing-0
+  border-separate
+  text-slate-800
+  bg-white
+  text-xs`),
+  th: ctl(`
+    text-left
+    px-2
+    border-r-[1px]
+    border-white-200
+    border-solid
+    border-t-0
+    border-l-0
+    border-b-0
+    bg-[#9995ff]
+    text-white
+    text-center
+    py-2
+    `),
+  tableBody: ctl(`
+    border-[1px]
+    border-gray-800
+    border-solid
+    `),
+  td: ctl(`
+    text-left
+    border-[#9995ff]
+    border-solid
+    p-4
+    border-[1px]
+    `),
+};
+</script>

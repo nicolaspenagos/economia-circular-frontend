@@ -74,3 +74,20 @@
 .left-drop-shadow{
   filter: drop-shadow(-6px 0 5px rgba(10, 10, 10, 0.065));
 }
+
+table tbody tr td:last-child {
+
+}
+
+table tbody tr:first-child td {
+  border-top-width: 2px;
+}
+
+table tbody tr td {
+  border-right-width: 1px;
+  border-top-width: 1px;
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+  border-style: solid;
+  border-color: black;
+}

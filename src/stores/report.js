@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { APIService, RESPONSE, REPORT } from "../service/APIService";
 import { useAuthStore } from "./auth";
-import REPORT_BY_LEVELS from "../constants/report.js";
+import {REPORT_BY_LEVELS} from "../constants/report.js";
 export const useReportStore = defineStore({
   id: "report",
   state: () => ({

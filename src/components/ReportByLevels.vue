@@ -12,22 +12,45 @@ import {
   Legend,
 } from "chart.js";
 import { PolarArea } from "vue-chartjs";
-
+import { TABLE_HEADERS } from "../constants/report.js";
+import Table from "./ui_utils/Table.vue";
 ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
 </script>
 <template>
-  <article v-if="loaded">
-    <h1 :class="localStyles.title + ' !text-2xl'">{{ selectedTab }}</h1>
-    <p class="text-center mt-4">
-      Esta gráfica muestra el puntaje obtenido en una escala de<strong>
-        0 a 1000</strong
-      >
-      en cada uno de los principios que se evalúan en el nivel
-      <strong>{{ selectedTab }}</strong>
+  <div :class="localStyles.grade">
+    <h3 class="text-white">Obtuviste</h3>
+    <div class="flex items-end" v-if="loaded">
+      <h1 class="font-bold text-white text-2xl">
+        {{
+          reportData.totalObtained >= reportData.totalPossible
+            ? reportData.totalPossible
+            : reportData.totalObtained.toFixed(0)
+        }}
+      </h1>
+      <p class="text-white mb-0.5 font-semibold opacity-50">
+        /{{ reportData.totalPossible }}
+      </p>
+    </div>
+  </div>
+
+  <article v-if="loaded" :class="relative">
+    <div :class="localStyles.button">
+      <p class="text-white py-2">Ver explicación</p>
+      <img src="/eye.svg" class="h-4 ml-2" />
+    </div>
+    <h1 :class="localStyles.title + ' text-xl sm:!text-2xl !mt-[-4px]'">
+      Nivel {{ selectedTab.toLowerCase() }}
+    </h1>
+    <p class="text-center mt-4 w-3/4 ml-auto mr-auto">
+      Los siguientes resultados corresponden a los principios asociados al nivel
+      {{ selectedTab }}. Cada principio se mide en una escala de 0 a 1000 y la
+      suma de todos estos da como resultado el puntaje total del nivel
     </p>
     <section class="flex flex-col sm:flex-row sm:justify-between">
       <div :class="localStyles.chartContainer + ' sm:mr-10'">
-        <h1 :class="localStyles.title">Distribución puntaje por principios</h1>
+        <h1 :class="localStyles.title">
+          Distribución de puntaje por principios
+        </h1>
         <div :class="localStyles.legend" v-if="loaded">
           <div
             v-for="(val, index) in reportData.labels"
@@ -44,15 +67,28 @@ ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
           :data="chartData"
           v-if="loaded"
         />
-        <div class="text-center mt-4 mb-12">
-          <strong>
-            Puntaje total nivel {{ selectedTab.toLowerCase() }}:
-          </strong>
-          {{ reportData.totalObtained.toFixed(1) }}
+        <div class="text-center mt-4 mb-12 font-semibold">
+          Puntaje total nivel:
+          <span class="font-regular">
+            {{ reportData.totalObtained.toFixed(1) }}</span
+          >
         </div>
         <ProgressBar :reportData="reportData" />
       </div>
-      <div :class="localStyles.chartContainer + ' h-32'"></div>
+      <div :class="localStyles.chartContainer">
+        <h1 :class="localStyles.title">Tabla de puntajes por principios</h1>
+        <Table :tableData="tableData" :tableHeader="TABLE_HEADERS" />
+        <div class="flex mt-4">
+          <article :class="localStyles.card +' '+getColorsMapClasses().get(best)+ ' mr-4'">
+            <h1 class="font-bold text-white">Principio más destacado</h1>
+            <p class="text-white">{{ best }}</p>
+          </article>
+          <article :class="localStyles.card+' '+getColorsMapClasses().get(worst)">
+            <h1 :class="['font-bold text-white']">Principio por mejorar</h1>
+            <p class="text-white"> {{ worst }}</p>
+          </article>
+        </div>
+      </div>
     </section>
   </article>
 </template>
@@ -71,10 +107,14 @@ export default {
   watch: {
     selectedTab() {
       this.loadChart();
+      this.loadTableData();
     },
   },
   data() {
     return {
+      best: "",
+      worst: "",
+      tableData: [],
       progressBarWidth: 0,
       loaded: false,
       reportData: null,
@@ -89,8 +129,9 @@ export default {
       },
     };
   },
-  mounted(){
+  mounted() {
     this.loadChart();
+    this.loadTableData();
   },
   methods: {
     loadChart() {
@@ -113,22 +154,58 @@ export default {
     getColor(principle) {
       return getColorsMapClasses().get(principle);
     },
-    
+    loadTableData() {
+      let tableData = [];
+      let totalObtained = 0;
+      let totalPossible = 0;
+      let bestScore = Number.NEGATIVE_INFINITY;
+      let worstScore = Number.POSITIVE_INFINITY;
+      this.reportStore.getLevelData(this.selectedTab).forEach((element) => {
+        let row = [];
+        row.push(element.shortname);
+        row.push(element.possibleScore);
+        row.push(element.obtainedScore);
+        row.push(element.obtainedPercentage);
+        tableData.push(row);
+        if (element.obtainedScore > bestScore) {
+          bestScore = element.obtainedScore;
+          this.best = element.shortname;
+        }
+        if (element.obtainedScore < worstScore) {
+          worstScore = element.obtainedScore;
+          this.worst = element.shortname;
+        }
+
+        totalObtained += element.obtainedScore;
+        totalPossible += element.possibleScore;
+      });
+      const lastRow = [
+        "Total",
+        totalPossible,
+        totalObtained,
+        (totalObtained / totalPossible) * 100,
+      ];
+      tableData.push(lastRow);
+      this.tableData = tableData;
+    },
   },
 };
 const localStyles = {
   title: ctl(`
         font-bold
         text-center
-        sm:text-xl
+        sm:text-lg
         mb-6
     `),
   chartContainer: ctl(`
+        h-fit
+
         w-full
          sm:w-1/2
          custom-shadow
          custom-border-radius
-         p-12
+         p-6
+         sm:p-12
          mt-12
     
          
@@ -145,5 +222,42 @@ const localStyles = {
   w-full 
   justify-center 
   mb-6`),
+  grade: ctl(`
+    absolute
+    w-44
+    h-24
+    bg-[#9995FF]
+    top-0
+    right-0
+    custom-border-radius
+    !rounded-br-none
+    !rounded-tl-none
+    custom-shadow
+    flex
+    justify-center
+    items-center
+    flex-col
+    
+  `),
+  button: ctl(`
+  flex
+  items-center
+  justify-between
+  px-4
+  text-white
+  bg-[#756ef2]
+  rounded-3xl
+  absolute
+  bottom-0
+  right-0
+  `),
+  card: ctl(`
+    flex 
+    flex-col
+    p-6
+    custom-shadow
+    custom-border-radius
+    text-sm
+  `),
 };
 </script>

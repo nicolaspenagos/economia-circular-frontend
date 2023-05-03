@@ -6,7 +6,7 @@ import { useReportStore } from "../stores/report";
 import { mapStores } from "pinia";
 import { useAuthStore } from "../stores/auth";
 import ReportSection from '../components/ReportSection.vue';
-import REPORT_BY_LEVELS from "../constants/report";
+import {REPORT_BY_LEVELS} from "../constants/report";
 </script>
 <template>
   <header :class="localStyles.header">
@@ -70,6 +70,9 @@ export default {
   },
   mounted() {
     window.scrollTo(0, 0);
+    if (!this.authStore||!this.authStore.isLoggedIn) {
+      router.push(HOME);
+    }
   },
 };
 const localStyles = {
@@ -110,6 +113,7 @@ const localStyles = {
     sm:px-20
     py-16
     w-full
+    bg-[#f8f7f7]
     `),
   info: ctl(`
     w-full
@@ -153,7 +157,7 @@ const localStyles = {
     `),
     title:ctl(`
         font-bold
-        sm:text-2xl
+        sm:text-3xl
         sm:text-left
         text-center
         text-xl

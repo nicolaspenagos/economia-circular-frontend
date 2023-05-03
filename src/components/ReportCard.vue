@@ -41,7 +41,6 @@ export default {
   methods: {
     getColor() {
       const rowIndex = Math.floor(this.index / NUMBER_OF_COLUMNS);
-      console.log(rowIndex);
       if (rowIndex % 2 == 0) {
         return this.index % 2 == 0
           ? "sm:bg-[#756EF2] bg-[#756EF2]"

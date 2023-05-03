@@ -4,14 +4,14 @@ import ctl from "@netlify/classnames-template-literals";
 <template>
   <div class="relative">
     <div class="absolute top-[-24px] w-full justify-between flex">
-      <div>Porcentaje obtenido:</div>
-      <div class="flex items-center" ref="progressPercentage">
-        <span class="text-xs opacity-50">%</span
-        >{{
+      <div class="ml-2 font-semibold  text-[#756ef2]">Porcentaje obtenido:</div>
+      <div class="flex sm:items-center items-start mr-2 text-[#756ef2]" ref="progressPercentage">
+        {{
           ((reportData.totalObtained / reportData.totalPossible) * 100).toFixed(
             1
           )
         }}
+        %
       </div>
     </div>
     <div
@@ -23,12 +23,12 @@ import ctl from "@netlify/classnames-template-literals";
       ref="progressBar"
     ></div>
     <div class="flex justify-between">
-      <div class="flex items-center">
+      <div class="flex items-center ml-2">
         <div>0</div>
-        <p class="text-xs opacity-50 ml-1">Mín</p>
+     
       </div>
-      <div class="flex items-center">
-        <p class="text-xs opacity-50 mr-1">Máx</p>
+      <div class="flex items-center mr-2">
+
         <div>
           {{ reportData.totalPossible }}
         </div>

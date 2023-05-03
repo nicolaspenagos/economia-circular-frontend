@@ -42,8 +42,12 @@ import ReportCardContainer from "../components/ReportCardContainer.vue";
 export default {
   emits: ["toggleHeader", "toggleFooter"],
   async mounted() {
+    if (!this.authStore||!this.authStore.isLoggedIn) {
+      router.push(HOME);
+    }
     this.$emit("toggleHeader", true);
     this.$emit("toggleFooter", true);
+ 
     await this.reportStore.loadCompletedResponses();
     this.handleShowModal();
   
@@ -51,6 +55,7 @@ export default {
   data() {
     return {
       showModal: false,
+    
     };
   },
   computed: {
