@@ -161,6 +161,7 @@ const localStyles = {
         text-xl
         font-bold
         sm:mr-10
+        
     `),
   card: ctl(`
           bg-white

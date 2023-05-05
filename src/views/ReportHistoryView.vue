@@ -42,9 +42,7 @@ import ReportCardContainer from "../components/ReportCardContainer.vue";
 export default {
   emits: ["toggleHeader", "toggleFooter"],
   async mounted() {
-    if (!this.authStore||!this.authStore.isLoggedIn) {
-      router.push(HOME);
-    }
+ 
     this.$emit("toggleHeader", true);
     this.$emit("toggleFooter", true);
  

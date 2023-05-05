@@ -15,11 +15,11 @@ import ctl from "@netlify/classnames-template-literals";
       </div>
     </div>
     <div
-      class="w-full h-5 mt-4 rounded-xl bg-[#D9D9D9]"
+      class="w-full h-4 sm:h-5 mt-4 rounded-xl bg-[#D9D9D9]"
       ref="progressBarContainer"
     ></div>
     <div
-      class="h-5 rounded-xl absolute top-0 left-0 bg-[#756ef2] ease-out duration-300"
+      class="h-4 sm:h-5 rounded-xl absolute top-0 left-0 bg-[#756ef2] ease-out duration-300"
       ref="progressBar"
     ></div>
     <div class="flex justify-between">

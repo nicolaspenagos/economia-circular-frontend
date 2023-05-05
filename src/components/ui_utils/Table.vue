@@ -57,7 +57,7 @@ const localStyles = {
   text-xs`),
   th: ctl(`
     text-left
-    px-2
+    sm:px-2
     border-r-[1px]
     border-white-200
     border-solid
@@ -67,7 +67,8 @@ const localStyles = {
     bg-[#9995ff]
     text-white
     text-center
-    py-2
+    sm:py-2
+    sm:h-12
     `),
   tableBody: ctl(`
     border-[1px]
@@ -78,7 +79,8 @@ const localStyles = {
     text-left
     border-[#9995ff]
     border-solid
-    p-4
+    p-1
+    sm:p-4
     border-[1px]
     `),
 };

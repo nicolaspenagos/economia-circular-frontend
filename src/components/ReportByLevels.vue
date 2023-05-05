@@ -1,4 +1,6 @@
 <script setup>
+import Onboarding from "../components/Onboarding.vue";
+import onboardingData from "../constants/onboarding.js";
 import ctl from "@netlify/classnames-template-literals";
 import { useReportStore } from "../stores/report";
 import { mapStores } from "pinia";
@@ -17,6 +19,7 @@ import Table from "./ui_utils/Table.vue";
 ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
 </script>
 <template>
+  <Onboarding v-if="showModal" :data="onboardingData.REPORT_BY_LEVELS" @close="closeOnboarding" :fromReport="true"/>
   <div :class="localStyles.grade">
     <h3 class="text-white">Obtuviste</h3>
     <div class="flex items-end" v-if="loaded">
@@ -32,15 +35,26 @@ ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
       </p>
     </div>
   </div>
+  <article v-if="loaded">
 
-  <article v-if="loaded" :class="relative">
-    <div :class="localStyles.button">
-      <p class="text-white py-2">Ver explicación</p>
-      <img src="/eye.svg" class="h-4 ml-2" />
-    </div>
     <h1 :class="localStyles.title + ' text-xl sm:!text-2xl !mt-[-4px]'">
       Nivel {{ selectedTab.toLowerCase() }}
     </h1>
+    <div :class="localStyles.gradeResponsive">
+      <h3 class="text-white">Obtuviste</h3>
+      <div class="flex items-end">
+        <h1 class="font-bold text-white text-lg sm:text-2xl">
+          {{
+            reportData.totalObtained >= reportData.totalPossible
+              ? reportData.totalPossible
+              : reportData.totalObtained.toFixed(0)
+          }}
+        </h1>
+        <p class="text-white mb-0.5 font-semibold opacity-50">
+          /{{ reportData.totalPossible }}
+        </p>
+      </div>
+    </div>
     <p class="text-center mt-4 w-3/4 ml-auto mr-auto">
       Los siguientes resultados corresponden a los principios asociados al nivel
       {{ selectedTab }}. Cada principio se mide en una escala de 0 a 1000 y la
@@ -79,17 +93,27 @@ ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
         <h1 :class="localStyles.title">Tabla de puntajes por principios</h1>
         <Table :tableData="tableData" :tableHeader="TABLE_HEADERS" />
         <div class="flex mt-4">
-          <article :class="localStyles.card +' '+getColorsMapClasses().get(best)+ ' mr-4'">
+          <article
+            :class="
+              localStyles.card + ' ' + getColorsMapClasses().get(best) + ' mr-4'
+            "
+          >
             <h1 class="font-bold text-white">Principio más destacado</h1>
             <p class="text-white">{{ best }}</p>
           </article>
-          <article :class="localStyles.card+' '+getColorsMapClasses().get(worst)">
+          <article
+            :class="localStyles.card + ' ' + getColorsMapClasses().get(worst)"
+          >
             <h1 :class="['font-bold text-white']">Principio por mejorar</h1>
-            <p class="text-white"> {{ worst }}</p>
+            <p class="text-white">{{ worst }}</p>
           </article>
         </div>
       </div>
     </section>
+    <div :class="localStyles.button" @click="showOnboarding">
+      <p class="text-white py-2">Ver explicación</p>
+      <img src="/eye.svg" class="h-4 ml-2" />
+    </div>
   </article>
 </template>
 <script>
@@ -112,6 +136,8 @@ export default {
   },
   data() {
     return {
+      onboardingData:onboardingData.QUESTIONNAIRE_ONBOARDING, 
+      showModal:false,
       best: "",
       worst: "",
       tableData: [],
@@ -134,6 +160,14 @@ export default {
     this.loadTableData();
   },
   methods: {
+    showOnboarding(){
+      console.log('Hola')
+      this.showModal = true;
+      console.log(this.showModal)
+    },
+    closeOnboarding(){
+      this.showModal = false;
+    },
     loadChart() {
       this.reportData = getPieChartConfig(
         this.reportStore.getLevelData(this.selectedTab)
@@ -204,11 +238,10 @@ const localStyles = {
          sm:w-1/2
          custom-shadow
          custom-border-radius
-         p-6
+         sm:p-6
+         p-4
          sm:p-12
          mt-12
-    
-         
   `),
   dot: ctl(`
     h-4
@@ -223,33 +256,40 @@ const localStyles = {
   justify-center 
   mb-6`),
   grade: ctl(`
-    absolute
+    hidden
+    sm:flex
+    sm:absolute
     w-44
     h-24
     bg-[#9995FF]
     top-0
     right-0
     custom-border-radius
+    custom-shadow
     !rounded-br-none
     !rounded-tl-none
-    custom-shadow
     flex
     justify-center
     items-center
     flex-col
-    
   `),
   button: ctl(`
+  z-20
+  !cursor-pointer
   flex
   items-center
   justify-between
   px-4
-  text-white
+  hover:bg-[#6B63F9]
   bg-[#756ef2]
   rounded-3xl
-  absolute
+  sm:absolute
   bottom-0
   right-0
+  w-fit
+  mx-auto
+  m-6
+  sm:m-0
   `),
   card: ctl(`
     flex 
@@ -259,5 +299,21 @@ const localStyles = {
     custom-border-radius
     text-sm
   `),
+  gradeResponsive:ctl(`
+    
+    w-32
+    h-16
+    bg-[#9995FF]
+    custom-border-radius
+    custom-shadow
+    sm:hidden
+    flex
+    flex-col
+    items-center
+    justify-center
+    mx-auto
+
+  
+  `)
 };
 </script>

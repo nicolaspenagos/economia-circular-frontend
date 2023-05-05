@@ -70,9 +70,7 @@ export default {
   },
   mounted() {
     window.scrollTo(0, 0);
-    if (!this.authStore||!this.authStore.isLoggedIn) {
-      router.push(HOME);
-    }
+
   },
 };
 const localStyles = {

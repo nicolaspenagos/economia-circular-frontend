@@ -90,7 +90,7 @@ const localStyles = {
         h-fit
         custom-border-radius
         !rounded-tl-none
-        p-6
+        p-4
         sm:p-12
     `),
     title:ctl(`

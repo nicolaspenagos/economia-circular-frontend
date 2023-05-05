@@ -78,6 +78,7 @@ const localStyles = {
         items-center
         justify-center
         p-6
+
         custom-shadow
         cursor-pointer
         hover:translate-y-[-15px]
