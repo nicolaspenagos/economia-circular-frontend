@@ -2,13 +2,15 @@
 import ctl from "@netlify/classnames-template-literals";
 import ReportByLevels from "./ReportByLevels.vue";
 import ReportPrinciplesActivities from "./ReportPrinciplesActivities.vue";
-import { BY_LEVELS, BY_PRINCIPLES_VS_ACTIVITIES} from "../constants/report";
+import ReportRoadmap from "./ReportRoadmap.vue";
+import ReportRecomendations from "./ReportRecomendations.vue"
+import { BY_LEVELS, BY_PRINCIPLES_VS_ACTIVITIES, BY_ROADMAP, BY_RECOMENDATIONS} from "../constants/report";
 </script>
 <template>
   <section :class="localStyles.section">
     <nav :class="localStyles.nav">
       <div
-        :class="[localStyles.navBtn, getSelectedClassMod(val)]"
+        :class="[localStyles.navBtn, getSelectedClassMod(val), type===BY_RECOMENDATIONS?'w-[150px]':'']"
         v-for="(val, index) in Array.from(reportConstantMap.keys())"
         v-html="val"
         :key="index"
@@ -18,7 +20,8 @@ import { BY_LEVELS, BY_PRINCIPLES_VS_ACTIVITIES} from "../constants/report";
     <article :class="localStyles.card">
       <ReportByLevels :selectedTab="selectedTab" v-if="type === BY_LEVELS" />
       <ReportPrinciplesActivities  :selectedTab="selectedTab" v-if="type=== BY_PRINCIPLES_VS_ACTIVITIES"/>
-      
+      <ReportRoadmap v-if="type=== BY_ROADMAP"/>
+      <ReportRecomendations v-if="type===BY_RECOMENDATIONS"/>
     </article>
   </section>
 </template>
@@ -90,6 +93,8 @@ const localStyles = {
         sm:h-10
         font-bold
         text-white
+        sm:text-base
+
         w-[105px]
         sm:w-64
         flex

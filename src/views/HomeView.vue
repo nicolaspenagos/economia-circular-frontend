@@ -32,7 +32,7 @@ import BaseButton from "../components/ui_utils/BaseButton.vue";
           >Economía Circular!</span
         >
       </h1>
-      <BaseButton text="¡Comienza Ahora!" class="my-8 sm:mb-0 sm:mt-6" />
+      <BaseButton :text="isLoggedIn?'¡Autoevalúate!':'¡Comienza Ahora!'" class="my-8 sm:mb-0 sm:mt-6" />
     </article>
     <img
       src="/home-intersect.svg"
@@ -199,6 +199,7 @@ import BaseButton from "../components/ui_utils/BaseButton.vue";
 <script>
 export default {
   emits: ["toggleHeader", "toggleFooter"],
+
   mounted() {
     this.$emit("toggleFooter", true);
     this.$emit("toggleHeader", true);

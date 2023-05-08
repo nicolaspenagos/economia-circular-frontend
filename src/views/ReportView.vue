@@ -5,8 +5,17 @@ import { ORDINAL_NUMBERS_LIST } from "../constants/ordinals.js";
 import { useReportStore } from "../stores/report";
 import { mapStores } from "pinia";
 import { useAuthStore } from "../stores/auth";
-import ReportSection from '../components/ReportSection.vue';
-import {REPORT_BY_LEVELS, BY_LEVELS, BY_PRINCIPLES_VS_ACTIVITIES, REPORT_BY_PRINCIPLES_VS_ACTIVITIES} from "../constants/report";
+import ReportSection from "../components/ReportSection.vue";
+import {
+  REPORT_BY_LEVELS,
+  BY_LEVELS,
+  BY_PRINCIPLES_VS_ACTIVITIES,
+  REPORT_BY_PRINCIPLES_VS_ACTIVITIES,
+  REPORT_ROADMAP,
+  BY_ROADMAP,
+  REPORT_RECOMENDATIONS,
+  BY_RECOMENDATIONS,
+} from "../constants/report";
 </script>
 <template>
   <header :class="localStyles.header">
@@ -46,16 +55,25 @@ import {REPORT_BY_LEVELS, BY_LEVELS, BY_PRINCIPLES_VS_ACTIVITIES, REPORT_BY_PRIN
       </div>
     </section>
     <section :class="localStyles.section">
-        <h1 :class="localStyles.title +' mt-4'">Reporte por niveles</h1>
-        <ReportSection :reportConstantMap="REPORT_BY_LEVELS" :type="BY_LEVELS"/>
-        <h1 :class="localStyles.title + ' mt-16'">Reporte principios vs actividades</h1>
-        <ReportSection :reportConstantMap="REPORT_BY_PRINCIPLES_VS_ACTIVITIES" :type="BY_PRINCIPLES_VS_ACTIVITIES"/>
+      <h1 :class="localStyles.title + ' mt-4'">Reporte por niveles</h1>
+      <ReportSection :reportConstantMap="REPORT_BY_LEVELS" :type="BY_LEVELS" />
+      <h1 :class="localStyles.title + ' mt-16'">
+        Reporte principios vs actividades
+      </h1>
+      <ReportSection
+        :reportConstantMap="REPORT_BY_PRINCIPLES_VS_ACTIVITIES"
+        :type="BY_PRINCIPLES_VS_ACTIVITIES"
+      />
+      <h1 :class="localStyles.title + ' mt-16'">
+        Recomendaciones para tu empresa
+      </h1>
+      <ReportSection :reportConstantMap="REPORT_ROADMAP" :type="BY_ROADMAP" />
+      <ReportSection :reportConstantMap="REPORT_RECOMENDATIONS" :type="BY_RECOMENDATIONS" />
     </section>
   </main>
 </template>
 <script>
 export default {
-
   emits: ["toggleHeader", "toggleFooter"],
   async mounted() {
     this.$emit("toggleHeader", true);
@@ -73,7 +91,6 @@ export default {
   },
   mounted() {
     window.scrollTo(0, 0);
-
   },
 };
 const localStyles = {
@@ -148,7 +165,7 @@ const localStyles = {
     sm:my-0
     sm:h-full
     `),
-    section:ctl(`
+  section: ctl(`
     py-12
     flex
     flex-col
@@ -156,13 +173,13 @@ const localStyles = {
     items-start
     w-full
     `),
-    title:ctl(`
+  title: ctl(`
         font-bold
         sm:text-3xl
         sm:text-left
         text-center
         text-xl
         w-full
-    `)
+    `),
 };
 </script>

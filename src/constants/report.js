@@ -24,11 +24,20 @@ const REPORT_BY_PRINCIPLES_VS_ACTIVITIES = new Map();
 REPORT_BY_PRINCIPLES_VS_ACTIVITIES.set('Principios vs Actividades', PRINCIPLES_SCORES_WEITGHS);
 REPORT_BY_PRINCIPLES_VS_ACTIVITIES.set('Tabla de puntajes', 'ALL');
 
+const REPORT_ROADMAP = new Map();
+REPORT_ROADMAP.set('Hoja de ruta', '/roadmap.svg');
 
+const REPORT_RECOMENDATIONS = new Map();
+
+REPORT_RECOMENDATIONS.set('Recomendaciones', '');
+
+export const LOW_SCORE_CRITERIA = 400;
 export const TABLE_HEADERS_PRINCIPLE = ['Principio', 'Puntaje posible', 'Puntaje obtenido', 'Porcentaje'];
 export const TABLE_HEADERS_ACTIVITY = ['','Actividad', 'Puntaje posible', 'Puntaje obtenido', 'Porcentaje'];
 export const BY_LEVELS= 'ReportByLevels';
 export const BY_PRINCIPLES_VS_ACTIVITIES= 'PrinciplesVsActivities';
+export const BY_ROADMAP = 'Roadmap';
+export const BY_RECOMENDATIONS= 'Recomendations';
 
 
-export {REPORT_BY_LEVELS, REPORT_BY_PRINCIPLES_VS_ACTIVITIES};
+export {REPORT_BY_LEVELS, REPORT_BY_PRINCIPLES_VS_ACTIVITIES, REPORT_ROADMAP, REPORT_RECOMENDATIONS};

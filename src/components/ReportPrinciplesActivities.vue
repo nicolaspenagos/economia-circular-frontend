@@ -30,14 +30,45 @@ ChartJS.register(
 );
 </script>
 <template>
+   <div :class="localStyles.grade">
+      <h3 class="text-white">Obtuviste</h3>
+      <div class="flex items-end" v-if="loaded">
+        <h1 class="font-bold text-white text-2xl">
+          {{
+            totalObtained >= totalPossible
+              ? totalPossible.toFixed(0)
+              : totalObtained.toFixed(0)
+          }}
+        </h1>
+        <p class="text-white mb-0.5 font-semibold opacity-50">
+          /{{ totalPossible.toFixed(0) }}
+        </p>
+      </div>
+    </div>
   <main
     :class="localStyles.main"
     v-if="selectedTab === 'Principios vs Actividades'"
   >
+   
     <section>
       <h1 :class="localStyles.title + ' text-xl sm:!text-2xl'">
         Gráfica de desempeño
       </h1>
+      <div :class="localStyles.gradeResponsive">
+      <h3 class="text-white">Obtuviste</h3>
+      <div class="flex items-end">
+        <h1 class="font-bold text-white text-lg sm:text-2xl">
+          {{
+            totalObtained >=totalPossible
+              ? totalPossible
+              : totalObtained.toFixed(0)
+          }}
+        </h1>
+        <p class="text-white mb-0.5 font-semibold opacity-50">
+          /{{ totalPossible.toFixed(0) }}
+        </p>
+      </div>
+    </div>
       <p class="text-center mt-4 w-3/4 ml-auto mr-auto">
         Esta gráfica muestra la relación que existe entre los principios y las
         actividades. Cada principio se compone de diferentes actividades, las
@@ -122,7 +153,37 @@ ChartJS.register(
         <strong>principios VS Actividades.</strong>
       </p>
     </section>
-    <Table :tableData="tableData" :tableHeader="TABLE_HEADERS_ACTIVITY" />
+    <article class="sm:p-12 custom-shadow custom-border-radius">
+      <Table :tableData="tableData" :tableHeader="TABLE_HEADERS_ACTIVITY" />
+      <div class="flex mt-4">
+        <article
+          :class="
+            localStyles.card +
+            ' ' +
+            getColorClassMapByActivity().get(bestClass) +
+            ' my-6 mr-6'
+          "
+        >
+          <h1 class="font-bold text-white">Principio más destacado</h1>
+          <p class="text-white">{{ best }}</p>
+        </article>
+        <article
+          :class="
+            localStyles.card +
+            ' ' +
+            getColorClassMapByActivity().get(worstClass) +
+            ' my-6'
+          "
+        >
+          <h1 :class="['font-bold text-white ']">Principio por mejorar</h1>
+          <p class="text-white">{{ worst }}</p>
+        </article>
+      </div>
+    </article>
+    <div :class="localStyles.button">
+      <p class="text-white py-2">Ver explicación</p>
+      <img src="/eye.svg" class="h-4 ml-2" />
+    </div>
   </main>
 </template>
 <script>
@@ -142,6 +203,12 @@ export default {
   },
   data() {
     return {
+      totalObtained:0,
+      totalPossible:0,
+      best: "",
+      bestClass: "",
+      worstClass: "",
+      worst: "",
       tableData: [],
       loaded: false,
       options: {
@@ -181,35 +248,50 @@ export default {
       let bestScore = Number.NEGATIVE_INFINITY;
       let worstScore = Number.POSITIVE_INFINITY;
 
-      this.reportStore.currentReport.reportByActivities.forEach((activity) => {
-
+      this.reportStore.currentReport.reportByActivities.forEach((activity, index) => {
         totalObtained += activity.obtainedScore;
         totalPossible += activity.possibleScore;
-  
+
         const row = [];
         row.push(this.getIconHTML(activity.shortname));
-        row.push(activity.title);
+        row.push('A'+(index+1)+' '+activity.title);
         row.push(activity.possibleScore.toFixed(1));
         row.push(activity.obtainedScore.toFixed(1));
         row.push(activity.obtainedPercentage.toFixed(1));
-       
+
         tableData.push(row);
 
+        console.log(activity.title);
+
+        if (activity.obtainedScore > bestScore) {
+          bestScore = activity.obtainedScore;
+          this.best = 'A'+(index+1)+' '+activity.title;
+          this.bestClass = activity.shortname;
+        }
+        if (activity.obtainedScore < worstScore) {
+          worstScore = activity.obtainedScore;
+          this.worst = 'A'+(index+1)+' '+activity.title;
+          this.worstClass = activity.shortname;
+        }
       });
 
+      console.log(this.worst);
+
       const lastRow = [];
-      lastRow.push('');
-      lastRow.push('Total');
+      lastRow.push("");
+      lastRow.push("Total");
       lastRow.push(totalPossible.toFixed(0));
       lastRow.push(totalObtained.toFixed(1));
-      lastRow.push((totalObtained/totalPossible*100).toFixed(1));
+      lastRow.push(((totalObtained / totalPossible) * 100).toFixed(1));
       tableData.push(lastRow);
 
+      this.totalObtained = totalObtained;
+      this.totalPossible = totalPossible;
       this.tableData = tableData;
     },
     getIconHTML(shortname) {
       return (
-        '<div class="h-4 w-4 rounded-full mr-2 ' +
+        '<div class="h-4 w-4 rounded-full  my-auto mx-auto ' +
         getColorClassMapByActivity().get(shortname) +
         ' "></div>'
       );
@@ -224,7 +306,8 @@ const localStyles = {
         mb-6
     `),
   main: ctl(`
-        p-4
+        sm:min-h-[1450px]
+        p-0
         sm:p-6
         sm:pb-20
     `),
@@ -247,5 +330,48 @@ const localStyles = {
   sm:m-0
   sm:mr-6
   `),
+  card: ctl(`
+    flex 
+    flex-col
+    p-6
+    custom-shadow
+    custom-border-radius
+    text-sm
+    w-fit
+  `),
+  grade: ctl(`
+    hidden
+    sm:flex
+    sm:absolute
+    w-44
+    h-24
+    bg-[#9995FF]
+    top-0
+    right-0
+    custom-border-radius
+    custom-shadow
+    !rounded-br-none
+    !rounded-tl-none
+    flex
+    justify-center
+    items-center
+    flex-col
+  `),
+  gradeResponsive:ctl(`
+    
+    w-32
+    h-16
+    bg-[#9995FF]
+    custom-border-radius
+    custom-shadow
+    sm:hidden
+    flex
+    flex-col
+    items-center
+    justify-center
+    mx-auto
+
+  
+  `)
 };
 </script>
