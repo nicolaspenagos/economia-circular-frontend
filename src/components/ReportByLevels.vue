@@ -14,7 +14,7 @@ import {
   Legend,
 } from "chart.js";
 import { PolarArea } from "vue-chartjs";
-import { TABLE_HEADERS } from "../constants/report.js";
+import { TABLE_HEADERS_PRINCIPLE } from "../constants/report.js";
 import Table from "./ui_utils/Table.vue";
 ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
 </script>
@@ -91,7 +91,7 @@ ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
       </div>
       <div :class="localStyles.chartContainer">
         <h1 :class="localStyles.title">Tabla de puntajes por principios</h1>
-        <Table :tableData="tableData" :tableHeader="TABLE_HEADERS" />
+        <Table :tableData="tableData" :tableHeader="TABLE_HEADERS_PRINCIPLE" />
         <div class="flex mt-4">
           <article
             :class="
@@ -161,9 +161,7 @@ export default {
   },
   methods: {
     showOnboarding(){
-      console.log('Hola')
       this.showModal = true;
-      console.log(this.showModal)
     },
     closeOnboarding(){
       this.showModal = false;

@@ -1,6 +1,7 @@
 <script setup>
 import ctl from "@netlify/classnames-template-literals";
 import { convertNumberString } from "../../utils/reportUtils.js";
+import { isNumeric } from "../../utils/reportUtils";
 </script>
 <template>
   <table :class="localStyles.table">
@@ -10,8 +11,8 @@ import { convertNumberString } from "../../utils/reportUtils.js";
           v-for="(val, index) in tableHeader"
           :class="[localStyles.th, (index==0)?'rounded-tl-sm':'',(index+1===tableHeader.length)?'rounded-tr-sm !border-r-0':'']"
           :key="'th-' + index"
+          v-html="val"
         >
-          {{ val }}
         </th>
       </tr>
     </thead>
@@ -20,9 +21,10 @@ import { convertNumberString } from "../../utils/reportUtils.js";
         <td
           v-for="(tdVal, tdIndex) in val"
           :key="'td-' + tdIndex"
-          :class="[localStyles.td, tdIndex > 0 ? 'text-center' : '', index+1===tableData.length?'font-bold':'' ]"
+          :class="[localStyles.td, isNumeric(tdVal) ? 'text-center' : '', index+1===tableData.length?'font-bold':'', convertNumberString(tdVal)==0&&tdIndex==0?'text-white':'']"
+          v-html="convertNumberString(tdVal)"
         >
-          {{ convertNumberString(tdVal) }}
+
         </td>
       </tr>
     </tbody>
@@ -40,9 +42,7 @@ export default {
       default: [],
     },
   },
-  mounted() {
-    console.log(this.tableData);
-  },
+
 };
 const localStyles = {
   table: ctl(`

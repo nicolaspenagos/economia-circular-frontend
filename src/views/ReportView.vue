@@ -6,7 +6,7 @@ import { useReportStore } from "../stores/report";
 import { mapStores } from "pinia";
 import { useAuthStore } from "../stores/auth";
 import ReportSection from '../components/ReportSection.vue';
-import {REPORT_BY_LEVELS} from "../constants/report";
+import {REPORT_BY_LEVELS, BY_LEVELS, BY_PRINCIPLES_VS_ACTIVITIES, REPORT_BY_PRINCIPLES_VS_ACTIVITIES} from "../constants/report";
 </script>
 <template>
   <header :class="localStyles.header">
@@ -46,13 +46,16 @@ import {REPORT_BY_LEVELS} from "../constants/report";
       </div>
     </section>
     <section :class="localStyles.section">
-        <h1 :class="localStyles.title">Reporte por Niveles</h1>
-        <ReportSection :reportConstantMap="REPORT_BY_LEVELS"/>
+        <h1 :class="localStyles.title +' mt-4'">Reporte por niveles</h1>
+        <ReportSection :reportConstantMap="REPORT_BY_LEVELS" :type="BY_LEVELS"/>
+        <h1 :class="localStyles.title + ' mt-16'">Reporte principios vs actividades</h1>
+        <ReportSection :reportConstantMap="REPORT_BY_PRINCIPLES_VS_ACTIVITIES" :type="BY_PRINCIPLES_VS_ACTIVITIES"/>
     </section>
   </main>
 </template>
 <script>
 export default {
+
   emits: ["toggleHeader", "toggleFooter"],
   async mounted() {
     this.$emit("toggleHeader", true);

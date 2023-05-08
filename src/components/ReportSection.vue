@@ -1,68 +1,84 @@
 <script setup>
 import ctl from "@netlify/classnames-template-literals";
 import ReportByLevels from "./ReportByLevels.vue";
+import ReportPrinciplesActivities from "./ReportPrinciplesActivities.vue";
+import { BY_LEVELS, BY_PRINCIPLES_VS_ACTIVITIES} from "../constants/report";
 </script>
 <template>
-    <section :class="localStyles.section">
-        <nav :class="localStyles.nav">
-            <div :class="[localStyles.navBtn,getSelectedClassMod(val) ]" v-for="(val, index) in Array.from(reportConstantMap.keys())" v-html="val" :key="index" @click="setSlectedTab(val)">
-            </div>
-        </nav>
-        <article :class="localStyles.card">
-        <ReportByLevels :selectedTab="selectedTab"/>
-        </article>
-    </section>
+  <section :class="localStyles.section">
+    <nav :class="localStyles.nav">
+      <div
+        :class="[localStyles.navBtn, getSelectedClassMod(val)]"
+        v-for="(val, index) in Array.from(reportConstantMap.keys())"
+        v-html="val"
+        :key="index"
+        @click="setSlectedTab(val)"
+      ></div>
+    </nav>
+    <article :class="localStyles.card">
+      <ReportByLevels :selectedTab="selectedTab" v-if="type === BY_LEVELS" />
+      <ReportPrinciplesActivities  :selectedTab="selectedTab" v-if="type=== BY_PRINCIPLES_VS_ACTIVITIES"/>
+      
+    </article>
+  </section>
 </template>
 <script>
 export default {
-    props:{
-        reportConstantMap:{
-            type:Object,
-            default:null
-        }
+  props: {
+    reportConstantMap: {
+      type: Object,
+      default: null,
     },
-    methods:{
-        getNavTitle(str){
-            const parts = str.split(' ');
-
-            if(parts.length===0){
-                return str;
-            }
-
-            let title = '';
-
-            for(let i=0; i<parts.length; i++){
-             
-                if(!i+2<parts.length){
-                    title+='<br class="sm:hidden inline">';
-                }
-                title += parts[i];
-            }
-
-            return title;
-        },
-        setSlectedTab(newVal){
-            this.selectedTab = newVal;
-        },
-        getSelectedClassMod(val){
-            return this.selectedTab===val?'bg-[#9995ff]':'';
-        }
+    type: {
+      type: String,
+      default: "",
     },
-    data(){
-        return {
-            selectedTab:Array.from(this.reportConstantMap.keys())[0],
+  },
+  methods: {
+    getNavTitle(str) {
+      const parts = str.split(" ");
+
+      if (parts.length === 0) {
+        return str;
+      }
+
+      let title = "";
+
+      for (let i = 0; i < parts.length; i++) {
+        if (!i + 2 < parts.length) {
+          title += '<br class="sm:hidden inline">';
         }
-    }
-}
+        title += parts[i];
+      }
+
+      return title;
+    },
+    setSlectedTab(newVal) {
+      this.selectedTab = newVal;
+    },
+    getSelectedClassMod(val) {
+      return this.selectedTab === val ? "bg-[#9995ff]" : "";
+    },
+  },
+  data() {
+    return {
+      selectedTab: Array.from(this.reportConstantMap.keys())[0],
+    };
+  },
+  mounted(){
+
+  }
+
+};
 const localStyles = {
-    section:ctl(`
-        mt-12
+  section: ctl(`
+        mt-16
         w-full
     `),
-    nav:ctl(`
+  nav: ctl(`
         flex
     `),
-    navBtn:ctl(`
+  navBtn: ctl(`
         bg-[#766ef2]
         hover:bg-[#9995ff]
         custom-border-radius
@@ -83,7 +99,7 @@ const localStyles = {
         text-center
     
     `),
-    card:ctl(`
+  card: ctl(`
         custom-shadow
         bg-white
         w-full
@@ -93,10 +109,10 @@ const localStyles = {
         p-4
         sm:p-12
     `),
-    title:ctl(`
+  title: ctl(`
         font-bold
         text-center
         sm:text-xl
-    `)
-}
+    `),
+};
 </script>
