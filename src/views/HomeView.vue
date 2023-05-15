@@ -13,11 +13,13 @@ import BaseButton from "../components/ui_utils/BaseButton.vue";
       src="/home-vectors-right.svg"
       :class="[localStyles.vectors, 'right-0']"
       draggable="false"
+      alt="Decoration"
     />
     <img
       src="/home-vectors-left.svg"
       :class="[localStyles.vectors, 'left-0']"
       draggable="false"
+      alt="Decoration"
     />
     <article
       :class="localStyles.headerContent"
@@ -38,6 +40,7 @@ import BaseButton from "../components/ui_utils/BaseButton.vue";
       src="/home-intersect.svg"
       :class="localStyles.ellipse"
       draggable="false"
+      alt="Fondo"
     />
   </header>
   <main :class="localStyles.main">
@@ -49,6 +52,7 @@ import BaseButton from "../components/ui_utils/BaseButton.vue";
           :class="localStyles.imgMockup"
           data-aos="fade-up"
           data-aos-duration="1000"
+          alt="Mockup"
         />
         <p
           :class="localStyles.pWidth"
@@ -71,6 +75,7 @@ import BaseButton from "../components/ui_utils/BaseButton.vue";
               src="/home-mag-glass.svg"
               :class="localStyles.cardImg"
               draggable="false"
+              alt="Lupa"
             />
             <p>
               Autoevaluarse en tres niveles:
@@ -82,6 +87,7 @@ import BaseButton from "../components/ui_utils/BaseButton.vue";
               src="/home-download.svg"
               :class="localStyles.cardImg"
               draggable="false"
+              alt="Descargar"
             />
             <p>
               Obtener los <strong>resultados</strong> y descargar
@@ -94,6 +100,7 @@ import BaseButton from "../components/ui_utils/BaseButton.vue";
               src="/home-file.svg"
               :class="localStyles.cardImg"
               draggable="false"
+              alt="Archivo"
             />
             <p>
               Utilizar la <strong>hoja de ruta</strong> para
@@ -109,6 +116,7 @@ import BaseButton from "../components/ui_utils/BaseButton.vue";
         src="/home-left-img.png"
         :class="localStyles.leftImg"
         draggable="false"
+        alt="Imagen del home"
       />
       <article
         :class="localStyles.bodyTexContainer"
@@ -148,11 +156,13 @@ import BaseButton from "../components/ui_utils/BaseButton.vue";
           src="/final-mockup-mobile.png"
           class="mb-1 w-11/12 mx-auto sm:mx-0 sm:mb-0 sm:h-[422px] sm:w-[694px] z-30"
           draggable="false"
+          alt="Mockup"
         />
         <img
           src="/mockup-circle.png"
           class="absolute top-[-50px] right-[-10px] hidden sm:block h-40"
           draggable="false"
+          alt="Mockup decoration"
         />
       </div>
       <div
@@ -176,11 +186,13 @@ import BaseButton from "../components/ui_utils/BaseButton.vue";
         src="/end-vectors-right.svg"
         class="absolute right-0 h-full hidden sm:flex"
         draggable="false"
+        alt="decoration"
       />
       <img
         src="/end-vectors-left.svg"
         class="absolute left-0 h-full hidden sm:flex"
         draggable="false"
+        alt="decoration"
       />
       <div class="w-[500px] flex flex-col items-center justify-center"       data-aos="fade-up"
         data-aos-duration="500">

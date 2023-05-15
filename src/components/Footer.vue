@@ -6,7 +6,8 @@ import Gradient from "./ui_utils/Gradient.vue";
     <footer :class="localStyles.footer +' sm:p-10'">
         <Gradient/>
         <section :class="localStyles.section + ' pt-10 sm:pt-0'">
-            <img src="/logo-icesi.svg" :class="localStyles.logo" draggable="false"/>
+            <img src="/logo-icesi.svg" :class="localStyles.logo" draggable="false" alt="Logo"/>
+            
         </section>
         <section :class="localStyles.section">
             <h1 class="text-center sm:text-left"><strong :class="localStyles.text">Contacto</strong></h1> 

@@ -14,11 +14,13 @@ import router from "../router";
       src="/not-found-vector1.svg"
       :class="localStyles.vectorOne"
       draggable="false"
+      alt="decoration"
     />
     <img
       src="/not-found-vector2.svg"
       :class="localStyles.vectorTwo"
       draggable="false"
+      alt="decoration"
     />
 
     <article :class="localStyles.article">

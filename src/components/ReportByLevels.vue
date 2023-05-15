@@ -112,7 +112,7 @@ ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
     </section>
     <div :class="localStyles.button" @click="showOnboarding">
       <p class="text-white py-2">Ver explicación</p>
-      <img src="/eye.svg" class="h-4 ml-2" />
+      <img src="/eye.svg" class="h-4 ml-2" alt="Eye btn"/>
     </div>
   </article>
 </template>

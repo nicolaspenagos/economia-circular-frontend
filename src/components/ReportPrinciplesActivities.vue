@@ -138,7 +138,7 @@ ChartJS.register(
     </section>
     <div :class="localStyles.button">
       <p class="text-white py-2">Ver explicación</p>
-      <img src="/eye.svg" class="h-4 ml-2" />
+      <img src="/eye.svg" class="h-4 ml-2" alt="Eye btn" />
     </div>
   </main>
   <main :class="localStyles.main" v-else>
@@ -182,7 +182,7 @@ ChartJS.register(
     </article>
     <div :class="localStyles.button">
       <p class="text-white py-2">Ver explicación</p>
-      <img src="/eye.svg" class="h-4 ml-2" />
+      <img src="/eye.svg" class="h-4 ml-2" alt="Eye btn"/>
     </div>
   </main>
 </template>

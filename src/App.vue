@@ -28,6 +28,7 @@ const route = useRoute();
         src="/horizontal-logo.svg"
         :class="localStyles.logo"
         draggable="false"
+        alt="Logo economía circular"
       />
       <nav v-if="isLoggedIn" :class="localStyles.link">
         <RouterLink
@@ -79,6 +80,7 @@ const route = useRoute();
           src="/menu.svg"
           :class="localStyles.mobileMenu"
           @click="goToQuestionnaire"
+          alt="Botón de menú"
         />
       </nav>
     </header>

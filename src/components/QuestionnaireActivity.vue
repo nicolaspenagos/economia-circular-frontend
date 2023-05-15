@@ -32,6 +32,7 @@ import { useActivitiesStore } from "../stores/activities";
         src="/polygon.svg"
         :class="localStyles.cardTriangle"
         draggable="false"
+        alt="Apéndice de la tarjeta"
       />
       <h1
         :class="[
@@ -56,6 +57,7 @@ import { useActivitiesStore } from "../stores/activities";
         src="/purple-v.svg"
         :class="[localStyles.showBtn, getAbleClassMod()]"
         draggable="false"
+        alt="Botón deslplegar actividad"
       />
     </section>
     <article

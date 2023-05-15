@@ -7,7 +7,7 @@ import Gradient from "../components/ui_utils/Gradient.vue";
   <main :class="localStyles.main">
     <aside :class="localStyles.aside">
       <Gradient />
-      <img src="/logo.svg" :class="localStyles.logo" draggable="false" />
+      <img src="/logo.svg" :class="localStyles.logo" draggable="false" alt="logo" />
     </aside>
     <section :class="localStyles.section">
       <article :class="localStyles.card">

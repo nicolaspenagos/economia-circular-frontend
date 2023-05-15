@@ -25,6 +25,7 @@ import ctl from "@netlify/classnames-template-literals";
           localStyles.img,
         ]"
         draggable="false"
+        alt="Botón desplegar"
       />
     </div>
   </div>

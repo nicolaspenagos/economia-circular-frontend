@@ -32,6 +32,7 @@ import BaseButton from "./ui_utils/BaseButton.vue";
             :src="'/' + data[currentIndex].imgMobile"
             :class="[localStyles.mobileImg, fromReport?'!h-48 ':'']"
             draggable="false"
+            alt="Onboarding img"
           />
           <p
             v-html="this.data[currentIndex].text"
@@ -56,12 +57,13 @@ import BaseButton from "./ui_utils/BaseButton.vue";
       </div>
     
 
-      <img src="/onboarding-vector.svg" :class="[localStyles.vector]"  draggable="false" v-if="!fromReport"/>
+      <img src="/onboarding-vector.svg" :class="[localStyles.vector]"  draggable="false" v-if="!fromReport" alt="Decoración vector"/>
       <div :class="localStyles.right">
         <img
           :src="'/' + data[currentIndex].imgDesktop"
           :class="[localStyles.desktopImg, fromReport?'sm:mr-20':'']"
           draggable="false"
+          alt="Oboarding img"
         />
       </div>
     </article>
