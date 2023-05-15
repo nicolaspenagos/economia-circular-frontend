@@ -23,7 +23,6 @@ export const useAuthStore = defineStore({
     async signUp(newUser) {
       this.user = await APIService.post(USERS, newUser);
       await this.login(newUser.email, newUser.password);
-      return;
     },
     async login(email, password) {
       this.logout();

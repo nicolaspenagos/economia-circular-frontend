@@ -222,7 +222,7 @@ export default {
       return this.authStore.isLoggedIn;
     },
     userName() {
-      if (this.authStore.user && this.authStore.user.name)
+      if (this.authStore.user?.name)
         return this.authStore.user.name;
       else return "";
     },

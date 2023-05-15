@@ -114,8 +114,10 @@ export const useReponsesStore = defineStore({
           if (
             !newMarkedInfo.dependentQuestionId &&
             oldPickedInfo.dependentQuestionId
-          )
+          ){
             this.activeResponse.delete(oldPickedInfo.dependentQuestionId);
+          }
+        
             this.activeJustify.delete(oldPickedInfo.dependentQuestionId);
         }
       }
@@ -211,7 +213,7 @@ export const useReponsesStore = defineStore({
       const isSingleChoice = useQuestionsStore().isSingleChoice(questionType);
       let questionResponse = isSingleChoice ? null : [];
 
-      if (this.activeResponse && this.activeResponse.get(questionId)) {
+      if (this.activeResponse?.get(questionId)) {
         const selectionArray = Array.from(this.activeResponse.get(questionId));
 
         if (isSingleChoice) {
@@ -258,7 +260,7 @@ export const useReponsesStore = defineStore({
       return counter;
     },
     getJustifyAnswer(questionId) {
-      if (this.activeJustify && this.activeJustify.has(questionId)) {
+      if (this.activeJustify?.has(questionId)) {
         return this.activeJustify.get(questionId);
       } else {
         return "";

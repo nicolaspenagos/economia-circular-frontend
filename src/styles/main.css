@@ -75,10 +75,6 @@
   filter: drop-shadow(-6px 0 5px rgba(10, 10, 10, 0.065));
 }
 
-table tbody tr td:last-child {
-
-}
-
 table tbody tr:first-child td {
   border-top-width: 2px;
 }

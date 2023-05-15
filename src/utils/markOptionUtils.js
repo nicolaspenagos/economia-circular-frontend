@@ -34,8 +34,7 @@ export function mapFromStringToMarkedInfo(infoString) {
 }
 
 export function isExlusive(str) {
-  if (str.split(" ")[4].split(":")[1] === "true") return true;
-  return false;
+  return str.split(" ")[4].split(":")[1] === "true"
 }
 
 export function replaceNumbersWithWords(str) {
