@@ -28,7 +28,7 @@ export const useAuthStore = defineStore({
       this.logout();
       const token = await APIService.post(LOGIN, { email, password });
       localStorage.setItem(TOKEN_KEY, token.token);
-      this.setLoggedUserData(token.token);
+      await this.setLoggedUserData(token.token);
     },
     async fetchLoggedUser() {
 
@@ -59,14 +59,14 @@ export const useAuthStore = defineStore({
       
       localStorage.removeItem(TOKEN_KEY);
     },
-    checkIfLogged() {
+    async checkIfLogged() {
       const token = localStorage.getItem(TOKEN_KEY);
       if (token) {
      
         if (isTokenExpired(parseJwt(token).exp)) {
           this.logout();
         } else {
-          this.setLoggedUserData(token);
+          await this.setLoggedUserData(token);
         }
       }
     },
