@@ -11,7 +11,7 @@ import BaseButton from "./BaseButton.vue";
     @scroll.prevent
   >
     <article :class="[localStyles.modalContainer, xxl?'sm:max-w-3xl':'sm:max-w-xl']">
-      <img :src="imgPath" class="h-16 mb-6 mt-3 mx-auto" draggable="false" alt="Modal img" />
+      <img :src="imgPath" class="h-16 mb-6 mt-3 mx-auto" draggable="false" alt="modal img" />
       <p :class="localStyles.p" v-html="msg "></p>
       <div :class="localStyles.btnsContainer">
         <BaseButton text="Volver" class="min-w-[100px] w-fit " :altBtn="true" @click="closeModal" v-if="!onlyAccept"/>

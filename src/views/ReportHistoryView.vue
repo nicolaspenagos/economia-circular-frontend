@@ -35,25 +35,24 @@ import ReportCardContainer from "../components/ReportCardContainer.vue";
     </div>
   </header>
   <main :class="localStyles.main">
-    <ReportCardContainer/>
+    <ReportCardContainer />
   </main>
 </template>
 <script>
 export default {
   emits: ["toggleHeader", "toggleFooter"],
   async mounted() {
- 
     this.$emit("toggleHeader", true);
     this.$emit("toggleFooter", true);
- 
+
+    window.scrollTo(0, 0);
+
     await this.reportStore.loadCompletedResponses();
     this.handleShowModal();
-  
   },
   data() {
     return {
       showModal: false,
-    
     };
   },
   computed: {
@@ -71,7 +70,6 @@ export default {
       }
     },
   },
-
 };
 const localStyles = {
   header: ctl(`

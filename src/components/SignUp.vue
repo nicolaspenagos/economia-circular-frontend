@@ -16,7 +16,6 @@ import {
   PASSWORD,
   isValidUser,
 } from "../utils/inputChecker.js";
-import { RouterLink } from "vue-router";
 import { useAuthStore } from "../stores/auth";
 import { mapStores } from "pinia";
 import router from "../router";

@@ -78,6 +78,7 @@ export default {
   async mounted() {
     this.$emit("toggleHeader", true);
     this.$emit("toggleFooter", true);
+    window.scrollTo(0, 0);
   },
   computed: {
     ...mapStores(useReportStore, useAuthStore),
@@ -88,10 +89,7 @@ export default {
         ? ORDINAL_NUMBERS_LIST[this.reportStore.currentResponseIndex]
         : "";
     },
-  },
-  mounted() {
-    window.scrollTo(0, 0);
-  },
+  }
 };
 const localStyles = {
   header: ctl(`

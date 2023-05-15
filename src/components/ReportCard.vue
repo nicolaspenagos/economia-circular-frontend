@@ -18,7 +18,7 @@ import router, { REPORT } from "../router";
       </h1>
       <p class="text-white">{{ getDate() }}</p>
     </div>
-    <img src="/stats-repor-card.svg" class="mr-auto" draggable="false" alt="Tarjeta de reporte"/>
+    <img src="/stats-repor-card.svg" class="mr-auto" draggable="false" alt="report card stats"/>
   </article>
 </template>
 <script>

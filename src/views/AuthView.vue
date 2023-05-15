@@ -15,7 +15,7 @@ import { useRoute } from "vue-router";
     >
       <Gradient />
       <img
-        alt="EC logo"
+        alt="logo"
         :class="styles.logo"
         src="/logo.svg"
         draggable="false"

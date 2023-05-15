@@ -24,7 +24,6 @@ import { isNumeric } from "../../utils/reportUtils";
           :class="[localStyles.td, isNumeric(tdVal) ? 'text-center' : '', index+1===tableData.length?'font-bold':'', convertNumberString(tdVal)==0&&tdIndex==0?'text-white':'']"
           v-html="convertNumberString(tdVal)"
         >
-
         </td>
       </tr>
     </tbody>

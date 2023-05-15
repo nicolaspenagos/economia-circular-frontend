@@ -42,10 +42,10 @@ export const useAuthStore = defineStore({
       await useReponsesStore().loadUserActiveResponse(this.user.id);
      
     },
-    setLoggedUserData(token) {
+    async setLoggedUserData(token) {
       this.token = token;
       this.isLoggedIn = true;
-      this.fetchLoggedUser();
+      await this.fetchLoggedUser();
 
     },
     logout() {

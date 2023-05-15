@@ -28,9 +28,9 @@ const route = useRoute();
         src="/horizontal-logo.svg"
         :class="localStyles.logo"
         draggable="false"
-        alt="Logo economía circular"
+        alt="logo"
       />
-      <nav v-if="isLoggedIn" :class="localStyles.link">
+      <nav v-if="isLoggedIn" :class="localStyles.link" role="navigation" aria-labelledby="mainnavheading">
         <RouterLink
           :to="HOME"
           :class="[
@@ -61,7 +61,7 @@ const route = useRoute();
         >
         <BaseButton text="Cerrar Sesión" @click="openModal" />
       </nav>
-      <nav v-else :class="localStyles.link">
+      <nav v-else :class="localStyles.link" role="navigation" aria-labelledby="secondarynavheading">
         <BaseButton
           text="Iniciar Sesión"
           @click="goToLogin"
@@ -80,7 +80,7 @@ const route = useRoute();
           src="/menu.svg"
           :class="localStyles.mobileMenu"
           @click="goToQuestionnaire"
-          alt="Botón de menú"
+          alt="menu btn"
         />
       </nav>
     </header>
@@ -134,9 +134,6 @@ export default {
   },
   mounted() {
     this.authStore.checkIfLogged();
-    const divElements = document.querySelectorAll('div');
-    const myDiv = this.$refs.myDiv;
-
     AOS.init();
    
   },

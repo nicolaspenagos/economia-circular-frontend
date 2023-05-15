@@ -57,7 +57,7 @@ import BaseButton from "./ui_utils/BaseButton.vue";
       </div>
     
 
-      <img src="/onboarding-vector.svg" :class="[localStyles.vector]"  draggable="false" v-if="!fromReport" alt="Decoración vector"/>
+      <img src="/onboarding-vector.svg" :class="[localStyles.vector]"  draggable="false" v-if="!fromReport" alt="decoration"/>
       <div :class="localStyles.right">
         <img
           :src="'/' + data[currentIndex].imgDesktop"

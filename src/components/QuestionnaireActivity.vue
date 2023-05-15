@@ -32,7 +32,7 @@ import { useActivitiesStore } from "../stores/activities";
         src="/polygon.svg"
         :class="localStyles.cardTriangle"
         draggable="false"
-        alt="Apéndice de la tarjeta"
+        alt="Card appendix"
       />
       <h1
         :class="[
@@ -57,7 +57,7 @@ import { useActivitiesStore } from "../stores/activities";
         src="/purple-v.svg"
         :class="[localStyles.showBtn, getAbleClassMod()]"
         draggable="false"
-        alt="Botón deslplegar actividad"
+        alt="Show btn"
       />
     </section>
     <article
@@ -147,11 +147,7 @@ export default {
       else return "";
     },
     isAble() {
-      if (this.index === 0) {
-        return true;
-      }
-
-      if (this.isIndexAble()) {
+      if (this.index === 0 || this.isIndexAble()) {
         return true;
       }
       return false;
@@ -169,13 +165,10 @@ export default {
     },
     shouldRender(question) {
   
-      if (question.mandatory) {
+      if (question.mandatory || this.responsesStore.searchSelectedDependentQuestionId(question.id)) {
         return true;
       }
-      if (this.responsesStore.searchSelectedDependentQuestionId(question.id)) {
-        return true;
-      }
-
+  
       return false;
     },
     async saveAndContinue() {

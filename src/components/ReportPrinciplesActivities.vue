@@ -2,12 +2,11 @@
 import ctl from "@netlify/classnames-template-literals";
 import { useReportStore } from "../stores/report";
 import { mapStores } from "pinia";
-import { REPORT_BY_PRINCIPLES_VS_ACTIVITIES } from "../constants/report.js";
+import { REPORT_BY_PRINCIPLES_VS_ACTIVITIES,  TABLE_HEADERS_ACTIVITY } from "../constants/report.js";
 import {
   getStackedBarCharConfig,
   getColorClassMapByActivity,
 } from "../utils/chartUtils.js";
-import { TABLE_HEADERS_ACTIVITY } from "../constants/report.js";
 import {
   Chart as ChartJS,
   Title,
@@ -138,7 +137,7 @@ ChartJS.register(
     </section>
     <div :class="localStyles.button">
       <p class="text-white py-2">Ver explicación</p>
-      <img src="/eye.svg" class="h-4 ml-2" alt="Eye btn" />
+      <img src="/eye.svg" class="h-4 ml-2" alt="eye btn" />
     </div>
   </main>
   <main :class="localStyles.main" v-else>
@@ -182,7 +181,7 @@ ChartJS.register(
     </article>
     <div :class="localStyles.button">
       <p class="text-white py-2">Ver explicación</p>
-      <img src="/eye.svg" class="h-4 ml-2" alt="Eye btn"/>
+      <img src="/eye.svg" class="h-4 ml-2" alt="eye btn"/>
     </div>
   </main>
 </template>
@@ -233,14 +232,6 @@ export default {
       this.loaded = true;
     },
     loadTableData() {
-      const tableHeader = [
-        "",
-        "Actividad",
-        "Puntaje posible",
-        "Puntaje obtenido",
-        "Porcentaje",
-      ];
-
       let tableData = [];
       let totalObtained = 0;
       let totalPossible = 0;
@@ -261,8 +252,6 @@ export default {
 
         tableData.push(row);
 
-        console.log(activity.title);
-
         if (activity.obtainedScore > bestScore) {
           bestScore = activity.obtainedScore;
           this.best = 'A'+(index+1)+' '+activity.title;
@@ -274,8 +263,6 @@ export default {
           this.worstClass = activity.shortname;
         }
       });
-
-      console.log(this.worst);
 
       const lastRow = [];
       lastRow.push("");

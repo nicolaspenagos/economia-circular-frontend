@@ -3,9 +3,9 @@ import ctl from "@netlify/classnames-template-literals";
 </script>
 <template>
   <div class="relative">
-    <div class="absolute top-[-24px] w-full justify-between flex">
+    <div :class="localStyles.container">
       <div class="ml-2 font-semibold  text-[#756ef2]">Porcentaje obtenido:</div>
-      <div class="flex sm:items-center items-start mr-2 text-[#756ef2]" ref="progressPercentage">
+      <div :class="localStyles.percentage" ref="progressPercentage">
         {{
           ((reportData.totalObtained / reportData.totalPossible) * 100).toFixed(
             1
@@ -19,7 +19,7 @@ import ctl from "@netlify/classnames-template-literals";
       ref="progressBarContainer"
     ></div>
     <div
-      class="h-4 sm:h-5 rounded-xl absolute top-0 left-0 bg-[#756ef2] ease-out duration-300"
+      :class="localStyles.progressBar"
       ref="progressBar"
     ></div>
     <div class="flex justify-between">
@@ -74,5 +74,37 @@ export default {
       this.$refs.progressBar.style.width = width + "px";
     },
   },
+  watch:{
+    reportData(){
+      this.onResize();
+    }
+  }
 };
+const localStyles={
+  progressBar:ctl(`
+      h-4 
+      sm:h-5 
+      rounded-xl 
+      absolute 
+      top-0 
+      left-0 
+      bg-[#756ef2] 
+      ease-out 
+      duration-300
+  `),
+  container:ctl(`
+      absolute 
+      top-[-24px] 
+      w-full 
+      justify-between 
+      flex
+  `),
+  percentage:ctl(`
+      flex 
+      sm:items-center 
+      items-start 
+      mr-2 
+      text-[#756ef2]
+  `)
+}
 </script>

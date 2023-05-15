@@ -5,6 +5,7 @@ import {
   SINGLE_CHOICE,
   MULTIPLE_CHOICE,
   SINGLE_CHOICE_DEPENDENT,
+  useQuestionsStore 
 } from "../stores/questions";
 import { mapStores } from "pinia";
 import { useReponsesStore } from "../stores/responses";
@@ -13,7 +14,6 @@ import {
   isExlusive,
   replaceNumbersWithWords,
 } from "../utils/markOptionUtils.js";
-import { useQuestionsStore } from "../stores/questions";
 import Hint from "./ui_utils/Hint.vue";
 </script>
 <template>
