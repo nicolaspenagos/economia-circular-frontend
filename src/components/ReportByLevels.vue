@@ -259,7 +259,7 @@ const localStyles = {
     sm:absolute
     w-44
     h-24
-    bg-[#9995FF]
+    bg-[#766EF2]
     top-0
     right-0
     custom-border-radius

@@ -79,8 +79,7 @@ const localStyles = {
         custom-border-radius
         items-center
         justify-center
-        p-6
-
+        p-7
         custom-shadow
         cursor-pointer
         hover:translate-y-[-15px]

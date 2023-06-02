@@ -60,7 +60,7 @@ export default {
       this.selectedTab = newVal;
     },
     getSelectedClassMod(val) {
-      return this.selectedTab === val ? "bg-[#9995ff]" : "";
+      return this.selectedTab === val ? "!bg-[#766ef2]" : "";
     },
   },
   data() {
@@ -82,8 +82,8 @@ const localStyles = {
         flex
     `),
   navBtn: ctl(`
-        bg-[#766ef2]
-        hover:bg-[#9995ff]
+        bg-[#9995ff]
+        hover:bg-[#766ef2]
         custom-border-radius
         !rounded-b-none
         mr-2

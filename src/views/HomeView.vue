@@ -7,7 +7,7 @@ import BaseButton from "../components/ui_utils/BaseButton.vue";
 </script>
 
 <template>
-  <header :class="localStyles.header">
+  <header :class="[localStyles.header, isLoggedIn?localStyles.loggedBackground:localStyles.notLoggedBackground]">
     <Gradient />
     <img
       src="/home-vectors-right.svg"
@@ -26,15 +26,36 @@ import BaseButton from "../components/ui_utils/BaseButton.vue";
       data-aos="fade-up"
       data-aos-duration="1000"
     >
-      <h1 :class="localStyles.title">¡Queremos ayudar a tu</h1>
-      <h1 :class="localStyles.title">empresa a evolucionar hacia</h1>
-      <h1 :class="localStyles.title">
-        la
-        <span :class="[localStyles.title, '!text-[#38f0a2]']"
-          >Economía Circular!</span
-        >
-      </h1>
-      <BaseButton :text="isLoggedIn?'¡Autoevalúate!':'¡Comienza Ahora!'" class="my-8 sm:mb-0 sm:mt-6" />
+      <div v-if="isLoggedIn">
+        <h1 :class="localStyles.title">
+          Bienvenido, ahora 
+          <span :class="[localStyles.title, '!text-[#38f0a2]']"
+            > haces parte</span
+          >
+          de esta
+        </h1>
+        <h1 :class="localStyles.title">
+          <span :class="[localStyles.title, '!text-[#38f0a2]']"
+            >comunidad</span
+          >
+          y podrás acceder a todos
+        </h1>
+        <h1 :class="localStyles.title">nuestros servicios</h1>
+      </div>
+      <div v-else>
+        <h1 :class="localStyles.title">¡Queremos ayudar a tu</h1>
+        <h1 :class="localStyles.title">empresa a evolucionar hacia</h1>
+        <h1 :class="localStyles.title">
+          la
+          <span :class="[localStyles.title, '!text-[#38f0a2]']"
+            >Economía Circular!</span
+          >
+        </h1>
+      </div>
+      <BaseButton
+        :text="isLoggedIn ? '¡Autoevalúate!' : '¡Comienza Ahora!'"
+        class="my-8 sm:mb-0 sm:mt-6"
+      />
     </article>
     <img
       src="/home-intersect.svg"
@@ -194,8 +215,11 @@ import BaseButton from "../components/ui_utils/BaseButton.vue";
         draggable="false"
         alt="decoration"
       />
-      <div class="w-[500px] flex flex-col items-center justify-center"       data-aos="fade-up"
-        data-aos-duration="500">
+      <div
+        class="w-[500px] flex flex-col items-center justify-center"
+        data-aos="fade-up"
+        data-aos-duration="500"
+      >
         <h1
           :class="
             localStyles.bodyTitle + ' !text-white text-center mb-4 sm:m-0'
@@ -222,8 +246,7 @@ export default {
       return this.authStore.isLoggedIn;
     },
     userName() {
-      if (this.authStore.user?.name)
-        return this.authStore.user.name;
+      if (this.authStore.user?.name) return this.authStore.user.name;
       else return "";
     },
   },
@@ -236,6 +259,8 @@ export default {
   },
 };
 const localStyles = {
+  notLoggedBackground:"bg-[url('/home-hands.jpg')]",
+  loggedBackground:"bg-[url('/logged-home-hands.jpg')]",
   header: ctl(`
       relative
       h-fit
@@ -246,7 +271,6 @@ const localStyles = {
       sm:pt-[50px]
       sm:pb-[120px]
       sm:h-[800px]
-      bg-[url('/home-hands.jpg')]
       bg-cover
       bg-center
       bg-no-repeat

@@ -38,11 +38,11 @@ import { REPORT_HISTORY, HOME } from "../router/index.js";
       :class="localStyles.activitySection"
     >
       <aside :class="localStyles.aside">
-        <div :class="[localStyles.activityNumber, isActive(index)]">
+        <div :class="[localStyles.activityNumber, isActive(index + 1, BALL)]">
           {{ index + 1 }}
         </div>
         <div
-          :class="[localStyles.line, isActive(index + 1)]"
+          :class="[localStyles.line, isActive(index + 1, LINE)]"
           v-if="index < activities.length - 1"
         ></div>
       </aside>
@@ -144,9 +144,11 @@ export default {
         this.openModal();
       }
     },
-    isActive(index) {
+    isActive(index, type) {
       if (index - 1 <= this.responsesStore.lastActivityCompleted)
-        return " custom_bg_purple";
+        return " custom_bg_purple ";
+      else if(index - 2 <= this.responsesStore.lastActivityCompleted && type == BALL)
+        return " !bg-white border-2 border-[#766EF2] !text-[#766EF2]";
       else return " !bg-slate-300";
     },
     updateLastActivity(activityIndex) {
@@ -231,4 +233,6 @@ const localStyles = {
     hidden
     `),
 };
+const BALL = 'isBall';
+const LINE = 'isLine'
 </script>
