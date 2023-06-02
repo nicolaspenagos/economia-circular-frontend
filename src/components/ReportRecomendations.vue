@@ -46,7 +46,7 @@ export default {
   },
   mounted() {
     this.reportStore.currentReport.reportByActivities.forEach((activity) => {
-      if (activity.obtainedScore <= activity.possibleScore * 0.5) {
+      if (activity.obtainedScore < activity.possibleScore * 0.5) {
         this.lowerActivities.push(activity);
       }
     });

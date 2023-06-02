@@ -12,13 +12,15 @@ import router, { REPORT } from "../router";
     data-aos="flip-left"
     @click="getReport"
   >
+    <div :class="localStyles.counter">
+        <h1 class="text-white font-bold opacity-100">{{ index+1 }}</h1>
+    </div>
     <div>
       <h1 :class="localStyles.title">
         Resultados del {{ ORDINAL_NUMBERS_LIST[index] }} diagnóstico
       </h1>
-      <p class="text-white">{{ getDate() }}</p>
+      <p class="text-white mt-1">{{ getDate() }}</p>
     </div>
-    <img src="/stats-repor-card.svg" class="mr-auto" draggable="false" alt="report card stats"/>
   </article>
 </template>
 <script>
@@ -95,5 +97,17 @@ const localStyles = {
   font-bold
   text-lg
     `),
+  counter:ctl(`
+    text-4xl
+    bg-white
+    bg-opacity-30
+    h-[70px]
+    w-[70px]
+    flex
+    justify-center
+    items-center
+    rounded-full
+    mr-auto
+  `)
 };
 </script>
