@@ -44,11 +44,11 @@ const REPORT_BY_LEVELS = [
   },
   {
     title: "En cada uno de estos niveles",
-    text: "Se <strong>evalúan diferentes principios de la Economía Circular.</strong> Por ejemplo, en el nivel <strong>Cadena de Suministro</strong> evaluamos <strong>5</strong> principios: <br><br> <strong>Capital natural, Tecnologías para la EC, Ecoeficiencia, Pensamiento sistémico y Pensamiento en cascada.</strong>",
+    text: "Se <strong>evalúan diferentes principios de la Economía Circular.</strong> Por ejemplo, en el nivel <strong>Cadena de Suministro</strong> evaluamos <strong>5</strong> principios tal como se puede apreciar en la imagen de la derecha.",
     backBtn: "Regresar",
     nextBtn: "Continuar",
-    imgMobile: "pie-chart.svg",
-    imgDesktop: "pie-chart.svg",
+    imgMobile: "pie-chart.png",
+    imgDesktop: "pie-chart.png",
   },
   {
     title: "Cada principio evaluado en los diferentes niveles ",

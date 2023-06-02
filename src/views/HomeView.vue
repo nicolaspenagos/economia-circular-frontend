@@ -4,6 +4,8 @@ import { useAuthStore } from "../stores/auth";
 import ctl from "@netlify/classnames-template-literals";
 import Gradient from "../components/ui_utils/Gradient.vue";
 import BaseButton from "../components/ui_utils/BaseButton.vue";
+import router from "../router";
+import {QUESTIONNAIRE, AUTH} from "../router/index.js";
 </script>
 
 <template>
@@ -55,6 +57,7 @@ import BaseButton from "../components/ui_utils/BaseButton.vue";
       <BaseButton
         :text="isLoggedIn ? '¡Autoevalúate!' : '¡Comienza Ahora!'"
         class="my-8 sm:mb-0 sm:mt-6"
+        @click="handleBaseBtnClick"
       />
     </article>
     <img
@@ -256,6 +259,12 @@ export default {
       const mailtoUrl = `mailto:${email}`;
       window.location.href = mailtoUrl;
     },
+    handleBaseBtnClick(){
+      if(this.isLoggedIn)
+        router.push(QUESTIONNAIRE);
+      else
+        router.push(AUTH+'/signingUp');
+    }
   },
 };
 const localStyles = {

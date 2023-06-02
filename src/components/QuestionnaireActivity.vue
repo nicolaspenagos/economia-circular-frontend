@@ -61,17 +61,19 @@ import { useActivitiesStore } from "../stores/activities";
       />
     </section>
     <article
-      v-for="(val, index) in activityQuestions"
-      :key="index"
+      v-for="(val, questionIndex) in activityQuestions"
+      :key="questionIndex"
       :class="[
         getQuestionSectionClass(),
-        index === activityQuestions.length - 1 ? 'mb-12' : '',
+        questionIndex === activityQuestions.length - 1 ? 'mb-12' : '',
       ]"
     >
       <div :class="localStyles.line" v-if="shouldRender(val)"></div>
       <Question
         :loaded="loaded"
         :question="val"
+        :index="questionIndex"
+        :activityIndex="index"
         v-if="shouldRender(val)"
         :class="'question' + this.activity.name.replaceAll(' ', '')"
       />

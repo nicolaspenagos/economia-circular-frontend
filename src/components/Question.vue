@@ -20,7 +20,7 @@ import Hint from "./ui_utils/Hint.vue";
   <article :class="localStyles.questionCard">
     <div class="flex items-center">
       <h1 :class="localStyles.questionTitle">
-        {{ question.questionOrder + 1 + ". " + question.questionText }}
+        {{ (activityIndex+1)+'.'+ (question.questionOrder + 1) + ". " + question.questionText }}
       </h1>
       <Hint v-if="question.hint !== ''" :hintText="question.hint" />
     </div>
@@ -114,6 +114,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    activityIndex:{
+      type:Number,
+      default:0
+    }
   },
   data() {
     return {

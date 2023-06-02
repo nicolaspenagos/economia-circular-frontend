@@ -4,7 +4,7 @@ export function getColorsByPrinciple() {
   colorsMap.set("Capital natural", "#F38A87");
   colorsMap.set("Tecnologías para la EC", "#CAABD7");
   colorsMap.set("Ecoeficiencia", "#79B3EA");
-  colorsMap.set("Pensamiento sistémico", "#FBDD ");
+  colorsMap.set("Pensamiento sistémico", "#FBDD94");
   colorsMap.set("Pensamiento en cascada", "#84E2CA");
 
   colorsMap.set("Pensamiento local", "#CAABD7");
