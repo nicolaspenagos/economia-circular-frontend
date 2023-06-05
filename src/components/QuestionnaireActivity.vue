@@ -90,7 +90,7 @@ import { useActivitiesStore } from "../stores/activities";
 const alertImg = "/alert.svg";
 const savedImg = "/saved.svg";
 export default {
-  emits: ["updateLastActivity"],
+  emits: ["updateLastActivity", "showSavedPopup"],
   setup() {
     const activityMain = ref(null);
    
@@ -177,9 +177,10 @@ export default {
       if (this.readyToSave()) {
         await this.responsesStore.saveResponse(false);
    
-        this.modalMsg = modalMsgs.ANSWERS_SAVED;
-        this.modalImgPath = savedImg;
-        this.openModal();
+        //this.modalMsg = modalMsgs.ANSWERS_SAVED;
+        //this.modalImgPath = savedImg;
+        //this.openModal();
+        this.$emit("showSavedPopup", this.index);
         this.$emit("updateLastActivity", this.index);
       
       } else {

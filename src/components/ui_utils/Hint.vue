@@ -22,8 +22,10 @@ import ctl from "@netlify/classnames-template-literals";
 <script>
 export default {
   props: {
-    hintText: String,
-    default: "",
+    hintText: {
+      type:String,
+      default: "",
+    }
   },
   data() {
     return {
@@ -56,7 +58,7 @@ const localStyles = {
         bg-white
         custom-shadow
         z-30
-        sm:w-96
+        sm:w-[460px]
         sm:p-4
         custom-border-radius
     `),

@@ -14,12 +14,21 @@ import Modal from "../components/ui_utils/Modal.vue";
 import modalMsgs from "../constants/modal.js";
 import router from "../router";
 import { REPORT_HISTORY, HOME } from "../router/index.js";
+import PopUp from "../components/ui_utils/PopUp.vue";
 </script>
 <template>
+  <PopUp
+    data-aos="fade-left"
+    data-aos-duration="1000"
+    v-if="showPopup"
+    :class="[localStyles.popUp, opacityClassMod]"
+    :activityNo="currentActivity"
+    @closePopUpBtn="closePopUp"
+  ></PopUp>
   <Onboarding v-if="showModal" :data="dataArray" @close="closeModal" />
   <header :class="localStyles.header">
     <Gradient />
-    <div class="px-4" data-aos="fade-up" data-aos-duration="1000">
+    <div class="px-4" data-aos="fade-right" data-aos-duration="1000">
       <h1 :class="localStyles.headerTitle">
         ¡Es momento de
         <span class="custom-text-green font-bold">autoevaluar</span> las
@@ -52,6 +61,7 @@ import { REPORT_HISTORY, HOME } from "../router/index.js";
         :lastActivityCompleted="lastActivityCompleted"
         :index="index"
         @updateLastActivity="updateLastActivity"
+        @showSavedPopup="showSavedPopup"
         v-if="loaded"
       />
     </section>
@@ -84,6 +94,9 @@ export default {
       activities: [],
       loaded: false,
       answersModal: false,
+      showPopup: false,
+      opacityClassMod: "!opacity-1",
+      currentActivity: 1,
     };
   },
   computed: {
@@ -95,8 +108,24 @@ export default {
     ),
   },
   methods: {
+    closeAnimPopUp() {
+      setTimeout(this.closePopUp, POPUP_DURATION);
+    },
+    closePopUp() {
+      if (this.showPopup) {
+        this.opacityClassMod = "!opacity-0";
+        setTimeout(() => (this.showPopup = false), ANIM_DURATION);
+      }
+    },
+    showSavedPopup(currentActivity) {
+      if (!this.showPopup) {
+        this.opacityClassMod = "!opacity-1";
+        this.showPopup = true;
+        this.currentActivity = currentActivity + 1;
+        this.closeAnimPopUp();
+      }
+    },
     async sendAnswers() {
-      
       this.closeAnswersModal();
       await this.responsesStore.saveResponse(true);
       router.push(REPORT_HISTORY);
@@ -147,7 +176,10 @@ export default {
     isActive(index, type) {
       if (index - 1 <= this.responsesStore.lastActivityCompleted)
         return " custom_bg_purple ";
-      else if(index - 2 <= this.responsesStore.lastActivityCompleted && type == BALL)
+      else if (
+        index - 2 <= this.responsesStore.lastActivityCompleted &&
+        type == BALL
+      )
         return " !bg-white border-2 border-[#766EF2] !text-[#766EF2]";
       else return " !bg-slate-300";
     },
@@ -232,7 +264,13 @@ const localStyles = {
     mr-6 
     hidden
     `),
+  popUp: ctl(`
+    ease-in 
+    duration-300
+  `),
 };
-const BALL = 'isBall';
-const LINE = 'isLine'
+const BALL = "isBall";
+const LINE = "isLine";
+const ANIM_DURATION = 500;
+const POPUP_DURATION = 6000;
 </script>
