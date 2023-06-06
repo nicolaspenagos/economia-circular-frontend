@@ -1,4 +1,6 @@
 <script setup>
+import Onboarding from "../components/Onboarding.vue";
+import onboardingData from "../constants/onboarding.js";
 import ctl from "@netlify/classnames-template-literals";
 import { useReportStore } from "../stores/report";
 import { mapStores } from "pinia";
@@ -29,6 +31,7 @@ ChartJS.register(
 );
 </script>
 <template>
+  <Onboarding v-if="showModal" :data="onboardingData.PRINCIPLES_VS_ACTIVITIES" @close="closeModal" :fromReport="false" />
    <div :class="localStyles.grade">
       <h3 class="text-white">Obtuviste</h3>
       <div class="flex items-end" v-if="loaded">
@@ -135,7 +138,7 @@ ChartJS.register(
         </ul>
       </article>
     </section>
-    <div :class="localStyles.button">
+    <div :class="localStyles.button" @click="handleShowModal">
       <p class="text-white py-2">Ver explicación</p>
       <img src="/eye.svg" class="h-4 ml-2" alt="eye btn" />
     </div>
@@ -179,7 +182,7 @@ ChartJS.register(
         </article>
       </div>
     </article>
-    <div :class="localStyles.button">
+    <div :class="localStyles.button"  @click="handleShowModal">
       <p class="text-white py-2">Ver explicación</p>
       <img src="/eye.svg" class="h-4 ml-2" alt="eye btn"/>
     </div>
@@ -220,9 +223,16 @@ export default {
         },
       },
       data: null,
+      showModal:false
     };
   },
   methods: {
+    closeModal(){
+      this.showModal = false;
+    },
+    handleShowModal(){
+      this.showModal = true;
+    },
     loadPlotData() {
       this.data = getStackedBarCharConfig(
         this.reportStore.currentReport.reportByPrinciples,

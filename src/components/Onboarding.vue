@@ -26,7 +26,7 @@ import BaseButton from "./ui_utils/BaseButton.vue";
             {{ currentIndex + 1 + " de " + data.length }}
           </p>
         </div>
-        <div :class="['flex flex-col h-[440px] sm:h-[250px]',fromReport?'h-fit m':'']">
+        <div :class="['flex flex-col h-fit sm:h-[250px]',fromReport?'h-fit m':'']">
           <h1 :class="localStyles.title" v-html="data[currentIndex].title"></h1>
           <img
             :src="'/' + data[currentIndex].imgMobile"
