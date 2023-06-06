@@ -22,7 +22,16 @@ import {
 } from "../constants/report";
 </script>
 <template>
-  <Onboarding v-if="showModal" :data="onboardingData.REPORT_ONBOARDING" @close="closeModal" />
+  <Onboarding
+    v-if="showModal"
+    :data="onboardingData.REPORT_ONBOARDING"
+    @close="closeModal"
+  />
+  <Onboarding
+    v-if="showPrinciplesModal"
+    :data="onboardingData.PRINCIPLES"
+    @close="closePrincipleModal"
+  />
   <header :class="localStyles.header">
     <Gradient />
     <div
@@ -60,7 +69,13 @@ import {
       </div>
     </section>
     <section :class="localStyles.section">
-      <h1 :class="localStyles.title + ' mt-4'">Reporte por niveles</h1>
+      <div class="flex flex-col sm:flex-row justify-between w-full">
+        <h1 :class="localStyles.title + ' mt-4'">Reporte por niveles</h1>
+        <div :class="localStyles.button" @click="showPrincipleOnboarding">
+          <p class="text-white py-2">Principios de la EC</p>
+          <img src="/eye.svg" class="h-4 ml-2" alt="Eye btn" />
+        </div>
+      </div>
       <ReportSection :reportConstantMap="REPORT_BY_LEVELS" :type="BY_LEVELS" />
       <h1 :class="localStyles.title + ' mt-16'">
         Reporte principios vs actividades
@@ -91,10 +106,11 @@ export default {
   computed: {
     ...mapStores(useReportStore, useAuthStore),
   },
-  data(){
+  data() {
     return {
-      showModal:false
-    }
+      showModal: false,
+      showPrinciplesModal:false
+    };
   },
   methods: {
     getOrdinal() {
@@ -105,12 +121,18 @@ export default {
     handleOnboarding() {
       const currentUserOnboardingPath =
         REPORT_ONBOARDING_KEY + this.authStore.user.id;
-      if(handleIfShowOnboarding(currentUserOnboardingPath)){
+      if (handleIfShowOnboarding(currentUserOnboardingPath)) {
         this.showModal = true;
       }
     },
-    closeModal(){
+    showPrincipleOnboarding(){
+      this.showPrinciplesModal = true;
+    },
+    closeModal() {
       this.showModal = false;
+    },
+    closePrincipleModal(){
+      this.showPrinciplesModal = false;
     }
   },
   mounted() {
@@ -205,5 +227,24 @@ const localStyles = {
         text-xl
         w-full
     `),
+  button: ctl(`
+  z-20
+  !cursor-pointer
+  flex
+  items-center
+  justify-between
+  px-4
+  hover:bg-[#6B63F9]
+  bg-[#756ef2]
+  rounded-3xl
+  sm:absolute
+  bottom-0
+  right-0
+  w-fit
+  mx-auto
+  m-6
+  sm:m-0
+  sm:mr-6
+  `),
 };
 </script>

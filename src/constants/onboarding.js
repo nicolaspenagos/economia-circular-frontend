@@ -178,12 +178,65 @@ const PRINCIPLES_VS_ACTIVITIES = [
   },
 ]
 
+const PRINCIPLES = [
+  {
+    title: "",
+    text: "<span class='custom-text-color-purple font-bold'>1.Capital Natural</span><br><br><p class='text-xs'>Fortalecer y mantener el desarrollo de una economía que no comprometa las funcionalidades ecosistémicas, controlando las reservas finitas y equilibrando los flujos de recursos renovables, devolviendo los nutrientes a los ecosistemas.</p><br><span class='custom-text-color-purple font-bold'>2. Tecnologías para la Ec</span><br><br><p class='text-xs'>Utilizar y/o desarrollar tecnologías que promueven la EC (fuentes de energía renovables en sus operaciones, tecnologías para el agua, para el suelo, para las emisiones).</p>",
+    backBtn: "",
+    nextBtn: "Continuar",
+    imgMobile: "principles.png",
+    imgDesktop: "principles.png",
+  },
+  {
+    title: "",
+    text: "<span class='custom-text-color-purple font-bold'>3. Pensamiento sistémico</span><br><br><p class='text-xs'>Enfoque holístico que permite comprender las complejidades, dinámicas e interconexiones entre los procesos y actores de la cadena de valor con respecto a flujos de recursos, provisión de servicios, gobernanza, marcos regulatorios, mercado, infraestructura e innovación y prácticas del usuario que pueden soportar la transición hacia la Economía Circular.</p><br><span class='custom-text-color-purple font-bold'>4. Pensamiento en cascada</span><br><br><p class='text-xs'>Principio basado en la posibilidad de incrementar el valor de una materia prima o secundaria para introducirla en otra parte del ciclo de vida del mismo producto o en otros eslabones de la cadena de suministro.</p>",
+    backBtn: "Regresar",
+    nextBtn: "Continuar",
+    imgMobile: "principles.png",
+    imgDesktop: "principles.png",
+  },
+  {
+    title: "",
+    text: "<span class='custom-text-color-purple font-bold'>5. Ecoeficiencia</span><br><br><p class='text-xs'>El rendimiento tiene que ser sinérgico y basado en la creación de beneficios múltiples, incluyendo la creación de valores agregados, de puestos de trabajo y la reducción del consumo de recursos.</p><br><span class='custom-text-color-purple font-bold'>6. Innovación</span><br><br><p class='text-xs'>Las organizaciones continuamente innovan para crear valor empresarial a través de la sostenibilidad, gestión de recursos en productos y servicios.</p>",
+    backBtn: "Regresar",
+    nextBtn: "Continuar",
+    imgMobile: "principles.png",
+    imgDesktop: "principles.png",
+  },
+  {
+    title: "",
+    text: "<span class='custom-text-color-purple font-bold'>7. Gestión del impacto</span><br><br><p class='text-xs'>Las organizaciones gestionan el impacto directo e indirecto de sus decisiones y actividades, por medio de prácticas sostenibles con sus grupos de interés de manera clara, precisa, oportuna, honesta y completa.</p><br><span class='custom-text-color-purple font-bold'>8. Optimización de valor</span><br><br><p class='text-xs'>Las organizaciones mantienen todos los productos, componentes y materiales en su valor y utilidad más altos en todo momento.</p>",
+    backBtn: "Regresar",
+    nextBtn: "Continuar",
+    imgMobile: "principles.png",
+    imgDesktop: "principles.png",
+  },
+  {
+    title: "",
+    text: "<span class='custom-text-color-purple font-bold'>9. Pensamiento local</span><br><br><p class='text-xs'>Las organizaciones y comunidades están influenciadas con su contexto y por eso tiene una relación dinámica y simbiótica de proximidad. En los ecosistemas ocurre de forma similar, es importante que los habitantes o clientes se sientan familiarizados con los productos o servicios que van a adquirir y participen de las actividades de recuperación de valor.</p><br><span class='custom-text-color-purple font-bold'>10. Resiliencia para la diversidad</span><br><br><p class='text-xs'>Implica que los productos y servicios se adapten a distintos contextos a lo largo de su ciclo de vida, siendo más eficientes, simples, modulares, robustos y al mismo tiempo versátiles.</p>",
+    backBtn: "Regresar",
+    nextBtn: "Continuar",
+    imgMobile: "principles.png",
+    imgDesktop: "principles.png",
+  },
+  {
+    title: "",
+    text: "<span class='custom-text-color-purple font-bold'>11. Circularidad y longevidad</span><br><br><p class='text-xs'>Que el producto tenga la capacidad de regenerarse y a su vez perdure en el tiempo conservando su máxima utilidad.</p><br><span class='custom-text-color-purple font-bold'>12. Diseño para prevención de residuos</span><br><br><p class='text-xs'>Los productos y servicios se pueden concebir y diseñar de manera que se minimice la generación de residuos para integrarlos a los ciclos biológicos y técnicos.</p>",
+    backBtn: "Regresar",
+    nextBtn: "Finalizar",
+    imgMobile: "principles.png",
+    imgDesktop: "principles.png",
+  },
+
+]
+
 
 export default {
   QUESTIONNAIRE_ONBOARDING,
   REPORT_BY_LEVELS,
   REPORT_ONBOARDING,
-  PRINCIPLES_VS_ACTIVITIES
+  PRINCIPLES_VS_ACTIVITIES,
+  PRINCIPLES
 };
 
 export const QUESTIONNAIRE_ONBOARDING_KEY = 'questionnaireOnboardingCompleted';

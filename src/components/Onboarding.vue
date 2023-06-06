@@ -177,6 +177,8 @@ const localStyles = {
   btnsContainer: ctl(`
     flex
     sm:mb-28
+    sm:mt-6
+  
   `),
   left: ctl(`
     flex
