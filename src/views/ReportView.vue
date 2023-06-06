@@ -6,6 +6,10 @@ import { useReportStore } from "../stores/report";
 import { mapStores } from "pinia";
 import { useAuthStore } from "../stores/auth";
 import ReportSection from "../components/ReportSection.vue";
+import { REPORT_ONBOARDING_KEY } from "../constants/onboarding";
+import Onboarding from "../components/Onboarding.vue";
+import { handleIfShowOnboarding } from "../utils/oboardingUtils";
+import onboardingData from "../constants/onboarding.js";
 import {
   REPORT_BY_LEVELS,
   BY_LEVELS,
@@ -18,6 +22,7 @@ import {
 } from "../constants/report";
 </script>
 <template>
+  <Onboarding v-if="showModal" :data="onboardingData.REPORT_ONBOARDING" @close="closeModal" />
   <header :class="localStyles.header">
     <Gradient />
     <div
@@ -68,7 +73,10 @@ import {
         Recomendaciones para tu empresa
       </h1>
       <ReportSection :reportConstantMap="REPORT_ROADMAP" :type="BY_ROADMAP" />
-      <ReportSection :reportConstantMap="REPORT_RECOMENDATIONS" :type="BY_RECOMENDATIONS" />
+      <ReportSection
+        :reportConstantMap="REPORT_RECOMENDATIONS"
+        :type="BY_RECOMENDATIONS"
+      />
     </section>
   </main>
 </template>
@@ -83,13 +91,31 @@ export default {
   computed: {
     ...mapStores(useReportStore, useAuthStore),
   },
+  data(){
+    return {
+      showModal:false
+    }
+  },
   methods: {
     getOrdinal() {
       return this.reportStore.currentResponseIndex >= 0
         ? ORDINAL_NUMBERS_LIST[this.reportStore.currentResponseIndex]
         : "";
     },
-  }
+    handleOnboarding() {
+      const currentUserOnboardingPath =
+        REPORT_ONBOARDING_KEY + this.authStore.user.id;
+      if(handleIfShowOnboarding(currentUserOnboardingPath)){
+        this.showModal = true;
+      }
+    },
+    closeModal(){
+      this.showModal = false;
+    }
+  },
+  mounted() {
+    this.handleOnboarding();
+  },
 };
 const localStyles = {
   header: ctl(`

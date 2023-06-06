@@ -67,7 +67,71 @@ const REPORT_BY_LEVELS = [
     imgDesktop: "table-by-levels.png",
   },
 ];
+
+const REPORT_ONBOARDING = [
+  {
+    title: "¡Bienvenido al reporte de resultados!",
+    text: "Aquí puedes consultar los <strong>resultados de tu empresa</strong> y conocer su <strong>estado actual</strong> en relación con los principios de la economía circular.",
+    backBtn: "",
+    nextBtn: "Continuar",
+    imgMobile: "report-questionnaire-mobile-1.png",
+    imgDesktop: "report-questionnaire-1.png",
+  },
+  {
+    title: "Inicialmente encontrarás el reporte por niveles",
+    text: "Que te mostrará los puntajes obtenidos en tres áreas:<strong><br><br>1.Nivel cadena de suministro<br>2.Nivel empresa <br>3.Nivel producto</strong>",
+    backBtn: "Regresar",
+    nextBtn: "Continuar",
+    imgMobile: "report-questionnaire-mobile-2.png",
+    imgDesktop: "report-questionnaire-2.png",
+  },
+  {
+    title: "Podrás acceder a una explicación detallada",
+    text: "Para que puedas <strong>interpretar tus resultados de manera más precisa</strong> y comprender mejor tu diagnóstico del reporte por Niveles. <strong>Esta opción la encuentras en el botón “Ver explicación” ubicado en la esquina inferior derecha.</strong>",
+    backBtn: "Regresar",
+    nextBtn: "Continuar",
+    imgMobile: "report-questionnaire-mobile-3.png",
+    imgDesktop: "report-questionnaire-3.png",
+  },
+  {
+    title: "Después, encontrarás el reporte de principios vs actividades",
+    text: "Donde podrás <strong>visualizar el puntaje</strong> obtenido de las <strong>actividades</strong> que aportan en <strong>cada principio</strong> de la economía circular",
+    backBtn: "Regresar",
+    nextBtn: "Continuar",
+    imgMobile: "report-questionnaire-mobile-4.png",
+    imgDesktop: "report-questionnaire-4.png",
+  },
+  {
+    title: "Del mismo modo, podrás acceder a una explicación detallada de este reporte",
+    text: "Haciendo click en el <strong>botón “ver explicación”</strong> ubicado en la esquino inferior derecha, tal como se muestra en la imagen.",
+    backBtn: "Regresar",
+    nextBtn: "Continuar",
+    imgMobile: "report-questionnaire-mobile-5.png",
+    imgDesktop: "report-questionnaire-5.png",
+  },
+  {
+    title: "Luego, encontrarás la hoja de ruta",
+    text: "La cual te proporcionará una <strong>guía detallada</strong> que identificará las <strong>etapas clave</strong>, los hitos importantes y los recursos necesarios para lograr una <strong>evolución exitosa</strong> hacia la economía circular.",
+    backBtn: "Regresar",
+    nextBtn: "Continuar",
+    imgMobile: "report-questionnaire-mobile-6.png",
+    imgDesktop: "report-questionnaire-6.png",
+  },
+  {
+    title: "Finalmente, te dejaremos algunas recomendaciones",
+    text: "En base a los <strong>aspectos de menor desempeño</strong> identificados en la evaluación, para ayudar a tu empresa a <strong>avanzar hacia un modelo económico más circular.</strong>",
+    backBtn: "Regresar",
+    nextBtn: "Finalizar",
+    imgMobile: "report-questionnaire-mobile-7.png",
+    imgDesktop: "report-questionnaire-7.png",
+  }
+]
+
 export default {
   QUESTIONNAIRE_ONBOARDING,
-  REPORT_BY_LEVELS
+  REPORT_BY_LEVELS,
+  REPORT_ONBOARDING
 };
+
+export const QUESTIONNAIRE_ONBOARDING_KEY = 'questionnaireOnboardingCompleted';
+export const REPORT_ONBOARDING_KEY = 'reportOnboardingCompleted';

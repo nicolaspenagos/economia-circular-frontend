@@ -15,6 +15,8 @@ import modalMsgs from "../constants/modal.js";
 import router from "../router";
 import { REPORT_HISTORY, HOME } from "../router/index.js";
 import PopUp from "../components/ui_utils/PopUp.vue";
+import {handleIfShowOnboarding} from "../utils/oboardingUtils.js";
+import { QUESTIONNAIRE_ONBOARDING_KEY } from "../constants/onboarding.js";
 </script>
 <template>
   <PopUp
@@ -165,12 +167,12 @@ export default {
       }
     },
     handleOnboarding() {
-      const userId = this.authStore.user.id;
+    
       const currentUserOnboardingPath =
-        "questionnaireOnboardingCompleted" + userId;
-      if (!localStorage.getItem(currentUserOnboardingPath)) {
-        localStorage.setItem(currentUserOnboardingPath, "true");
-        this.openModal();
+      QUESTIONNAIRE_ONBOARDING_KEY + this.authStore.user.id;
+
+      if(handleIfShowOnboarding(currentUserOnboardingPath)){
+        this.showModal = true;
       }
     },
     isActive(index, type) {
@@ -273,4 +275,5 @@ const BALL = "isBall";
 const LINE = "isLine";
 const ANIM_DURATION = 500;
 const POPUP_DURATION = 6000;
+
 </script>

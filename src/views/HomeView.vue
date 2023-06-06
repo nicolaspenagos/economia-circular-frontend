@@ -144,7 +144,7 @@ import {QUESTIONNAIRE, AUTH} from "../router/index.js";
       />
       <article
         :class="localStyles.bodyTexContainer"
-        data-aos="fade-left"
+        data-aos="fade-down"
         data-aos-duration="500"
       >
         <h1 :class="localStyles.bodyTitle">
