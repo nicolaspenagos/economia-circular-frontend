@@ -32,17 +32,17 @@ import {QUESTIONNAIRE, AUTH} from "../router/index.js";
         <h1 :class="localStyles.title">
           Bienvenido, ahora 
           <span :class="[localStyles.title, '!text-[#38f0a2]']"
-            > haces parte</span
+            > haces  parte</span
           >
           de esta
-        </h1>
-        <h1 :class="localStyles.title">
+          <br class="hidden sm:inline">
+     
           <span :class="[localStyles.title, '!text-[#38f0a2]']"
             >comunidad</span
           >
           y podrás acceder a todos
-        </h1>
-        <h1 :class="localStyles.title">nuestros servicios</h1>
+          <br class="hidden sm:inline">
+        nuestros servicios</h1>
       </div>
       <div v-else>
         <h1 :class="localStyles.title">¡Queremos ayudar a tu</h1>
