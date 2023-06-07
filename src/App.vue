@@ -12,9 +12,11 @@ import Modal from "./components/ui_utils/Modal.vue";
 import modalMsgs from "./constants/modal.js";
 import AOS from 'aos';
 import Footer from "./components/Footer.vue";
+import ResponsiveMenu from "./components/ui_utils/ResponsiveMenu.vue";
 const route = useRoute();
 </script>
 <template>
+  <ResponsiveMenu @logout="openModal" @close="closeResponsiveMenu" v-if="showResponsiveMenu" @goToLogin="goToLogin" @goToSignUp="goToSignUp"/>
   <Modal
     v-if="showModal"
     :msg="modalMsgs.LOGOUT_STATEMENT"
@@ -79,7 +81,7 @@ const route = useRoute();
         <img
           src="/menu.svg"
           :class="localStyles.mobileMenu"
-          @click="goToQuestionnaire"
+          @click="handleShowResponsiveMenu"
           alt="menu btn"
         />
       </nav>
@@ -122,6 +124,12 @@ export default {
     },
     toggleFooter(newVal){
       this.showFooter = newVal;
+    },
+    handleShowResponsiveMenu(){
+      this.showResponsiveMenu = true;
+    },
+    closeResponsiveMenu(){
+      this.showResponsiveMenu = false;
     }
   },
   data() {
@@ -129,7 +137,8 @@ export default {
       showHeader: true,
       currentView: "home",
       showModal: false,
-      showFooter:true
+      showFooter:true,
+      showResponsiveMenu:false
     };
   },
   mounted() {

@@ -98,10 +98,11 @@ import {
 <script>
 export default {
   emits: ["toggleHeader", "toggleFooter"],
-  async mounted() {
+  mounted() {
     this.$emit("toggleHeader", true);
     this.$emit("toggleFooter", true);
     window.scrollTo(0, 0);
+    this.handleOnboarding();
   },
   computed: {
     ...mapStores(useReportStore, useAuthStore),
@@ -135,9 +136,7 @@ export default {
       this.showPrinciplesModal = false;
     }
   },
-  mounted() {
-    this.handleOnboarding();
-  },
+
 };
 const localStyles = {
   header: ctl(`

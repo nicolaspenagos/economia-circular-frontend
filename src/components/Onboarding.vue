@@ -11,7 +11,10 @@ import BaseButton from "./ui_utils/BaseButton.vue";
     @touchmove.prevent
     @scroll.prevent
   >
-    <article :class="[localStyles.modalContainer, fromReport?'h-fit':'']">
+    <article :class="[localStyles.modalContainer, fromReport ? 'h-fit' : '']">
+      <button :class="localStyles.closeBtn" @click="closeModal">
+        <img src="/x.svg" draggable="false" class="!cursor-pointer" />
+      </button>
       <div :class="localStyles.left">
         <div>
           <div :class="localStyles.progressBar" class="text-black">
@@ -26,11 +29,16 @@ import BaseButton from "./ui_utils/BaseButton.vue";
             {{ currentIndex + 1 + " de " + data.length }}
           </p>
         </div>
-        <div :class="['flex flex-col h-fit sm:h-[250px]',fromReport?'h-fit m':'']">
+        <div
+          :class="[
+            'flex flex-col h-fit sm:h-[250px]',
+            fromReport ? 'h-fit m' : '',
+          ]"
+        >
           <h1 :class="localStyles.title" v-html="data[currentIndex].title"></h1>
           <img
             :src="'/' + data[currentIndex].imgMobile"
-            :class="[localStyles.mobileImg, fromReport?'!h-48 ':'']"
+            :class="[localStyles.mobileImg, fromReport ? '!h-48 ' : '']"
             draggable="false"
             alt="Onboarding img"
           />
@@ -39,7 +47,7 @@ import BaseButton from "./ui_utils/BaseButton.vue";
             :class="localStyles.text"
           ></p>
         </div>
-        <div :class="[localStyles.btnsContainer, fromReport?'mt-2':'']">
+        <div :class="[localStyles.btnsContainer, fromReport ? 'mt-2' : '']">
           <BaseButton
             v-if="data[currentIndex].backBtn !== ''"
             :text="data[currentIndex].backBtn"
@@ -55,13 +63,18 @@ import BaseButton from "./ui_utils/BaseButton.vue";
           />
         </div>
       </div>
-    
 
-      <img src="/onboarding-vector.svg" :class="[localStyles.vector]"  draggable="false" v-if="!fromReport" alt="decoration"/>
+      <img
+        src="/onboarding-vector.svg"
+        :class="[localStyles.vector]"
+        draggable="false"
+        v-if="!fromReport"
+        alt="decoration"
+      />
       <div :class="localStyles.right">
         <img
           :src="'/' + data[currentIndex].imgDesktop"
-          :class="[localStyles.desktopImg, fromReport?'sm:mr-20':'']"
+          :class="[localStyles.desktopImg, fromReport ? 'sm:mr-20' : '']"
           draggable="false"
           alt="Oboarding img"
         />
@@ -77,19 +90,18 @@ export default {
       type: Array,
       default: () => [],
     },
-    fromReport:{
-      type:Boolean,
-      default:false
-    }
+    fromReport: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     closeModal() {
       this.$emit("close");
     },
     next() {
-      if(this.currentIndex===this.data.length-1)
-        this.closeModal();
-      else if(this.currentIndex + 1 < this.data.length) this.currentIndex++;
+      if (this.currentIndex === this.data.length - 1) this.closeModal();
+      else if (this.currentIndex + 1 < this.data.length) this.currentIndex++;
     },
     back() {
       if (this.currentIndex == 0) {
@@ -210,5 +222,20 @@ const localStyles = {
     sm:flex
 
   `),
+  closeBtn: ctl(`
+        bg-[#34ce8b] 
+        hover:bg-[#25C380]
+        w-6 
+        h-6 
+        rounded-full 
+        flex 
+        items-center 
+        justify-center 
+        absolute 
+        top-6
+        right-6
+        !cursor-pointer
+        z-50
+    `),
 };
 </script>
