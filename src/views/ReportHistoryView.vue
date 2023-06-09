@@ -42,7 +42,7 @@ import ReportCardContainer from "../components/ReportCardContainer.vue";
 export default {
   emits: ["toggleHeader", "toggleFooter"],
   async mounted() {
-    console.log('HOLA');
+  
     this.$emit("toggleHeader", true);
     this.$emit("toggleFooter", true);
 
