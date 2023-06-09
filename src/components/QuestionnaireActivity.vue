@@ -17,8 +17,8 @@ import { useActivitiesStore } from "../stores/activities";
     @accept="closeModal"
     :onlyAccept="true"
   />
-  <!--<main class="flex flex-col w-full" ref="activityMain">-->
-  <main class="flex flex-col w-full">
+  <main class="flex flex-col w-full" ref="activityMain">
+  
     <section
       :class="[
         localStyles.card,
@@ -211,10 +211,10 @@ export default {
 
      // if(this.index>=1)
 
-     /*
+     
       if (this.$refs.activityMain) {
         this.$refs.activityMain.scrollIntoView({ behavior: "smooth" });
-      }*/
+      }
     }
   },
   computed: {
@@ -242,13 +242,13 @@ export default {
         if (this.responsesStore.lastActivityCompleted + 1 === this.index) {
           setTimeout(() => (this.show = true), 1200);
         }
-        /*
+        
         if (this.responsesStore.lastActivityCompleted === this.index) {
           if (this.$refs.activityMain) {
             this.$refs.activityMain.scrollIntoView({ behavior: "smooth" });
           }
           setTimeout(() => (this.show = false), 1200);
-        }*/
+        }
       },
       immediate: true,
     },
