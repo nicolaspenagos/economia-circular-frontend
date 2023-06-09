@@ -144,7 +144,7 @@ export default {
   mounted() {
     this.authStore.checkIfLogged();
     AOS.init();
-   
+    //
   },
 };
 const localStyles = {
