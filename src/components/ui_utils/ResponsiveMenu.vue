@@ -72,10 +72,10 @@ const route = useRoute();
         text="Cerrar Sesión"
         @click="logout"
         class="mt-auto mb-10"
-        classMod="w-[163px] h-[35px]"
+        classMod="w-[163px] h-[35px] mb-20"
         v-if="isLoggedIn"
       />
-      <div v-else class="mt-auto mb-10 flex flex-col">
+      <div v-else class="mt-auto mb-20 flex flex-col">
         <BaseButton
           text="Iniciar Sesión"
           @click="goToLogin"

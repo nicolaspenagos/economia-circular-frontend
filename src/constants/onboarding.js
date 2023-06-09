@@ -165,7 +165,7 @@ const PRINCIPLES_VS_ACTIVITIES = [
     text: "<strong>Las actividades pueden aportar puntos a varios principios de la economía circular.</strong> Por ejemplo, como se observa en la imagen, la <strong>actividad 2 (A2)</strong> aporta a los principios: <strong>P1, P3 y P9.</strong>",
     backBtn: "Regresar",
     nextBtn: "Continuar",
-    imgMobile: "report-principles-activities-4.png",
+    imgMobile: "report-principles-activities-4.pn",
     imgDesktop: "report-principles-activities-4.png",
   },
   {
