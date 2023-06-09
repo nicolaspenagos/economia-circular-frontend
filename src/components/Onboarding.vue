@@ -43,7 +43,7 @@ import BaseButton from "./ui_utils/BaseButton.vue";
             alt="Onboarding img"
           />
           <p
-            v-html="this.data[currentIndex].text"
+            v-html="data[currentIndex].text"
             :class="localStyles.text"
           ></p>
         </div>

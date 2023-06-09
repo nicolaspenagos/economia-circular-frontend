@@ -37,7 +37,7 @@ import { useActivitiesStore } from "../stores/activities";
       <h1
         :class="[
           localStyles.cardTitle,
-          this.isIndexAble() ? 'opacity-100' : 'opacity-50',
+          isIndexAble() ? 'opacity-100' : 'opacity-50',
         ]"
       >
         {{ activity.name }}
@@ -45,7 +45,7 @@ import { useActivitiesStore } from "../stores/activities";
       <h2
         :class="[
           localStyles.subtitle,
-          this.isIndexAble() ? 'opacity-100' : 'opacity-50',
+          isIndexAble() ? 'opacity-100' : 'opacity-50',
         ]"
       >
         {{ activity.title }}
@@ -75,13 +75,13 @@ import { useActivitiesStore } from "../stores/activities";
         :index="questionIndex"
         :activityIndex="index"
         v-if="shouldRender(val)"
-        :class="'question' + this.activity.name.replaceAll(' ', '')"
+        :class="'question' + activity.name.replaceAll(' ', '')"
       />
     </article>
     <BaseButton
       text="Guardar y continuar"
       @click="saveAndContinue"
-      v-if="this.show"
+      v-if="show"
       :class="localStyles.saveButton"
     />
   </main>

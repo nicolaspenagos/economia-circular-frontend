@@ -45,7 +45,7 @@ import { QUESTIONNAIRE_ONBOARDING_KEY } from "../constants/onboarding.js";
   </header>
   <main class="custom-bg-gray p-6 sm:py-20 sm:px-20">
     <section
-      v-for="(val, index) in this.activities"
+      v-for="(val, index) in activities"
       :class="localStyles.activitySection"
     >
       <aside :class="localStyles.aside">
