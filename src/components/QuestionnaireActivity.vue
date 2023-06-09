@@ -18,7 +18,7 @@ import { useActivitiesStore } from "../stores/activities";
     :onlyAccept="true"
   />
   <!--<main class="flex flex-col w-full" ref="activityMain">-->
-  <main class="flex flex-col w-full" ref="activityMain">
+  <main class="flex flex-col w-full">
     <section
       :class="[
         localStyles.card,
@@ -211,9 +211,10 @@ export default {
 
      // if(this.index>=1)
 
+     /*
       if (this.$refs.activityMain) {
         this.$refs.activityMain.scrollIntoView({ behavior: "smooth" });
-      }
+      }*/
     }
   },
   computed: {
