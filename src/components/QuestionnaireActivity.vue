@@ -79,7 +79,7 @@ import { useActivitiesStore } from "../stores/activities";
       />
     </article>
     <BaseButton
-      text="Guardar progreso"
+      text="Guardar y continuar"
       @click="saveAndContinue"
       v-if="this.show"
       :class="localStyles.saveButton"

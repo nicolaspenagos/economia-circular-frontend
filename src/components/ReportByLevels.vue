@@ -171,6 +171,8 @@ export default {
         this.reportStore.getLevelData(this.selectedTab)
       );
 
+
+
       this.chartData = {
         labels: this.reportData.labels,
         datasets: [

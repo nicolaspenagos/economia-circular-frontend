@@ -22,7 +22,7 @@ import { isNumeric } from "../../utils/reportUtils";
           v-for="(tdVal, tdIndex) in val"
           :key="'td-' + tdIndex"
           :class="[localStyles.td, isNumeric(tdVal) ? 'text-center' : '', index+1===tableData.length?'font-bold':'', convertNumberString(tdVal)==0&&tdIndex==0?'text-white':'']"
-          v-html="convertNumberString(tdVal)"
+          v-html="(val.length===tdIndex+1)?convertNumberString(tdVal)+'%':convertNumberString(tdVal)"
         >
         </td>
       </tr>

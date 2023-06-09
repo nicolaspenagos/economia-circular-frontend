@@ -152,7 +152,7 @@ import {QUESTIONNAIRE, AUTH} from "../router/index.js";
         </h1>
         <p>
           Con preguntas abiertas que requieren de justificación y de selección
-          múltiple, enfocadas en los
+          múltiple, enfocadas <br>en los
           <strong>12 principios de la Economía Circular.</strong>
         </p>
       </article>

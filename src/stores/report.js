@@ -35,6 +35,7 @@ export const useReportStore = defineStore({
       this.currentResponseIndex = index;
       this.selectedResponse = this.completedResponses[index];
       this.currentReport = await APIService.get(REPORT+'/'+useAuthStore().user.id+'/'+this.selectedResponse.id);
+      console.log(this.currentReport);
       return this.currentReport;
     },
     resetStore(){
@@ -45,13 +46,14 @@ export const useReportStore = defineStore({
     },
     getLevelData(level){
       const principlesArray = REPORT_BY_LEVELS.get(level);
+      
       const levelData = [];
       this.currentReport.reportByPrinciples.forEach(principleResult=>{
           if(principlesArray.includes(principleResult.shortname)){
             levelData.push(principleResult);
           }
       });
-      
+      console.log(levelData);
       //Sort by title order 
       return levelData.sort(function(a,b){
      
