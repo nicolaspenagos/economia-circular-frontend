@@ -17,6 +17,7 @@ import { useActivitiesStore } from "../stores/activities";
     @accept="closeModal"
     :onlyAccept="true"
   />
+  <!--<main class="flex flex-col w-full" ref="activityMain">-->
   <main class="flex flex-col w-full" ref="activityMain">
     <section
       :class="[
@@ -91,13 +92,14 @@ const alertImg = "/alert.svg";
 const savedImg = "/saved.svg";
 export default {
   emits: ["updateLastActivity", "showSavedPopup"],
+  /*
   setup() {
     const activityMain = ref(null);
    
     return {
       activityMain,
     };
-  },
+  },*/
   props: {
     activity: {
       type: Object,
@@ -206,7 +208,9 @@ export default {
   mounted() {
     if (this.responsesStore.lastActivityCompleted + 1 === this.index) {
       this.show = true;
-      if(this.index>=1)
+
+     // if(this.index>=1)
+
       if (this.$refs.activityMain) {
         this.$refs.activityMain.scrollIntoView({ behavior: "smooth" });
       }
