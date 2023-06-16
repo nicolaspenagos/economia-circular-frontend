@@ -38,15 +38,7 @@ import ctl from "@netlify/classnames-template-literals";
 </template>
 <script>
 export default {
-  setup() {
-    const progressBarContainer = ref(null);
-    const progressBar = ref(null);
 
-    return {
-      progressBarContainer,
-      progressBar,
-    };
-  },
   props: {
     reportData: {
       type: Object,
